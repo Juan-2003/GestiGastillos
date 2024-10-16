@@ -21,7 +21,7 @@ public class UserController {
     @PostMapping("/signup")
     public void signUpRequest(@Valid @RequestBody UserDataDTO userDataDTO){
         System.out.println(userDataDTO.name());
-
+        userService.signUpRequest(userDataDTO);
     }
 
 }
