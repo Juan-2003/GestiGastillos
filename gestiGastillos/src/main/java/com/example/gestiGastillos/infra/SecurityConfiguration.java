@@ -27,7 +27,7 @@ public class SecurityConfiguration {
     public DataSource dataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.sqlite.JDBC");
-        dataSource.setUrl("jdbc:sqlite:C:/Users/juanp_4igfwoc/Desktop/gestiGastillos.db");//Ruta de la base de datos
+        dataSource.setUrl("jdbc:sqlite:C:/Users/Toton/Desktop/gestiGastillos.db");//Ruta de la base de datos
         return dataSource;
     }
 }
