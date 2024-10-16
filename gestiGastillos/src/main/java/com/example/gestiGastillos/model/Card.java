@@ -8,6 +8,7 @@ import java.util.Date;
 @Entity(name = "Card")
 @Table(name = "card")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")

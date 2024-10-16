@@ -3,6 +3,7 @@ package com.example.gestiGastillos.controller;
 import com.example.gestiGastillos.dto.user.UserDataDTO;
 import com.example.gestiGastillos.dto.user.UserResponseDTO;
 import com.example.gestiGastillos.service.UserService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class UserController {
         this.userService = userService;
     }
     @PostMapping("/signup")
+    @Transactional
     public ResponseEntity<UserResponseDTO> signUpRequest(@Valid @RequestBody UserDataDTO userDataDTO, UriComponentsBuilder uriComponentsBuilder){
         UserResponseDTO userResponseDTO = userService.signUpRequest(userDataDTO);
 

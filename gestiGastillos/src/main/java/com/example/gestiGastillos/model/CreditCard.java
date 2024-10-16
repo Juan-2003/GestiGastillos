@@ -19,11 +19,11 @@ public class CreditCard{
     private String creditLimit;         //Limite de credito
     private Double debt;               //Deuda
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     private Card card;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
