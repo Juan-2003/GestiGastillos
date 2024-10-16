@@ -1,6 +1,7 @@
 package com.example.gestiGastillos.service;
 
 import com.example.gestiGastillos.dto.user.UserDataDTO;
+import com.example.gestiGastillos.dto.user.UserResponseDTO;
 import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void signUpRequest(UserDataDTO userDataDTO){
-        userRepository.save(new User(userDataDTO.name()));
+    public UserResponseDTO signUpRequest(UserDataDTO userDataDTO){
         User user = new User(userDataDTO.name());
-        userRepository.f
+        userRepository.save(user);
+
+        return new UserResponseDTO(user.getId(), user.getName());
     }
 }

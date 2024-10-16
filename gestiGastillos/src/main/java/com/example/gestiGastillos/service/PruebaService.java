@@ -1,6 +1,5 @@
 package com.example.gestiGastillos.service;
 
-import com.example.gestiGastillos.dto.PruebaEntradaDTO;
 import com.example.gestiGastillos.model.Card;
 import com.example.gestiGastillos.model.CreditCard;
 import com.example.gestiGastillos.model.DebitCard;
@@ -29,7 +28,7 @@ public class PruebaService {
     @Autowired
     private CardRepository cardRepository;
 
-    public void prueba(PruebaEntradaDTO pruebaEntradaDTO){
+    public void prueba(){
        User user = userRepository.getReferenceById(4l);
            
         System.out.println(user.getCreditCards().size());
