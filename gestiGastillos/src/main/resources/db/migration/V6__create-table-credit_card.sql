@@ -1,6 +1,7 @@
-CREATE TABLE debit_card(
+CREATE TABLE credit_card(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    current_balance REAL NOT NULL,
+    credit_limit varchar(50) NOT NULL,
+    debt REAL NOT NULL,
     card_id INTEGER,
     user_id INTEGER,
 

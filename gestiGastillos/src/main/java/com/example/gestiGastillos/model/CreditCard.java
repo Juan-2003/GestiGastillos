@@ -1,7 +1,10 @@
 package com.example.gestiGastillos.model;
 
+import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardDTO;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Optional;
 
 @Entity(name = "CreditCard")
 @Table(name = "credit_card")
@@ -32,6 +35,22 @@ public class CreditCard{
         this.user = user;
         this.creditLimit = creditLimit;
         this.debt = debt;
+    }
+
+    public void updateCreditCard(UpdateCreditCardDTO updateCreditCardDTO){
+        Long id = updateCreditCardDTO.creditCard_id();
+        String name = updateCreditCardDTO.name();
+        String creditLimit = updateCreditCardDTO.creditLimit();
+        Double debt = updateCreditCardDTO.debt();
+
+        this.card.updateCard(name);
+
+        if(!this.getCreditLimit().equals(creditLimit)){
+            this.setCreditLimit(creditLimit);
+        }
+        if(!this.getDebt().equals(debt)){
+            this.setDebt(debt);
+        }
     }
 
 

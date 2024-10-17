@@ -1,4 +1,0 @@
-CREATE TABLE user(
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    name varchar(50) NOT NULL
-)

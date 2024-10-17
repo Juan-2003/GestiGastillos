@@ -1,9 +1,11 @@
 package com.example.gestiGastillos.model;
 
+import com.example.gestiGastillos.model.transactions.Transactions;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "Card")
 @Table(name = "card")
@@ -41,9 +43,18 @@ public class Card {
     @JoinColumn(name = "reminder_id")
     private Reminder reminder;
 
+    @OneToMany(mappedBy = "card")
+    private List<Transactions> transactions;
+
     public Card(String name, String lastDigits, String expirationDate){
         this.name = name;
         this.lastDigits = lastDigits;
         this.expirationDate = expirationDate;
+    }
+
+    public  void updateCard(String name){
+        if(!this.name.equals(name)){
+            this.name = name;
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.example.gestiGastillos.controller;
 
 import com.example.gestiGastillos.dto.creditCard.CreditCardDataDTO;
 import com.example.gestiGastillos.dto.creditCard.CreditCardResponseDTO;
+import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardDTO;
+import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardResponseDTO;
 import com.example.gestiGastillos.service.CreditCardService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -52,6 +54,18 @@ public class CreditCardController {
     public ResponseEntity<List<CreditCardResponseDTO>> getCreditCardsList(Pageable pageable){
         List<CreditCardResponseDTO> creditCardResponseDTOS = creditCardService.getCreditCardsList(pageable);
         return ResponseEntity.ok(creditCardResponseDTOS);
+    }
+
+    @PutMapping("/update")
+    @Transactional
+    public ResponseEntity<UpdateCreditCardResponseDTO> updateCreditCard(@Valid @RequestBody UpdateCreditCardDTO updateCreditCardDTO){
+        UpdateCreditCardResponseDTO updateCreditCardResponse = creditCardService.updateCreditCard(updateCreditCardDTO);
+        return ResponseEntity.ok(updateCreditCardResponse);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity deleteCreditCard(@PathVariable Long id){
+       return creditCardService.deleteCreditCard(id) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
     }
 }
 

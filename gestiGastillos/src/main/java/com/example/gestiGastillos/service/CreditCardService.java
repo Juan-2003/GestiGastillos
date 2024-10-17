@@ -2,6 +2,8 @@ package com.example.gestiGastillos.service;
 
 import com.example.gestiGastillos.dto.creditCard.CreditCardDataDTO;
 import com.example.gestiGastillos.dto.creditCard.CreditCardResponseDTO;
+import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardDTO;
+import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardResponseDTO;
 import com.example.gestiGastillos.model.Card;
 import com.example.gestiGastillos.model.CreditCard;
 import com.example.gestiGastillos.model.User;
@@ -63,5 +65,29 @@ public class CreditCardService {
 
     public List<CreditCardResponseDTO> getCreditCardsList(Pageable pageable){
         return  creditCardRepository.findAll(pageable).map(CreditCardResponseDTO::new).getContent();
+    }
+
+    public UpdateCreditCardResponseDTO updateCreditCard(UpdateCreditCardDTO updateCreditCardDTO){
+        Long id = updateCreditCardDTO.creditCard_id();
+        Optional<CreditCard> creditCardOptional = creditCardRepository.findById(id);
+
+        if(creditCardOptional.isEmpty()){
+            return null;
+        }
+        CreditCard creditCard = creditCardOptional.get();
+        creditCard.updateCreditCard(updateCreditCardDTO);
+
+        creditCardRepository.save(creditCard);
+        return new UpdateCreditCardResponseDTO(creditCard);
+    }
+
+    public boolean deleteCreditCard(Long id){
+        Optional<CreditCard>creditCardOptional= creditCardRepository.findById(id);
+        if(creditCardOptional.isEmpty()){
+            return false;
+        }
+        creditCardRepository.delete(creditCardOptional.get());
+        cardRepository.delete(creditCardOptional.get().getCard());
+        return true;
     }
 }
