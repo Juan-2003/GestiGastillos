@@ -1,6 +1,6 @@
 package com.example.gestiGastillos.dto.creditCard;
 
-import com.example.gestiGastillos.model.CreditCard;
+import com.example.gestiGastillos.model.creditCard.CreditCard;
 
 public record UpdateCreditCardResponseDTO(
         Long creditCard_id,

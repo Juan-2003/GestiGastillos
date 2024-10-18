@@ -2,7 +2,7 @@ package com.example.gestiGastillos.dto.creditCard;
 
 import com.example.gestiGastillos.dto.card.CardResponseDTO;
 import com.example.gestiGastillos.dto.user.UserResponseDTO;
-import com.example.gestiGastillos.model.CreditCard;
+import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

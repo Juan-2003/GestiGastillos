@@ -1,6 +1,6 @@
 package com.example.gestiGastillos.model.transactions;
 
-import com.example.gestiGastillos.model.Card;
+import com.example.gestiGastillos.model.card.Card;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

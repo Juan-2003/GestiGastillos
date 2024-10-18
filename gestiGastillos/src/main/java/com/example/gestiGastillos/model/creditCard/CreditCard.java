@@ -1,10 +1,10 @@
-package com.example.gestiGastillos.model;
+package com.example.gestiGastillos.model.creditCard;
 
 import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardDTO;
+import com.example.gestiGastillos.model.card.Card;
+import com.example.gestiGastillos.model.User;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Optional;
 
 @Entity(name = "CreditCard")
 @Table(name = "credit_card")
@@ -38,7 +38,7 @@ public class CreditCard{
     }
 
     public void updateCreditCard(UpdateCreditCardDTO updateCreditCardDTO){
-        Long id = updateCreditCardDTO.creditCard_id();
+        Long id = updateCreditCardDTO.creditCardId();
         String name = updateCreditCardDTO.name();
         String creditLimit = updateCreditCardDTO.creditLimit();
         Double debt = updateCreditCardDTO.debt();

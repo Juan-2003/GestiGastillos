@@ -1,5 +1,6 @@
 package com.example.gestiGastillos.model;
 
+import com.example.gestiGastillos.model.creditCard.CreditCard;
 import jakarta.persistence.*;
 import lombok.*;
 

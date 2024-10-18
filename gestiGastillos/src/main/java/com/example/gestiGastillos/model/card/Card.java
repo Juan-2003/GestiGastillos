@@ -1,10 +1,13 @@
-package com.example.gestiGastillos.model;
+package com.example.gestiGastillos.model.card;
 
+import com.example.gestiGastillos.model.DebitCard;
+import com.example.gestiGastillos.model.Reminder;
+import com.example.gestiGastillos.model.Saving;
+import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.transactions.Transactions;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Entity(name = "Card")

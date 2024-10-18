@@ -1,6 +1,6 @@
 package com.example.gestiGastillos.dto.card;
 
-import com.example.gestiGastillos.model.Card;
+import com.example.gestiGastillos.model.card.Card;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
