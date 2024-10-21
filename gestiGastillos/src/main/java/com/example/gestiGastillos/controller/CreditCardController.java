@@ -34,7 +34,7 @@ public class CreditCardController {
     public ResponseEntity<CreditCardResponseDTO> registerCreditCard(@Valid @RequestBody CreditCardDataDTO creditCardDataDTO, UriComponentsBuilder uriComponentsBuilder){
         CreditCardResponseDTO creditCardResponseDTO = creditCardService.registerCreditCard(creditCardDataDTO);
 
-        URI url = uriComponentsBuilder.path("/gestiGastillos/creditCard/register/{id}")
+        URI url = uriComponentsBuilder.path("/gestiGastillos/creditCard/{id}")
                 .buildAndExpand(creditCardResponseDTO.creditCardId())
                 .toUri();
 
@@ -64,8 +64,9 @@ public class CreditCardController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteCreditCard(@PathVariable Long id){
-       return creditCardService.deleteCreditCard(id) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
+    public ResponseEntity<Void> deleteCreditCard(@PathVariable Long id){
+        creditCardService.deleteCreditCard(id);
+        return  ResponseEntity.noContent().build();
     }
 }
 

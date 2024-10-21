@@ -39,7 +39,7 @@ public class CreditCard{
 
     public void updateCreditCard(UpdateCreditCardDTO updateCreditCardDTO){
         Long id = updateCreditCardDTO.creditCardId();
-        String name = updateCreditCardDTO.name();
+        String name = updateCreditCardDTO.updateCardDTO().name();
         String creditLimit = updateCreditCardDTO.creditLimit();
         Double debt = updateCreditCardDTO.debt();
 

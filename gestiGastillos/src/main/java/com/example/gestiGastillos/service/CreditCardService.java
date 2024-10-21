@@ -4,6 +4,8 @@ import com.example.gestiGastillos.dto.creditCard.CreditCardDataDTO;
 import com.example.gestiGastillos.dto.creditCard.CreditCardResponseDTO;
 import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardDTO;
 import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardResponseDTO;
+import com.example.gestiGastillos.infra.exceptions.CreditCardNotFoundException;
+import com.example.gestiGastillos.infra.exceptions.UserNotFoundException;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.User;
@@ -45,7 +47,7 @@ public class CreditCardService {
         Double debt = creditCardDataDTO.debt();
 
         User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UserNotFoundException(user_id));
 
         creditCardPostValidator.forEach(c -> c.validation(creditCardDataDTO));
 
@@ -56,15 +58,13 @@ public class CreditCardService {
         creditCardRepository.save(creditCard);
         card.setCreditCard(creditCard);
 
-        System.out.println(card.getCreditCard().getUser().getName());
-
         return new CreditCardResponseDTO(creditCard);
 
     }
 
     public CreditCardResponseDTO getCreditCard(Long id){
         CreditCard creditCard = creditCardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarjeta de credito no encontrada"));
+                .orElseThrow(() -> new CreditCardNotFoundException("Tarjeta de credito no encontrada con id: " + id));
 
         return new CreditCardResponseDTO(creditCard);
     }
@@ -74,29 +74,26 @@ public class CreditCardService {
     }
 
     public UpdateCreditCardResponseDTO updateCreditCard(UpdateCreditCardDTO updateCreditCardDTO){
+        //Se valida que la tarjeta de credito exista mediante el id
+        CreditCard creditCard = creditCardRepository.findById(updateCreditCardDTO.creditCardId())
+                        .orElseThrow(() -> new CreditCardNotFoundException("Tarjeta no encontrada con el id: " + updateCreditCardDTO.creditCardId()));
 
+        //Se itera en las validaciones para PUT
         creditCardPutValidator.forEach(c -> c.validation(updateCreditCardDTO));
 
-        Long id = updateCreditCardDTO.creditCardId();
-        Optional<CreditCard> creditCardOptional = creditCardRepository.findById(id);
-
-        if(creditCardOptional.isEmpty()){
-            return null;
-        }
-        CreditCard creditCard = creditCardOptional.get();
+        //Se actualizan los datos
         creditCard.updateCreditCard(updateCreditCardDTO);
 
         creditCardRepository.save(creditCard);
         return new UpdateCreditCardResponseDTO(creditCard);
     }
 
-    public boolean deleteCreditCard(Long id){
-        Optional<CreditCard>creditCardOptional= creditCardRepository.findById(id);
-        if(creditCardOptional.isEmpty()){
-            return false;
+    public void deleteCreditCard(Long id){
+        if(!creditCardRepository.existsById(id)){
+            throw new CreditCardNotFoundException("Tarjeta no encontrada con el id: " + id);
         }
-        creditCardRepository.delete(creditCardOptional.get());
-        cardRepository.delete(creditCardOptional.get().getCard());
-        return true;
+        CreditCard creditCard =  creditCardRepository.getReferenceById(id);
+        creditCardRepository.delete(creditCard);
+        cardRepository.delete(creditCard.getCard());
     }
 }
