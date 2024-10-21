@@ -1,5 +1,8 @@
-package com.example.gestiGastillos.model;
+package com.example.gestiGastillos.model.debitCard;
 
+import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardDTO;
+import com.example.gestiGastillos.dto.debitCard.UpdateDebitCardDTO;
+import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.model.card.Card;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,5 +34,16 @@ public class DebitCard {
         this.currentBalance = currentBalance;
         this.card = card;
         this.user = user;
+    }
+    public void updateDebitCard(UpdateDebitCardDTO updateDebitCardDTO){
+        Long id = updateDebitCardDTO.debitCardId();
+        String name = updateDebitCardDTO.name();
+        Double currentBalance = updateDebitCardDTO.currentBalance();
+
+        this.card.updateCard(name);
+
+        if(!this.getCurrentBalance().equals(currentBalance)){
+            this.setCurrentBalance(currentBalance);
+        }
     }
 }

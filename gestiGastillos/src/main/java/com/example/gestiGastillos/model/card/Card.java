@@ -1,6 +1,6 @@
 package com.example.gestiGastillos.model.card;
 
-import com.example.gestiGastillos.model.DebitCard;
+import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.Reminder;
 import com.example.gestiGastillos.model.Saving;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
