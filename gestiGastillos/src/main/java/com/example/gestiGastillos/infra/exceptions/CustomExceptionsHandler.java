@@ -31,10 +31,8 @@ public class CustomExceptionsHandler {
     public ResponseEntity<DataErrorValidation> handleBeanValidationError(MethodArgumentNotValidException e){
         Set<String> errorMessages =  new HashSet<>();
         e.getBindingResult().getFieldErrors().forEach(fieldError -> {
-            String fieldName = fieldError.getField();
             String errorMessage = fieldError.getDefaultMessage(); // Capt
             errorMessages.add(errorMessage);
-            System.out.println("fiedlName: " + fieldName);
         });
 
         return ResponseEntity.badRequest().body(new DataErrorValidation("Error en Bean Validation", errorMessages));
@@ -65,12 +63,14 @@ public class CustomExceptionsHandler {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new DataErrorValidation("Error inesperado", Set.of("Ocurrio un error inesperado")));
     }
+
     /*
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<DataErrorValidation> handleUserNotFound(UserNotFoundException e){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new DataErrorValidation("Usuario no encontrado", Set.of(e.getMessage())));
     }
+
 
     @ExceptionHandler(InvalidCreditLimitException.class)
     public ResponseEntity<DataErrorValidation> handleInvalidCreditLimit(InvalidCreditLimitException e){

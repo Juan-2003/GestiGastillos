@@ -22,7 +22,9 @@ public class DebitCardController {
     private final DebitCardService debitCardService;
 
     @Autowired
-    public DebitCardController(DebitCardService debitCardService){this.debitCardService=debitCardService;}
+    public DebitCardController(DebitCardService debitCardService){
+        this.debitCardService=debitCardService;
+    }
 
     @PostMapping
     @Transactional

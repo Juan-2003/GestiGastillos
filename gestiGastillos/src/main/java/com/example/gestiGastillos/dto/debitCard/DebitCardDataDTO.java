@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 public record DebitCardDataDTO(
         @NotNull
         Long user_id,
-        @NotBlank
+        @NotNull
         @JsonProperty("current_balance")
         Double currentBalance,
         @JsonProperty("card")
