@@ -51,8 +51,8 @@ public class IncomeController {
 
     @PutMapping("/update")
     @Transactional
-    public ResponseEntity<UpdateIncomeResponseDTO> upateIncome(@Valid @RequestBody UpdateIncomeDTO updateIncomeDTO){
-        UpdateIncomeResponseDTO updateIncomeResponseDTO = incomeService.upateIncome(updateIncomeDTO);
+    public ResponseEntity<UpdateIncomeResponseDTO> updateIncome(@Valid @RequestBody UpdateIncomeDTO updateIncomeDTO){
+        UpdateIncomeResponseDTO updateIncomeResponseDTO = incomeService.updateIncome(updateIncomeDTO);
 
         return ResponseEntity.ok(updateIncomeResponseDTO);
     }

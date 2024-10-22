@@ -4,8 +4,7 @@ import com.example.gestiGastillos.dto.creditCard.CreditCardDataDTO;
 import com.example.gestiGastillos.dto.creditCard.CreditCardResponseDTO;
 import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardDTO;
 import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardResponseDTO;
-import com.example.gestiGastillos.infra.exceptions.CreditCardNotFoundException;
-import com.example.gestiGastillos.infra.exceptions.UserNotFoundException;
+import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.User;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CreditCardService {
@@ -47,7 +45,7 @@ public class CreditCardService {
         Double debt = creditCardDataDTO.debt();
 
         User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new UserNotFoundException(user_id));
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con id: " + user_id));
 
         creditCardPostValidator.forEach(c -> c.validation(creditCardDataDTO));
 
@@ -64,7 +62,7 @@ public class CreditCardService {
 
     public CreditCardResponseDTO getCreditCard(Long id){
         CreditCard creditCard = creditCardRepository.findById(id)
-                .orElseThrow(() -> new CreditCardNotFoundException("Tarjeta de credito no encontrada con id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Tarjeta de credito no encontrada con id: " + id));
 
         return new CreditCardResponseDTO(creditCard);
     }
@@ -76,7 +74,7 @@ public class CreditCardService {
     public UpdateCreditCardResponseDTO updateCreditCard(UpdateCreditCardDTO updateCreditCardDTO){
         //Se valida que la tarjeta de credito exista mediante el id
         CreditCard creditCard = creditCardRepository.findById(updateCreditCardDTO.creditCardId())
-                        .orElseThrow(() -> new CreditCardNotFoundException("Tarjeta no encontrada con el id: " + updateCreditCardDTO.creditCardId()));
+                        .orElseThrow(() -> new EntityNotFoundException("Tarjeta no encontrada con el id: " + updateCreditCardDTO.creditCardId()));
 
         //Se itera en las validaciones para PUT
         creditCardPutValidator.forEach(c -> c.validation(updateCreditCardDTO));
@@ -90,7 +88,7 @@ public class CreditCardService {
 
     public void deleteCreditCard(Long id){
         if(!creditCardRepository.existsById(id)){
-            throw new CreditCardNotFoundException("Tarjeta no encontrada con el id: " + id);
+            throw new EntityNotFoundException("Tarjeta no encontrada con el id: " + id);
         }
         CreditCard creditCard =  creditCardRepository.getReferenceById(id);
         creditCardRepository.delete(creditCard);

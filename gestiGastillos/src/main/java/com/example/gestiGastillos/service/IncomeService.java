@@ -5,6 +5,7 @@ import com.example.gestiGastillos.dto.transactions.income.IncomeDataDTO;
 import com.example.gestiGastillos.dto.transactions.income.IncomeResponseDTO;
 import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeDTO;
 import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeResponseDTO;
+import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.transactions.TransactionType;
@@ -36,11 +37,11 @@ public class IncomeService {
 
     public IncomeResponseDTO registerIncome(IncomeDataDTO incomeDataDTO) {
         incomeValidator.forEach(i -> i.validation(incomeDataDTO));
-        Transactions transactions;
 
+        Transactions transactions;
         if(incomeDataDTO.debitCardId() != null){//La transaccion se hizo con tarjeta
             DebitCard debitCard = debitCardRepository.findById(incomeDataDTO.debitCardId())
-                    .orElseThrow(() -> new RuntimeException("La tarjeta no existe"));
+                    .orElseThrow(() -> new EntityNotFoundException("La tarjeta credito con el id: " + incomeDataDTO.debitCardId()));
 
             Double currentBalance = debitCard.getCurrentBalance();
             currentBalance += incomeDataDTO.amount();
@@ -56,8 +57,7 @@ public class IncomeService {
 
     public IncomeResponseDTO getIncome(Long id){
         Transactions transactions = transactionsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transaccion no encontrada"));
-        Card card = cardRepository.getReferenceById(transactions.getCard().getId());
+                .orElseThrow(() -> new EntityNotFoundException("Transaccion no encontrada con el id: " + id));
 
         return new IncomeResponseDTO(transactions);
     }
@@ -71,9 +71,9 @@ public class IncomeService {
         return incomeList;
     }
 
-    public UpdateIncomeResponseDTO upateIncome(UpdateIncomeDTO updateIncomeDTO){
+    public UpdateIncomeResponseDTO updateIncome(UpdateIncomeDTO updateIncomeDTO){
         Transactions transaction = transactionsRepository.findById(updateIncomeDTO.incomeId())
-                .orElseThrow(() -> new RuntimeException("Transaccion no encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Transaccion no encontrada con id: " + updateIncomeDTO.incomeId()));
 
         transaction.update(updateIncomeDTO);
 
@@ -83,7 +83,7 @@ public class IncomeService {
 
     public void deleteIcome(Long id){
         Transactions transaction = transactionsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transaccion no encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Transaccion no encontrada con id: " + id));
 
         transactionsRepository.delete(transaction);
     }

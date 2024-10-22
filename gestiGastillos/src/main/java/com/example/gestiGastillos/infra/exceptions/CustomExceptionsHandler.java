@@ -1,6 +1,5 @@
 package com.example.gestiGastillos.infra.exceptions;
 
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -8,7 +7,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.xml.crypto.Data;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,13 +15,12 @@ import java.util.Set;
 public class CustomExceptionsHandler {
     private final Set<Class<? extends RuntimeException>> customExeptions = new HashSet<>(
             Arrays.asList(
-                    UserNotFoundException.class,
+                    EntityNotFoundException.class,
                     InvalidCreditLimitException.class,
                     InvalidDebtException.class,
                     InvalidExpirationDateException.class,
                     InvalidLastDigitsException.class,
-                    InvalidCardNameException.class,
-                    CreditCardNotFoundException.class
+                    InvalidCardNameException.class
             )
     );
 
@@ -53,8 +50,7 @@ public class CustomExceptionsHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new DataErrorValidation("Error inesperado", Set.of("Ocurrio un error inesperado")));
     }
 
-    @ExceptionHandler({UserNotFoundException.class,
-                        CreditCardNotFoundException.class})
+    @ExceptionHandler({EntityNotFoundException.class})
     public ResponseEntity<DataErrorValidation> handleNotFoundCustomExceptions(RuntimeException e){
         for(Class<? extends RuntimeException> exeptionClass : customExeptions){
             if(exeptionClass.isInstance(e)){
