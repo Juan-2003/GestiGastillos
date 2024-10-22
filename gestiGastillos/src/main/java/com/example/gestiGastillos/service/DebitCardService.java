@@ -8,6 +8,8 @@ import com.example.gestiGastillos.dto.debitCard.UpdateDebitCardResponseDTO;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.User;
+import com.example.gestiGastillos.model.debitCard.PostValidation.DebitCardPostValidator;
+import com.example.gestiGastillos.model.debitCard.PutValidation.DebitCardPutValidator;
 import com.example.gestiGastillos.repository.CardRepository;
 import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.UserRepository;
@@ -22,12 +24,16 @@ public class DebitCardService {
     private final UserRepository userRepository;
     private final DebitCardRepository debitCardRepository;
     private final CardRepository cardRepository;
+    private final List<DebitCardPostValidator> debitCardPostValidator;
+    private final List<DebitCardPutValidator> debitCardPutValidator;
 
     @Autowired
-    public DebitCardService(UserRepository userRepository, DebitCardRepository debitCardRepository, CardRepository cardRepository){
+    public DebitCardService(UserRepository userRepository, DebitCardRepository debitCardRepository, CardRepository cardRepository, List<DebitCardPostValidator> debitCardPostValidator, List<DebitCardPutValidator> debitCardPutValidator) {
         this.userRepository = userRepository;
         this.debitCardRepository = debitCardRepository;
         this.cardRepository = cardRepository;
+        this.debitCardPostValidator = debitCardPostValidator;
+        this.debitCardPutValidator = debitCardPutValidator;
     }
 
     public DebitCardResponseDTO registerDebitCard(DebitCardDataDTO debitCardDataDTO){
@@ -39,6 +45,8 @@ public class DebitCardService {
 
         User user = userRepository.findById(user_id)
                 .orElseThrow(() ->new RuntimeException("Usuario no encontrado"));
+
+        debitCardPostValidator.forEach(c -> c.validation(debitCardDataDTO));
 
         Card card = new Card(debitCardName, lastDigits, expirationDate);
         cardRepository.save(card);
@@ -65,27 +73,24 @@ public class DebitCardService {
 
     public UpdateDebitCardResponseDTO updateDebitCard(UpdateDebitCardDTO updateDebitCardDTO){
 
-        Long id = updateDebitCardDTO.debitCardId();
-        Optional<DebitCard> debitCardOptional = debitCardRepository.findById(id);
+        DebitCard debitCard = debitCardRepository.findById(updateDebitCardDTO.debitCardId())
+                .orElseThrow(() ->new RuntimeException("Tarjeta no encontrada con el id: " + updateDebitCardDTO.debitCardId()));
 
-        if(debitCardOptional.isEmpty()){
-            return null;
-        }
-        DebitCard debitCard = debitCardOptional.get();
+        debitCardPutValidator.forEach(c -> c.validation(updateDebitCardDTO));
+
         debitCard.updateDebitCard(updateDebitCardDTO);
 
         debitCardRepository.save(debitCard);
         return new UpdateDebitCardResponseDTO(debitCard);
     }
 
-    public boolean deleteDebitCard(Long id){
-        Optional<DebitCard> debitCardOptional = debitCardRepository.findById(id);
-        if(debitCardOptional.isEmpty()){
-            return false;
+    public void deleteDebitCard(Long id){
+        if(!debitCardRepository.existsById(id)){
+            throw new RuntimeException("Tarjeta no encontrada con el id: " + id);
         }
-        debitCardRepository.delete(debitCardOptional.get());
-        cardRepository.delete(debitCardOptional.get().getCard());
-        return true;
+        DebitCard debitCard = debitCardRepository.getReferenceById(id);
+        debitCardRepository.delete(debitCard);
+        cardRepository.delete(debitCard.getCard());
     }
 
 }

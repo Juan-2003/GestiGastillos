@@ -37,7 +37,7 @@ public class DebitCard {
     }
     public void updateDebitCard(UpdateDebitCardDTO updateDebitCardDTO){
         Long id = updateDebitCardDTO.debitCardId();
-        String name = updateDebitCardDTO.name();
+        String name = updateDebitCardDTO.updateCardDTO().name();
         Double currentBalance = updateDebitCardDTO.currentBalance();
 
         this.card.updateCard(name);
