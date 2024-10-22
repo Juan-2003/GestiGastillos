@@ -8,8 +8,7 @@ import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.User;
-import com.example.gestiGastillos.model.creditCard.PostValidations.CreditCardPostValidator;
-import com.example.gestiGastillos.model.creditCard.PutValidations.CreditCardPutValidator;
+import com.example.gestiGastillos.validation.Validator;
 import com.example.gestiGastillos.repository.CardRepository;
 import com.example.gestiGastillos.repository.CreditCardRepository;
 import com.example.gestiGastillos.repository.UserRepository;
@@ -19,16 +18,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/*
+    6.Mira la linea 29 y 30. Parece como lo teniamos antes, pero la diferencia es que la lista
+    sera de tipo "Validator" y a cada uno se le especifica con que DTO va a trabajar.
+
+    Si bajas al POST y el UPDATE veras que todo esta muy similar.
+ */
 @Service
 public class CreditCardService {
     private final UserRepository userRepository;
     private final CreditCardRepository creditCardRepository;
     private final CardRepository cardRepository;
-    private final List<CreditCardPostValidator> creditCardPostValidator;
-    private final List<CreditCardPutValidator> creditCardPutValidator;
+    private final List<Validator<CreditCardDataDTO>> creditCardPostValidator;
+    private final List<Validator<UpdateCreditCardDTO>> creditCardPutValidator;
 
     @Autowired
-    public CreditCardService(UserRepository userRepository, CreditCardRepository creditCardRepository, CardRepository cardRepository, List<CreditCardPostValidator> creditCardPostValidator, List<CreditCardPutValidator> creditCardPutValidator){
+    public CreditCardService(UserRepository userRepository, CreditCardRepository creditCardRepository,
+                             CardRepository cardRepository, List<Validator<CreditCardDataDTO>> creditCardPostValidator,
+                             List<Validator<UpdateCreditCardDTO>> creditCardPutValidator){
         this.userRepository = userRepository;
         this.creditCardRepository = creditCardRepository;
         this.cardRepository = cardRepository;

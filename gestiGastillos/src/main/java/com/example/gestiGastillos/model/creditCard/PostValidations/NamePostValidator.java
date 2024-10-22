@@ -4,36 +4,33 @@ import com.example.gestiGastillos.dto.creditCard.CreditCardDataDTO;
 import com.example.gestiGastillos.infra.exceptions.InvalidCardNameException;
 import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
-import com.example.gestiGastillos.repository.CreditCardRepository;
+import com.example.gestiGastillos.validation.CardName;
+import com.example.gestiGastillos.validation.Validator;
 import com.example.gestiGastillos.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/*
+    2. Como puedes ver, en donde se declara la clase se implementa la interfaz "Validator" y
+    se le especifica la clase que va a recibir, en este caso "CreditCardDataDTO".
+
+    Ahora vamos al archivo de NamePutValidator en la carpeta de PutValidations
+ */
 @Component
-public class NamePostValidator implements CreditCardPostValidator {
-    private final CreditCardRepository creditCardRepository;
+public class NamePostValidator implements Validator<CreditCardDataDTO> {
     private final UserRepository userRepository;
 
     @Autowired
-    public NamePostValidator(CreditCardRepository creditCardRepository, UserRepository userRepository){
-        this.creditCardRepository = creditCardRepository;
+    public NamePostValidator(UserRepository userRepository){
         this.userRepository = userRepository;
     }
 
+
     @Override
     public void validation(CreditCardDataDTO creditCardDataDTO) {
-        String newCreditCardName = creditCardDataDTO.cardDataDTO().name();
-
         User user = userRepository.getReferenceById(creditCardDataDTO.user_id());
-        List<CreditCard> creditCardList = user.getCreditCards();
-
-        boolean flag =  creditCardList.stream()
-                .anyMatch(c -> c.getCard().getName().equals(newCreditCardName));
-
-        if(flag){
-            throw new InvalidCardNameException("Ya existe una tarjeta de credito con el nombre: " + newCreditCardName);
-        }
+        CardName.cardNameValidation(creditCardDataDTO.cardDataDTO().name(), user);
     }
 }
