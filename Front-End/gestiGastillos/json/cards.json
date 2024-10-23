@@ -1,0 +1,21 @@
+{
+    "cards": [
+      {
+        "id": "1",
+        "name": "bbva Ramon",
+        "saldo": "10000",
+        "deudaActual": "2000",
+        "digitos":"3434",
+        "fechaVencimiento":"10-10-2024"
+      },
+      {
+        "id": "2",
+        "name": "bbva juan",
+        "saldo": "20000",
+        "deudaActual": "2000",
+        "digitos":"3534",
+        "fechaVencimiento":"11-10-2024"
+      }
+    ]
+  }
+  
