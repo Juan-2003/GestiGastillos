@@ -31,13 +31,18 @@ public class DebitCardController {
     public ResponseEntity<DebitCardResponseDTO> registerDebitCard(@Valid @RequestBody DebitCardDataDTO debitCardDataDTO, UriComponentsBuilder uriComponentsBuilder){
         DebitCardResponseDTO debitCardResponseDTO = debitCardService.registerDebitCard(debitCardDataDTO);
 
-        URI url = uriComponentsBuilder.path("/gestiGastillos/debitCard/register/{id}")
+        URI url = uriComponentsBuilder.path("/gestiGastillos/debitCard/{id}")
                 .buildAndExpand(debitCardResponseDTO.debitCardId())
                 .toUri();
 
         return ResponseEntity.created(url).body(debitCardResponseDTO);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<DebitCardResponseDTO> getDebitCard(@PathVariable Long id){
+        DebitCardResponseDTO debitCardResponseDTO = debitCardService.getDebitCard(id);
+        return ResponseEntity.ok(debitCardResponseDTO);
+    }
     @GetMapping("/debitCardsList")
     public ResponseEntity<List<DebitCardResponseDTO>> getDebitCardsList(Pageable pageable){
         List<DebitCardResponseDTO> debitCardResponseDTOS = debitCardService.getDebitCardsList(pageable);
@@ -52,7 +57,8 @@ public class DebitCardController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteDebitCard(@PathVariable Long id){
-        return debitCardService.deleteDebitCard(id) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
+    public ResponseEntity<Void> deleteDebitCard(@PathVariable Long id){
+        debitCardService.deleteDebitCard(id);
+        return ResponseEntity.noContent().build();
     }
 }
