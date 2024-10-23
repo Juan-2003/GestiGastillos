@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class DebitNamePostValidator implements DebitCardPostValidator{
+public class DebitNamePostValidator implements DebitCardDataDTODebitCardPostValidator{
     private final UserRepository userRepository;
 
     @Autowired

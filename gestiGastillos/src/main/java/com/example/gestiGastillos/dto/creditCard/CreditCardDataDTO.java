@@ -24,5 +24,4 @@ public record CreditCardDataDTO(
         @Valid
         @JsonProperty("card")
         CardDataDTO cardDataDTO
-) {
-}
+){}

@@ -1,4 +1,4 @@
-package com.example.gestiGastillos.model.creditCard.PostValidations;
+package com.example.gestiGastillos.validation.Cards.PostValidations;
 
 import com.example.gestiGastillos.dto.creditCard.CreditCardDataDTO;
 import com.example.gestiGastillos.infra.exceptions.InvalidLastDigitsException;

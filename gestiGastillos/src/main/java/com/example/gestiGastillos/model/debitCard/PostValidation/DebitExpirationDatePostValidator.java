@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 @Component
-public class DebitExpirationDatePostValidator implements DebitCardPostValidator {
+public class DebitExpirationDatePostValidator implements DebitCardDataDTODebitCardPostValidator {
 
     @Override
     public void validation(DebitCardDataDTO debitCardDataDTO) {

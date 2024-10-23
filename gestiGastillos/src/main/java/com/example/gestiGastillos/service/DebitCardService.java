@@ -8,27 +8,29 @@ import com.example.gestiGastillos.dto.debitCard.UpdateDebitCardResponseDTO;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.User;
-import com.example.gestiGastillos.model.debitCard.PostValidation.DebitCardPostValidator;
 import com.example.gestiGastillos.model.debitCard.PutValidation.DebitCardPutValidator;
 import com.example.gestiGastillos.repository.CardRepository;
 import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.UserRepository;
+import com.example.gestiGastillos.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
-
+//1
 @Service
 public class DebitCardService {
     private final UserRepository userRepository;
     private final DebitCardRepository debitCardRepository;
     private final CardRepository cardRepository;
-    private final List<DebitCardPostValidator> debitCardPostValidator;
+    private final List<Validator<Object>> debitCardPostValidator;
     private final List<DebitCardPutValidator> debitCardPutValidator;
 
     @Autowired
-    public DebitCardService(UserRepository userRepository, DebitCardRepository debitCardRepository, CardRepository cardRepository, List<DebitCardPostValidator> debitCardPostValidator, List<DebitCardPutValidator> debitCardPutValidator) {
+    public DebitCardService(UserRepository userRepository, DebitCardRepository debitCardRepository,
+                            CardRepository cardRepository, List<Validator<Object>> debitCardPostValidator,
+                            List<DebitCardPutValidator> debitCardPutValidator) {
         this.userRepository = userRepository;
         this.debitCardRepository = debitCardRepository;
         this.cardRepository = cardRepository;

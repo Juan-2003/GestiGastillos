@@ -5,7 +5,7 @@ import com.example.gestiGastillos.infra.exceptions.InvalidLastDigitsException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DebitLastDigitsPostValidator implements DebitCardPostValidator {
+public class DebitLastDigitsPostValidator implements DebitCardDataDTODebitCardPostValidator {
     @Override
     public void validation(DebitCardDataDTO debitCardDataDTO) {
         String lastDigits = debitCardDataDTO.cardDataDTO().lastDigits();

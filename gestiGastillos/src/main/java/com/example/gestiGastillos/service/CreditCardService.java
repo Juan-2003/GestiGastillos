@@ -29,12 +29,12 @@ public class CreditCardService {
     private final UserRepository userRepository;
     private final CreditCardRepository creditCardRepository;
     private final CardRepository cardRepository;
-    private final List<Validator<CreditCardDataDTO>> creditCardPostValidator;
+    private final List<Validator<Object>> creditCardPostValidator;
     private final List<Validator<UpdateCreditCardDTO>> creditCardPutValidator;
 
     @Autowired
     public CreditCardService(UserRepository userRepository, CreditCardRepository creditCardRepository,
-                             CardRepository cardRepository, List<Validator<CreditCardDataDTO>> creditCardPostValidator,
+                             CardRepository cardRepository, List<Validator<Object>> creditCardPostValidator,
                              List<Validator<UpdateCreditCardDTO>> creditCardPutValidator){
         this.userRepository = userRepository;
         this.creditCardRepository = creditCardRepository;
@@ -81,7 +81,7 @@ public class CreditCardService {
     public UpdateCreditCardResponseDTO updateCreditCard(UpdateCreditCardDTO updateCreditCardDTO){
         //Se valida que la tarjeta de credito exista mediante el id
         CreditCard creditCard = creditCardRepository.findById(updateCreditCardDTO.creditCardId())
-                        .orElseThrow(() -> new EntityNotFoundException("Tarjeta no encontrada con el id: " + updateCreditCardDTO.creditCardId()));
+                .orElseThrow(() -> new EntityNotFoundException("Tarjeta no encontrada con el id: " + updateCreditCardDTO.creditCardId()));
 
         //Se itera en las validaciones para PUT
         creditCardPutValidator.forEach(c -> c.validation(updateCreditCardDTO));
