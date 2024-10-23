@@ -29,12 +29,12 @@ public class IncomeController {
 
     @PostMapping
     public ResponseEntity<IncomeResponseDTO> registerIncome(@Valid @RequestBody IncomeDataDTO incomeDataDTO, UriComponentsBuilder uriComponentsBuilder){
-        IncomeResponseDTO transactionResponseDTO = incomeService.registerIncome(incomeDataDTO);
+        IncomeResponseDTO incomeResponseDTO = incomeService.registerIncome(incomeDataDTO);
 
         URI url = uriComponentsBuilder.path("/gestiGastillos/income/{id}")
-                .buildAndExpand(transactionResponseDTO.transactionId())
+                .buildAndExpand(incomeResponseDTO.transactionId())
                 .toUri();
-        return ResponseEntity.created(url).body(transactionResponseDTO);
+        return ResponseEntity.created(url).body(incomeResponseDTO);
     }
 
     @GetMapping("/{id}")

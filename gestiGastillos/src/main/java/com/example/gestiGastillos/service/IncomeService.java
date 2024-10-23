@@ -56,10 +56,14 @@ public class IncomeService {
     }
 
     public IncomeResponseDTO getIncome(Long id){
-        Transactions transactions = transactionsRepository.findById(id)
+        Transactions transaction = transactionsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Transaccion no encontrada con el id: " + id));
 
-        return new IncomeResponseDTO(transactions);
+        if(transaction.getType() != TransactionType.INCOME){
+            throw new RuntimeException("La transaccion no es un ingreso");
+        }
+
+        return new IncomeResponseDTO(transaction);
     }
 
     public List<IncomeResponseDTO> getIncomeList(Pageable pageable){
