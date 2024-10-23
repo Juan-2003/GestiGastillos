@@ -32,13 +32,6 @@ public class NamePostValidator implements Validator<Object> {
         this.userRepository = userRepository;
     }
 
-
-    @Override
-    public void validation(CreditCardDataDTO creditCardDataDTO) {
-        User user = userRepository.getReferenceById(creditCardDataDTO.user_id());
-        CardName.cardNameValidation(creditCardDataDTO.cardDataDTO().name(), user);
-    }
-
     @Override
     public void validation(Object dto) {
         User user = null;
