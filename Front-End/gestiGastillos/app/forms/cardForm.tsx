@@ -1,70 +1,115 @@
-import { View,Text,TextInput } from "react-native";
+import { View, Text, TextInput, Alert,Pressable } from "react-native"; 
+import { useState } from "react";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
 import TopBar from "@/components/topBar";
 import ButtonClass from "@/components/buttons";
 import TextClass from "@/components/TextClass";
-import RNFS from 'react-native-fs';
-export default function Cardform(){
+
+export default function Cardform() {
     const [name, setName] = useState('');
+    const [digitos, setDigitos] = useState('');
     const [saldo, setSaldo] = useState('');
     const [deudaActual, setDeudaActual] = useState('');
-    const [digitos, setDigitos] = useState('');
     const [fechaVencimiento, setFechaVencimiento] = useState('');
     
-    return(
+    const handleSubmit = async () => {
+        const url = 'http://IP_DEL_BACKEND:PUERTO'; // Reemplaza con la IP y el puerto del backend
+        
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name,
+                    digitos,
+                    saldo,
+                    deudaActual,
+                    fechaVencimiento,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            // Manejar la respuesta del servidor aquí
+            Alert.alert('Success', 'Datos enviados correctamente');
+        } catch (error) {
+            // Manejar errores aquí
+            Alert.alert('Error', 'No se pudo enviar los datos');
+        }
+    };
+    
+    return (
         <View style={globalStyles.container}>
-      
-        <TopBar title="TARJETAS"/>
+            <TopBar title="TARJETAS"/>
             <View style={globalStylesMenu.container}>
-            
                 <View style={globalStylesMenu.containerMiddle}>
                     <View style={globalStyles.inputTextContainer}>
                         
                         <TextClass text="nombre"/>
-
                         <TextInput
                             style={globalStyles.textInput}
-                            placeholder="Ingresa tu texto aquí"
-                            value ={name}
+                            placeholder="Ingresa tu nombre"
+                            value={name}
+                            onChangeText={setName}
+                        />
+
+                        <TextClass text="Selecciones el tipo de tarjeta"/>
+                        <TextInput
+                            style={globalStyles.textInput}
+                            placeholder="Ingresa tu nombre"
+                            value={name}
                             onChangeText={setName}
                         />
                         
-                        <TextClass text="Ultimos 4 digitos"/>
-
+                        <TextClass text="Últimos 4 dígitos"/>
                         <TextInput
                             style={globalStyles.textInput}
-                            placeholder="Ingresa tu texto aquí"
+                            placeholder="Ingresa los últimos 4 dígitos"
+                            value={digitos}
+                            onChangeText={setDigitos}
                         />
 
                         <TextClass text="Saldo actual"/>
-
                         <TextInput
                             style={globalStyles.textInput}
-                            placeholder="Ingresa tu texto aquí"
+                            placeholder="Ingresa tu saldo actual"
+                            value={saldo}
+                            onChangeText={setSaldo}
                         />
 
                         <TextClass text="Deuda actual"/>
-
                         <TextInput
                             style={globalStyles.textInput}
-                            placeholder="Ingresa tu texto aquí"
+                            placeholder="Ingresa tu deuda actual"
+                            value={deudaActual}
+                            onChangeText={setDeudaActual}
                         />
 
-                        <View style={globalStyles.textContainer}>
-                            <Text>fecha de nacimiento</Text>
-                        </View>
-
+                        
+                        <TextClass text="Fecha de vencimiento" />
+                        
                         <TextInput
                             style={globalStyles.textInput}
-                            placeholder="Ingresa tu texto aquí"
+                            placeholder="Ingresa la fecha de vencimiento"
+                            value={fechaVencimiento}
+                            onChangeText={setFechaVencimiento}
                         />
                     </View>
-                </View >
+                </View>
                 <View style={globalStylesMenu.containerBottom}>
-                    <ButtonClass text="Agregar"/>
-                </View >
-                
+                <Pressable 
+                    style={globalStyles.button}
+                    onPress = {handleSubmit} 
+                >
+                    <Text style={globalStyles.text}>Agregar</Text>
+                </Pressable>
+                </View>
             </View>
         </View>
     );

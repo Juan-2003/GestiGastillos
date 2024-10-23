@@ -2,14 +2,16 @@
     "cards": [
       {
         "id": "1",
-        "name": "bbva Ramon",
+        "type": "Tarjeta Credito",
+        "name": "Ramon",
+        "digitos":"3434",
         "saldo": "10000",
         "deudaActual": "2000",
-        "digitos":"3434",
         "fechaVencimiento":"10-10-2024"
       },
       {
         "id": "2",
+        "type": "Tarjeta Credito",
         "name": "bbva juan",
         "saldo": "20000",
         "deudaActual": "2000",
