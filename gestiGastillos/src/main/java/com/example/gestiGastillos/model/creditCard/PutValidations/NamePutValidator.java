@@ -24,7 +24,7 @@ import java.util.List;
      y yo quiero solamente usar las de POST en el service no tomara tambien los de PUT?
      Pues no, ya que el "Validator" puede diferenciar a que llamar dependiendo de la clase (en este caso el DTO)
      que se le mande.
-     
+
     Ahora vamos aqui mismo abajo, punto 4.
  */
 @Component
