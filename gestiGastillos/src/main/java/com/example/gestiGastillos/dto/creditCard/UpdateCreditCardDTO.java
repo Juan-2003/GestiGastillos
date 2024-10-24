@@ -16,6 +16,7 @@ public record UpdateCreditCardDTO(
         Long creditCardId,
 
         @NotNull(message = "El user_id no puede ser nulo")
+        @JsonProperty("user_id")
         Long userId,
 
         @NotBlank(message = "'credit_limit' no puede estar vacio")

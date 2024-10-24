@@ -1,6 +1,7 @@
 package com.example.gestiGastillos.validation.Cards.PostValidations;
 
 import com.example.gestiGastillos.dto.creditCard.CreditCardDataDTO;
+import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardDTO;
 import com.example.gestiGastillos.dto.debitCard.DebitCardDataDTO;
 import com.example.gestiGastillos.infra.exceptions.InvalidCreditLimitException;
 import com.example.gestiGastillos.validation.ExpirationDate;
@@ -24,11 +25,8 @@ public class ExpirationDatePostValidator implements Validator<Object> {
             DebitCardDataDTO debitCardDataDTO = (DebitCardDataDTO) dto;
             expirationDate = debitCardDataDTO.cardDataDTO().expirationDate();
         }
-
         if(!expirationDate.isBlank()){
             ExpirationDate.expirationDateValidator(expirationDate);
-        }else{
-            throw new RuntimeException("La clase no es la apropiada");
         }
     }
 }

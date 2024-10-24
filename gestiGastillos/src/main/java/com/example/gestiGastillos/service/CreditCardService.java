@@ -30,12 +30,12 @@ public class CreditCardService {
     private final CreditCardRepository creditCardRepository;
     private final CardRepository cardRepository;
     private final List<Validator<Object>> creditCardPostValidator;
-    private final List<Validator<UpdateCreditCardDTO>> creditCardPutValidator;
+    private final List<Validator<Object>> creditCardPutValidator;
 
     @Autowired
     public CreditCardService(UserRepository userRepository, CreditCardRepository creditCardRepository,
                              CardRepository cardRepository, List<Validator<Object>> creditCardPostValidator,
-                             List<Validator<UpdateCreditCardDTO>> creditCardPutValidator){
+                             List<Validator<Object>> creditCardPutValidator){
         this.userRepository = userRepository;
         this.creditCardRepository = creditCardRepository;
         this.cardRepository = cardRepository;

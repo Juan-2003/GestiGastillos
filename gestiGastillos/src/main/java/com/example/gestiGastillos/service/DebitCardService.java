@@ -8,7 +8,6 @@ import com.example.gestiGastillos.dto.debitCard.UpdateDebitCardResponseDTO;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.User;
-import com.example.gestiGastillos.model.debitCard.PutValidation.DebitCardPutValidator;
 import com.example.gestiGastillos.repository.CardRepository;
 import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.UserRepository;
@@ -25,12 +24,12 @@ public class DebitCardService {
     private final DebitCardRepository debitCardRepository;
     private final CardRepository cardRepository;
     private final List<Validator<Object>> debitCardPostValidator;
-    private final List<DebitCardPutValidator> debitCardPutValidator;
+    private final List<Validator<Object>> debitCardPutValidator;
 
     @Autowired
     public DebitCardService(UserRepository userRepository, DebitCardRepository debitCardRepository,
                             CardRepository cardRepository, List<Validator<Object>> debitCardPostValidator,
-                            List<DebitCardPutValidator> debitCardPutValidator) {
+                            List<Validator<Object>> debitCardPutValidator) {
         this.userRepository = userRepository;
         this.debitCardRepository = debitCardRepository;
         this.cardRepository = cardRepository;
