@@ -1,4 +1,4 @@
-package com.example.gestiGastillos.model.transactions.expense;
+package com.example.gestiGastillos.dto.transactions.expense;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

@@ -67,11 +67,13 @@ public class IncomeService {
     }
 
     public List<IncomeResponseDTO> getIncomeList(Pageable pageable){
-        List<IncomeResponseDTO> incomeList = transactionsRepository.findAll(pageable).getContent().stream()
+        /*List<IncomeResponseDTO> incomeList = transactionsRepository.findAll(pageable).getContent().stream()
                 .filter(transaction -> transaction.getType().equals(TransactionType.INCOME))
                 .map(transactions -> new IncomeResponseDTO(transactions))
+                .toList();*/
+        List<IncomeResponseDTO> incomeList = transactionsRepository.findAllByType(TransactionType.INCOME).stream()
+                .map(IncomeResponseDTO::new)
                 .toList();
-
         return incomeList;
     }
 
@@ -79,7 +81,7 @@ public class IncomeService {
         Transactions transaction = transactionsRepository.findById(updateIncomeDTO.incomeId())
                 .orElseThrow(() -> new EntityNotFoundException("Transaccion no encontrada con id: " + updateIncomeDTO.incomeId()));
 
-        transaction.update(updateIncomeDTO);
+        transaction.updateIncome(updateIncomeDTO);
 
         transactionsRepository.save(transaction);
         return new UpdateIncomeResponseDTO(transaction);

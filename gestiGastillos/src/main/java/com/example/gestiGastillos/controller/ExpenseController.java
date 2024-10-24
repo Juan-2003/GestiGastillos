@@ -1,16 +1,20 @@
 package com.example.gestiGastillos.controller;
 
-import com.example.gestiGastillos.model.transactions.expense.ExpenseDataDTO;
-import com.example.gestiGastillos.model.transactions.expense.ExpenseResponseDTO;
+import com.example.gestiGastillos.dto.transactions.expense.ExpenseDataDTO;
+import com.example.gestiGastillos.dto.transactions.expense.ExpenseResponseDTO;
+import com.example.gestiGastillos.dto.transactions.expense.UpdateExpenseDTO;
+import com.example.gestiGastillos.dto.transactions.expense.UpdateExpenseResponseDTO;
 import com.example.gestiGastillos.service.ExpenseService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/gestiGastillos/expense")
@@ -38,5 +42,26 @@ public class ExpenseController {
     public ResponseEntity<ExpenseResponseDTO> getExpense(@PathVariable Long id){
         ExpenseResponseDTO expenseResponseDTO = expenseService.getExpense(id);
         return ResponseEntity.ok(expenseResponseDTO);
+    }
+
+    @GetMapping("/expenseList")
+    public ResponseEntity<List<ExpenseResponseDTO>> getExpenseList(Pageable pageable){
+        List<ExpenseResponseDTO> expenseList = expenseService.getExpenseList(pageable);
+        return ResponseEntity.ok(expenseList);
+    }
+
+    @PutMapping("/updateExpense")
+    @Transactional
+    public ResponseEntity<UpdateExpenseResponseDTO> updateExpense(@Valid @RequestBody UpdateExpenseDTO updateExpenseDTO){
+        UpdateExpenseResponseDTO updateExpenseResponseDTO = expenseService.updateExpense(updateExpenseDTO);
+
+        return ResponseEntity.ok(updateExpenseResponseDTO);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @Transactional
+    public ResponseEntity<Void> deleteExpense(@PathVariable Long id){
+        expenseService.deleteExpense(id);
+        return ResponseEntity.noContent().build();
     }
 }

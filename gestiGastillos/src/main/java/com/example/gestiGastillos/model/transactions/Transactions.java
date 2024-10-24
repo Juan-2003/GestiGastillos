@@ -1,17 +1,15 @@
 package com.example.gestiGastillos.model.transactions;
 
+import com.example.gestiGastillos.dto.transactions.expense.UpdateExpenseDTO;
 import com.example.gestiGastillos.dto.transactions.income.IncomeDataDTO;
 import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeDTO;
 import com.example.gestiGastillos.model.card.Card;
-import com.example.gestiGastillos.model.debitCard.DebitCard;
-import com.example.gestiGastillos.model.transactions.expense.ExpenseDataDTO;
+import com.example.gestiGastillos.dto.transactions.expense.ExpenseDataDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Objects;
 
 @Entity(name = "Transacciones")
 @Table(name = "transactions")
@@ -62,6 +60,7 @@ public class Transactions {
         this.paymentMethod = PaymentMethod.fromSpanish(incomeDataDTO.paymentMethod());
     }
 
+    //Egreso con cualquier tarjeta
     public Transactions(ExpenseDataDTO expenseDataDTO, Card card){
         this.type = TransactionType.fromSpanish(expenseDataDTO.type());
         this.amount = expenseDataDTO.amount();
@@ -73,16 +72,15 @@ public class Transactions {
 
     //Egreso con efectivo
     public Transactions(ExpenseDataDTO expenseDataDTO){
-        System.out.println("Type: " + expenseDataDTO.type());
         this.type = TransactionType.fromSpanish(expenseDataDTO.type());
-        System.out.println("222222222222222");
         this.amount = expenseDataDTO.amount();
         this.concept = expenseDataDTO.concept();
         this.category = TransactionCategory.fromSpanish(expenseDataDTO.category());
         this.paymentMethod = PaymentMethod.fromSpanish(expenseDataDTO.paymentMethod());
     }
 
-    public void update(UpdateIncomeDTO updateIncomeDTO){
+    //Actualizar ingreso
+    public void updateIncome(UpdateIncomeDTO updateIncomeDTO){
 
         if(updateIncomeDTO.amount() != this.amount){
             this.amount = updateIncomeDTO.amount();
@@ -96,6 +94,23 @@ public class Transactions {
 
         if(this.paymentMethod.name() != updateIncomeDTO.paymentMethod()){
             this.paymentMethod = PaymentMethod.fromSpanish(updateIncomeDTO.paymentMethod());
+        }
+    }
+
+    //Actualizar egreso
+    public void updateExpense(UpdateExpenseDTO updateExpenseDTO){
+        if(updateExpenseDTO.amount() != this.amount){
+            this.amount = updateExpenseDTO.amount();
+        }
+        if(updateExpenseDTO.concept() != this.concept){
+            this.concept = updateExpenseDTO.concept();
+        }
+        if(!this.category.name().equals(updateExpenseDTO.category())){
+            this.category = TransactionCategory.fromSpanish(updateExpenseDTO.category());
+        }
+
+        if(this.paymentMethod.name() != updateExpenseDTO.paymentMethod()){
+            this.paymentMethod = PaymentMethod.fromSpanish(updateExpenseDTO.paymentMethod());
         }
     }
 }

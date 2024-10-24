@@ -27,7 +27,7 @@ public record IncomeResponseDTO(
                         transaction.getConcept(),
                         transaction.getCategory().name(),
                         transaction.getPaymentMethod().name(),
-                        (transaction.getCard().getDebitCard() != null) ? transaction.getCard().getDebitCard().getId() : null
+                        (transaction.getCard() == null) ?  null : (transaction.getCard().getDebitCard() == null) ? null : transaction.getCard().getDebitCard().getId()
                 );
         }
 }
