@@ -56,18 +56,24 @@ public class IncomeService {
     }
 
     public IncomeResponseDTO getIncome(Long id){
-        Transactions transactions = transactionsRepository.findById(id)
+        Transactions transaction = transactionsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Transaccion no encontrada con el id: " + id));
 
-        return new IncomeResponseDTO(transactions);
+        if(transaction.getType() != TransactionType.INCOME){
+            throw new RuntimeException("La transaccion no es un ingreso");
+        }
+
+        return new IncomeResponseDTO(transaction);
     }
 
     public List<IncomeResponseDTO> getIncomeList(Pageable pageable){
-        List<IncomeResponseDTO> incomeList = transactionsRepository.findAll(pageable).getContent().stream()
+        /*List<IncomeResponseDTO> incomeList = transactionsRepository.findAll(pageable).getContent().stream()
                 .filter(transaction -> transaction.getType().equals(TransactionType.INCOME))
                 .map(transactions -> new IncomeResponseDTO(transactions))
+                .toList();*/
+        List<IncomeResponseDTO> incomeList = transactionsRepository.findAllByType(TransactionType.INCOME).stream()
+                .map(IncomeResponseDTO::new)
                 .toList();
-
         return incomeList;
     }
 
@@ -75,7 +81,7 @@ public class IncomeService {
         Transactions transaction = transactionsRepository.findById(updateIncomeDTO.incomeId())
                 .orElseThrow(() -> new EntityNotFoundException("Transaccion no encontrada con id: " + updateIncomeDTO.incomeId()));
 
-        transaction.update(updateIncomeDTO);
+        transaction.updateIncome(updateIncomeDTO);
 
         transactionsRepository.save(transaction);
         return new UpdateIncomeResponseDTO(transaction);

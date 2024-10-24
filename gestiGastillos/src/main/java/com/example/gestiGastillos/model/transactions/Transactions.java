@@ -1,16 +1,15 @@
 package com.example.gestiGastillos.model.transactions;
 
+import com.example.gestiGastillos.dto.transactions.expense.UpdateExpenseDTO;
 import com.example.gestiGastillos.dto.transactions.income.IncomeDataDTO;
 import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeDTO;
 import com.example.gestiGastillos.model.card.Card;
-import com.example.gestiGastillos.model.debitCard.DebitCard;
+import com.example.gestiGastillos.dto.transactions.expense.ExpenseDataDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Objects;
 
 @Entity(name = "Transacciones")
 @Table(name = "transactions")
@@ -40,24 +39,48 @@ public class Transactions {
     @JoinColumn(name = "card_id")
     private Card card;
 
-    public Transactions(IncomeDataDTO transactionDataDTO, Card card){
-        this.type = TransactionType.fromSpanish(transactionDataDTO.type());
-        this.amount = transactionDataDTO.amount();
-        this.concept = transactionDataDTO.concept();
-        this.category = TransactionCategory.fromSpanish(transactionDataDTO.category());
-        this.paymentMethod = PaymentMethod.fromSpanish(transactionDataDTO.paymentMethod());
+
+    //Ingreso con tarjeta de debito
+    public Transactions(IncomeDataDTO incomeDataDTO, Card card){
+        this.type = TransactionType.fromSpanish(incomeDataDTO.type());
+        this.amount = incomeDataDTO.amount();
+        this.concept = incomeDataDTO.concept();
+        this.category = TransactionCategory.fromSpanish(incomeDataDTO.category());
+        this.paymentMethod = PaymentMethod.fromSpanish(incomeDataDTO.paymentMethod());
         this.card = card;
     }
 
-    public Transactions(IncomeDataDTO transactionDataDTO){
-        this.type = TransactionType.fromSpanish(transactionDataDTO.type());
-        this.amount = transactionDataDTO.amount();
-        this.concept = transactionDataDTO.concept();
-        this.category = TransactionCategory.fromSpanish(transactionDataDTO.category());
-        this.paymentMethod = PaymentMethod.fromSpanish(transactionDataDTO.paymentMethod());
+
+    //Ingreso con efectivo
+    public Transactions(IncomeDataDTO incomeDataDTO){
+        this.type = TransactionType.fromSpanish(incomeDataDTO.type());
+        this.amount = incomeDataDTO.amount();
+        this.concept = incomeDataDTO.concept();
+        this.category = TransactionCategory.fromSpanish(incomeDataDTO.category());
+        this.paymentMethod = PaymentMethod.fromSpanish(incomeDataDTO.paymentMethod());
     }
 
-    public void update(UpdateIncomeDTO updateIncomeDTO){
+    //Egreso con cualquier tarjeta
+    public Transactions(ExpenseDataDTO expenseDataDTO, Card card){
+        this.type = TransactionType.fromSpanish(expenseDataDTO.type());
+        this.amount = expenseDataDTO.amount();
+        this.concept = expenseDataDTO.concept();
+        this.category = TransactionCategory.fromSpanish(expenseDataDTO.category());
+        this.paymentMethod = PaymentMethod.fromSpanish(expenseDataDTO.paymentMethod());
+        this.card = card;
+    }
+
+    //Egreso con efectivo
+    public Transactions(ExpenseDataDTO expenseDataDTO){
+        this.type = TransactionType.fromSpanish(expenseDataDTO.type());
+        this.amount = expenseDataDTO.amount();
+        this.concept = expenseDataDTO.concept();
+        this.category = TransactionCategory.fromSpanish(expenseDataDTO.category());
+        this.paymentMethod = PaymentMethod.fromSpanish(expenseDataDTO.paymentMethod());
+    }
+
+    //Actualizar ingreso
+    public void updateIncome(UpdateIncomeDTO updateIncomeDTO){
 
         if(updateIncomeDTO.amount() != this.amount){
             this.amount = updateIncomeDTO.amount();
@@ -71,6 +94,23 @@ public class Transactions {
 
         if(this.paymentMethod.name() != updateIncomeDTO.paymentMethod()){
             this.paymentMethod = PaymentMethod.fromSpanish(updateIncomeDTO.paymentMethod());
+        }
+    }
+
+    //Actualizar egreso
+    public void updateExpense(UpdateExpenseDTO updateExpenseDTO){
+        if(updateExpenseDTO.amount() != this.amount){
+            this.amount = updateExpenseDTO.amount();
+        }
+        if(updateExpenseDTO.concept() != this.concept){
+            this.concept = updateExpenseDTO.concept();
+        }
+        if(!this.category.name().equals(updateExpenseDTO.category())){
+            this.category = TransactionCategory.fromSpanish(updateExpenseDTO.category());
+        }
+
+        if(this.paymentMethod.name() != updateExpenseDTO.paymentMethod()){
+            this.paymentMethod = PaymentMethod.fromSpanish(updateExpenseDTO.paymentMethod());
         }
     }
 }
