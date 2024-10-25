@@ -7,7 +7,7 @@ interface Props{
 export default function TextClass({text}: Props){
     return(
         <View style={globalStyles.textContainer}>
-            <Text>{text}</Text>
+            <Text style={globalStyles.textForm}>{text}</Text>
         </View>
 
     )

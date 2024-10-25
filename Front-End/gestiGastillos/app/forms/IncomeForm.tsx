@@ -1,15 +1,15 @@
-import { View,Text,TextInput } from "react-native";
+import { View,TextInput } from "react-native";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
-import TopBar from "@/components/topBar";
 import ButtonClass from "@/components/buttons";
 import TextClass from "@/components/TextClass";
+import TopBarForms from "@/components/TopBarForms";
 
 export default function IncomeForm(){
     return(
         <View style={globalStyles.container}>
       
-        <TopBar title="Ingreso"/>
+        <TopBarForms title="INGRESO"/>
             <View style={globalStylesMenu.container}>
             
                 <View style={globalStylesMenu.containerMiddle}>

@@ -8,13 +8,17 @@ const globalStyles = StyleSheet.create({
   button: {
     backgroundColor: "#BA2828",
     alignItems: "center",
-    width: "40%",
+    width: "50%",
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 15,
   },
   text: {
     color: "white",
   },
+  textForm: {
+    fontWeight: 'bold',
+    color: 'black'
+},
   input: {
     borderColor: "gray",
     borderBottomWidth: 2,
@@ -46,6 +50,7 @@ const globalStyles = StyleSheet.create({
   },
   inputTextContainer: {
     alignItems: "center",
+    paddingTop: 30,
     //backgroundColor: "green",
   },
 });

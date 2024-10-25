@@ -1,116 +1,133 @@
-import { View, Text, TextInput, Alert,Pressable } from "react-native"; 
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
 import { useState } from "react";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
 import TopBar from "@/components/topBar";
-import ButtonClass from "@/components/buttons";
 import TextClass from "@/components/TextClass";
+import TopBarForms from "@/components/TopBarForms";
 
 export default function Cardform() {
-    const [name, setName] = useState('');
-    const [digitos, setDigitos] = useState('');
-    const [saldo, setSaldo] = useState('');
-    const [deudaActual, setDeudaActual] = useState('');
-    const [fechaVencimiento, setFechaVencimiento] = useState('');
-    
-    const handleSubmit = async () => {
-        const url = 'http://IP_DEL_BACKEND:PUERTO'; // Reemplaza con la IP y el puerto del backend
-        
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name,
-                    digitos,
-                    saldo,
-                    deudaActual,
-                    fechaVencimiento,
-                }),
-            });
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [digitos, setDigitos] = useState("");
+  const [limite, setLimite] = useState("");
+  const [deudaActual, setDeudaActual] = useState<number>();
+  const [fechaVencimiento, setFechaVencimiento] = useState("");
+  const user_id = 1;
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+  const handleSubmit = async () => {
+    fetch("http://10.214.91.96:8080/gestiGastillos/creditCard/register", {
+      // Reemplaza con la IP y el puerto del backend
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_id,
+        credit_limit: limite,
+        debt: deudaActual,
+        card: {
+          name,
+          last_digits: digitos,
+          expiration_date: fechaVencimiento,
+        },
+      }),
+    }).then((response) => {
+      console.log(response.status);
+      if (response.ok) {
+        console.log("Usuario creado satisfactoriamente!!");
+        //navigation.navigate("Login");
+        return response.json();
+      } else {
+        return response.json().then((data) => {
+          if (response.status == 409) {
+            console.log(data);
+          }
+        });
+      }
+    });
+  };
 
-            const data = await response.json();
-            // Manejar la respuesta del servidor aquí
-            Alert.alert('Success', 'Datos enviados correctamente');
-        } catch (error) {
-            // Manejar errores aquí
-            Alert.alert('Error', 'No se pudo enviar los datos');
-        }
-    };
-    
-    return (
-        <View style={globalStyles.container}>
-            <TopBar title="TARJETAS"/>
-            <View style={globalStylesMenu.container}>
-                <View style={globalStylesMenu.containerMiddle}>
-                    <View style={globalStyles.inputTextContainer}>
-                        
-                        <TextClass text="nombre"/>
-                        <TextInput
-                            style={globalStyles.textInput}
-                            placeholder="Ingresa tu nombre"
-                            value={name}
-                            onChangeText={setName}
-                        />
+  return (
+    <View style={globalStyles.container}>
+      <TopBarForms title="TARJETAS" />
+      <View style={globalStylesMenu.container}>
+        <ScrollView style={globalStylesMenu.containerMiddle}>
+          <View style={globalStyles.inputTextContainer}>
+            <TextClass text="Nombre de la tarjeta" />
+            <TextInput
+              style={globalStyles.textInput}
+              value={name}
+              onChangeText={setName}
+            />
 
-                        <TextClass text="Selecciones el tipo de tarjeta"/>
-                        <TextInput
-                            style={globalStyles.textInput}
-                            placeholder="Ingresa tu nombre"
-                            value={name}
-                            onChangeText={setName}
-                        />
-                        
-                        <TextClass text="Últimos 4 dígitos"/>
-                        <TextInput
-                            style={globalStyles.textInput}
-                            placeholder="Ingresa los últimos 4 dígitos"
-                            value={digitos}
-                            onChangeText={setDigitos}
-                        />
+            <TextClass text="Últimos 4 dígitos" />
+            <TextInput
+              style={globalStyles.textInput}
+              value={digitos}
+              onChangeText={setDigitos}
+            />
 
-                        <TextClass text="Saldo actual"/>
-                        <TextInput
-                            style={globalStyles.textInput}
-                            placeholder="Ingresa tu saldo actual"
-                            value={saldo}
-                            onChangeText={setSaldo}
-                        />
+            <TextClass text="Saldo actual" />
+            <TextInput
+              style={globalStyles.textInput}
+              value={limite}
+              onChangeText={setLimite}
+            />
 
-                        <TextClass text="Deuda actual"/>
-                        <TextInput
-                            style={globalStyles.textInput}
-                            placeholder="Ingresa tu deuda actual"
-                            value={deudaActual}
-                            onChangeText={setDeudaActual}
-                        />
+            <TextClass text="Selecciones el tipo de tarjeta" />
+            <TextInput
+              style={globalStyles.textInput}
+              value={type}
+              onChangeText={setType}
+            />
 
-                        
-                        <TextClass text="Fecha de vencimiento" />
-                        
-                        <TextInput
-                            style={globalStyles.textInput}
-                            placeholder="Ingresa la fecha de vencimiento"
-                            value={fechaVencimiento}
-                            onChangeText={setFechaVencimiento}
-                        />
-                    </View>
-                </View>
-                <View style={globalStylesMenu.containerBottom}>
-                <Pressable 
-                    style={globalStyles.button}
-                    onPress = {handleSubmit} 
-                >
-                    <Text style={globalStyles.text}>Agregar</Text>
-                </Pressable>
-                </View>
-            </View>
-        </View>
-    );
+            <TextClass text="Fecha de vencimiento" />
+
+            <TextInput
+              style={globalStyles.textInput}
+              placeholder="DD/MM/YYYY"
+              value={fechaVencimiento}
+              onChangeText={setFechaVencimiento}
+            />
+
+            <TextClass text="Deuda actual" />
+            <TextInput
+              style={globalStyles.textInput}
+              value={deudaActual ? deudaActual.toString() : ""}
+              onChangeText={(text) => setDeudaActual(parseFloat(text))}
+              keyboardType="numeric"
+            />
+            <TextClass text="Deuda actual" />
+            <TextInput
+              style={globalStyles.textInput}
+              value={deudaActual ? deudaActual.toString() : ""}
+              onChangeText={(text) => setDeudaActual(parseFloat(text))}
+              keyboardType="numeric"
+            />
+            <TextClass text="Deuda actual" />
+            <TextInput
+              style={globalStyles.textInput}
+              value={deudaActual ? deudaActual.toString() : ""}
+              onChangeText={(text) => setDeudaActual(parseFloat(text))}
+              keyboardType="numeric"
+            />
+          </View>
+          <View style={globalStylesMenu.containerBottom}>
+            <Pressable style={globalStyles.button} onPress={handleSubmit}>
+              <Text style={globalStyles.text}>Agregar</Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      </View>
+    </View>
+  );
 }

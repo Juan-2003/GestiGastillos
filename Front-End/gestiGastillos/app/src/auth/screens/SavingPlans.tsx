@@ -19,7 +19,7 @@ export default function SavingPlans({navigation}:Props) {
   return (
     <View style={globalStyles.container}>
       
-      <TopBar title="Planes de Ahorro"/>
+      <TopBar title="PLANES DE AHORRO"/>
       <View style={globalStylesMenu.container}>
        
         <View style={globalStylesMenu.containerMiddle}>

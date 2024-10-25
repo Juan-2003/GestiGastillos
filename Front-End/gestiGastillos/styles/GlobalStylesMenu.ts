@@ -6,11 +6,12 @@ const globalStylesMenu = StyleSheet.create({
       },
       containerMiddle:{
         flex:2,
-        padding:20,
+        padding:15,
       },
       containerBottom:{
         flex:0.4,
-        alignItems:"center"
+        alignItems:"center",
+        paddingBottom: 50,
      }
 });
 
