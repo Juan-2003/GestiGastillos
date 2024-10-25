@@ -1,9 +1,5 @@
 package com.example.gestiGastillos.service;
 
-import com.example.gestiGastillos.dto.PruebaEntradaDTO;
-import com.example.gestiGastillos.model.Card;
-import com.example.gestiGastillos.model.CreditCard;
-import com.example.gestiGastillos.model.DebitCard;
 import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.repository.CardRepository;
 import com.example.gestiGastillos.repository.CreditCardRepository;
@@ -11,9 +7,6 @@ import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class PruebaService {
@@ -29,7 +22,7 @@ public class PruebaService {
     @Autowired
     private CardRepository cardRepository;
 
-    public void prueba(PruebaEntradaDTO pruebaEntradaDTO){
+    public void prueba(){
        User user = userRepository.getReferenceById(4l);
            
         System.out.println(user.getCreditCards().size());

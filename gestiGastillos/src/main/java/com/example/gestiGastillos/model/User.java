@@ -1,8 +1,11 @@
 package com.example.gestiGastillos.model;
 
+import com.example.gestiGastillos.model.creditCard.CreditCard;
+import com.example.gestiGastillos.model.debitCard.DebitCard;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,6 +31,9 @@ public class User {
 
 
     public User(String name){
+
         this.name = name;
+        creditCards = new ArrayList<>();
+        debitCards = new ArrayList<>();
     }
 }
