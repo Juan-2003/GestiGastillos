@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
-import TopBar from "@/components/topBar";
+import { Picker } from '@react-native-picker/picker';
 import TextClass from "@/components/TextClass";
 import TopBarForms from "@/components/TopBarForms";
 
@@ -77,21 +77,39 @@ export default function Cardform() {
             />
 
             <TextClass text="Saldo actual" />
-            <TextInput
-              style={globalStyles.textInput}
-              value={limite}
-              onChangeText={setLimite}
-            />
+              <TextInput
+                style={globalStyles.textInput}
+                value={limite}
+                onChangeText={setLimite}
+              />
 
             <TextClass text="Selecciones el tipo de tarjeta" />
-            <TextInput
-              style={globalStyles.textInput}
-              value={type}
-              onChangeText={setType}
-            />
+            <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={type}
+                  onValueChange={(itemValue) => setType(itemValue)}
+                  style={styles.picker}
+                
+                >
+                  <Picker.Item label="Seleccionar" value="" />
+                  <Picker.Item label="Tarjeta de Crédito" value="credito" />
+                  <Picker.Item label="Tarjeta de Débito" value="debito" />
+                </Picker>
+            </View>
+
+            {type === 'credito' && (
+            <View style={styles.textContainer}>
+              <TextClass text="deuda actual" />
+                <TextInput
+                  style={styles.textInput}
+                  value={deudaActual ? deudaActual.toString() : ""}
+                  onChangeText={(text) => setDeudaActual(parseFloat(text))}
+                  keyboardType="numeric"
+                />
+              </View>
+            )}
 
             <TextClass text="Fecha de vencimiento" />
-
             <TextInput
               style={globalStyles.textInput}
               placeholder="DD/MM/YYYY"
@@ -99,27 +117,6 @@ export default function Cardform() {
               onChangeText={setFechaVencimiento}
             />
 
-            <TextClass text="Deuda actual" />
-            <TextInput
-              style={globalStyles.textInput}
-              value={deudaActual ? deudaActual.toString() : ""}
-              onChangeText={(text) => setDeudaActual(parseFloat(text))}
-              keyboardType="numeric"
-            />
-            <TextClass text="Deuda actual" />
-            <TextInput
-              style={globalStyles.textInput}
-              value={deudaActual ? deudaActual.toString() : ""}
-              onChangeText={(text) => setDeudaActual(parseFloat(text))}
-              keyboardType="numeric"
-            />
-            <TextClass text="Deuda actual" />
-            <TextInput
-              style={globalStyles.textInput}
-              value={deudaActual ? deudaActual.toString() : ""}
-              onChangeText={(text) => setDeudaActual(parseFloat(text))}
-              keyboardType="numeric"
-            />
           </View>
           <View style={globalStylesMenu.containerBottom}>
             <Pressable style={globalStyles.button} onPress={handleSubmit}>
@@ -131,3 +128,37 @@ export default function Cardform() {
     </View>
   );
 }
+
+const styles=StyleSheet.create({
+  picker: {
+    height: 50,
+    width: '100%',
+    justifyContent:"space-between",
+    alignItems:"center",
+    
+
+
+  },
+  pickerContainer:{
+    width:"71%",
+    justifyContent:"center",
+    borderBottomWidth:0.5,
+    borderColor:"black",
+    marginBottom:40,
+  },
+  textContainer:{
+    width: '70%',
+    justifyContent: 'center',
+    
+    
+  },
+ 
+  textInput:{
+    borderBottomWidth: 1,
+    width: '100%',
+    borderBottomColor: "#A9BBBD",
+    marginRight: 60,
+    marginBottom: 40,
+  }
+  
+})
