@@ -71,7 +71,7 @@ export default function Card({ navigation }: Props) {
                   </View>
                 </View>
               </View>
-            )} // Método para renderizar cada elemento
+            )} 
           />
         </View>
 

@@ -8,12 +8,14 @@ const globalStyles = StyleSheet.create({
   button: {
     backgroundColor: "#BA2828",
     alignItems: "center",
-    width: "50%",
-    padding: 10,
-    borderRadius: 15,
+    width: "80%",
+    padding: 4,
+    borderRadius: 2,
   },
   text: {
     color: "white",
+    fontWeight: 'bold',
+    fontSize: 20,
   },
   textForm: {
     fontWeight: 'bold',
