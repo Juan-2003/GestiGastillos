@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
-  SafeAreaView,
 } from "react-native";
 import { useState } from "react";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";

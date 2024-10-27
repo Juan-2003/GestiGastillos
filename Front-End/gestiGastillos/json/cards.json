@@ -3,20 +3,29 @@
       {
         "id": "1",
         "type": "Tarjeta Credito",
-        "name": "Ramon",
-        "digitos":"3434",
-        "saldo": "10000",
-        "deudaActual": "2000",
-        "fechaVencimiento":"10-10-2024"
+        "name": "La Consentida ",
+        "digitos":"8245",
+        "saldo": "$100",
+        "deudaActual": "$0",
+        "fechaVencimiento":"28/27"
       },
       {
         "id": "2",
         "type": "Tarjeta Credito",
-        "name": "bbva juan",
-        "saldo": "20000",
-        "deudaActual": "2000",
-        "digitos":"3534",
-        "fechaVencimiento":"11-10-2024"
+        "name": "LA DUEÑA DE MIS QUINCENAS 😈",
+        "saldo": "$20,000",
+        "deudaActual": "$512.40",
+        "digitos":"1412",
+        "fechaVencimiento":"15/30"
+      },
+      {
+        "id": "3",
+        "type": "Tarjeta Credito",
+        "name": "LA CAPRICHOSA 🥵",
+        "saldo": "$2,000",
+        "deudaActual": "$0",
+        "digitos":"6265",
+        "fechaVencimiento":"08/29"
       }
     ]
   }

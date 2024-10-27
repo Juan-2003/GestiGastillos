@@ -9,8 +9,11 @@ const globalStyles = StyleSheet.create({
     backgroundColor: "#BA2828",
     alignItems: "center",
     width: "80%",
-    padding: 4,
-    borderRadius: 2,
+    padding: 6,
+    borderRadius: 10,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#9e292b"
   },
   text: {
     color: "white",
@@ -36,12 +39,11 @@ const globalStyles = StyleSheet.create({
     flex: 3,
     alignItems: "center",
     justifyContent: "center",
-    //backgroundColor: "red",
   },
   textInput: {
     borderBottomWidth: 1,
     width: '70%',
-    borderBottomColor: "#A9BBBD",
+    borderBottomColor: "#000000",
     marginLeft: 60,
     marginRight: 60,
     marginBottom: 40,

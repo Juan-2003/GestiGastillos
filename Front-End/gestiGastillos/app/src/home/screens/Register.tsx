@@ -14,25 +14,23 @@ export default function Register({ navigation }: Props) {
       <View style={styles.topContainer}>
         <ImagePicker />
       </View>
-
       <View style={styles.middleContainer}>
 
         <View style={globalStyles.inputTextContainer}>
           <View style={globalStyles.textContainer}>
-            <Text>Nombre</Text>
+            <Text style={styles.text}>Nombre</Text>
           </View>
 
           <TextInput
             style={globalStyles.textInput}
-            placeholder="Ingresa tu texto aquí"
           />
         </View>
 
         <View style={styles.buttonContainer}>
-            <ButtonClass
+          <ButtonClass
             text="Crear Perfil"
             onPressNavigation={() => navigation.navigate("DrawerNavigation")}
-            />
+          />
         </View>
       </View>
     </View>
@@ -47,14 +45,15 @@ const styles = StyleSheet.create({
   },
   middleContainer: {
     flex: 2.5,
-    
     //backgroundColor: "red",
   },
-  
   buttonContainer: {
     alignItems: "center",
-    paddingTop:30
+    paddingTop: 30
     //backgroundColor: "green",
   },
-  
+  text: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });

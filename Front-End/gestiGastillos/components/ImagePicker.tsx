@@ -71,8 +71,9 @@ const styles = StyleSheet.create({
     //backgroundColor: 'green'
   },
   imageContainer: {
-    borderWidth: 5,
+    borderWidth: 3,
     borderRadius: 200,
+    borderColor: "#BF1515"
     //backgroundColor: "red",
   },
 });

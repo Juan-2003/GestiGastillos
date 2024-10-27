@@ -1,24 +1,33 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StatusBar} from "react-native";
 
-import { StatusBar } from "react-native";
-const Stack = createNativeStackNavigator();
-
-import Welcome from "./src/home/screens/Welcome"; // Asegúrate de que esta ruta sea correcta
+import Welcome from "./src/home/screens/Welcome";
 import Register from "./src/home/screens/Register";
-
 import DrawerNavigation from "./navigation/DraweNavigation";
 import Cardform from "./forms/cardForm";
 import ExpensesForm from "./forms/ExpensesForm";
 import IncomeForm from "./forms/IncomeForm";
 import ReminderForm from "./forms/ReminderForm";
 import SavingPlansForm from "./forms/SavingPlansForm";
+import { useEffect } from "react";
+
+const Stack = createNativeStackNavigator();
+
 export default function Index() {
+
+  useEffect(() => {
+    StatusBar.setBackgroundColor('black');
+    StatusBar.setBarStyle('light-content');
+  }, []);
+  
   return (
-    <>
-      <StatusBar barStyle="light-content" backgroundColor="black" />
       <Stack.Navigator
-        initialRouteName="Register"
-        screenOptions={{ headerShown: false }}
+        initialRouteName="Welcome"
+        screenOptions={{ 
+          headerShown: false,
+          gestureEnabled: true, 
+          animation: 'fade_from_bottom'
+        }}
       >
         <Stack.Screen
           name="Welcome"
@@ -61,7 +70,5 @@ export default function Index() {
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
-      
-    </>
   );
 }
