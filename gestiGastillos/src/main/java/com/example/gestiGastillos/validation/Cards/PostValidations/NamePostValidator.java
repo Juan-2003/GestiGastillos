@@ -52,7 +52,6 @@ public class NamePostValidator implements Validator<Object> {
             newCardName = updatedebitCardDTO.updateCardDTO().name();
         }
         else if(dto instanceof DebitCardDataDTO){
-            System.out.println("1355555555555");
             DebitCardDataDTO debitCardDataDTO = (DebitCardDataDTO) dto;
             user= userRepository.getReferenceById(debitCardDataDTO.user_id());
             newCardName = debitCardDataDTO.cardDataDTO().name();
