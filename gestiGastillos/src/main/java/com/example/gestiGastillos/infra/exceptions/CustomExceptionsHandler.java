@@ -20,7 +20,9 @@ public class CustomExceptionsHandler {
                     InvalidDebtException.class,
                     InvalidExpirationDateException.class,
                     InvalidLastDigitsException.class,
-                    InvalidCardNameException.class
+                    InvalidCardNameException.class,
+                    DateException.class,
+                    ReminderNameException.class
             )
     );
 
@@ -40,7 +42,10 @@ public class CustomExceptionsHandler {
             InvalidDebtException.class,
             InvalidExpirationDateException.class,
             InvalidLastDigitsException.class,
-            InvalidCardNameException.class})
+            InvalidCardNameException.class,
+            DateException.class,
+            ReminderNameException.class
+    })
     public ResponseEntity<DataErrorValidation> handleBadRequestCustomExceptions(RuntimeException e){
         for(Class<? extends RuntimeException> exeptionClass : customExeptions){
             if(exeptionClass.isInstance(e)){

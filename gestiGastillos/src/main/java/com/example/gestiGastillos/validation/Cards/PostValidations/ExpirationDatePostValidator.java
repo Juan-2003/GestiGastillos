@@ -27,8 +27,6 @@ public class ExpirationDatePostValidator implements Validator<Object> {
 
         if(!expirationDate.isBlank()){
             ExpirationDate.expirationDateValidator(expirationDate);
-        }else{
-            throw new RuntimeException("La clase no es la apropiada");
         }
     }
 }
