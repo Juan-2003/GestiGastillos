@@ -11,6 +11,9 @@ public record UpdateDebitCardDTO(
         @NotNull(message = "'debit_card_id' no puede ser nulo")
         @JsonProperty("debit_card_id")
         Long debitCardId,
+        @NotNull(message = "El user_id no puede ser nulo")
+        @JsonProperty("user_id")
+        Long userId,
         @NotBlank
         @PositiveOrZero(message = "'current_balance' debe ser mayor o igual a 0")
         @JsonProperty("current_balance")
