@@ -14,6 +14,7 @@ import com.example.gestiGastillos.repository.CreditCardRepository;
 import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.ReminderRepository;
 import com.example.gestiGastillos.validation.Validator;
+import com.example.gestiGastillos.validation.reminder.ReminderValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
@@ -26,13 +27,13 @@ public class ReminderService {
     private final CardRepository cardRepository;
     private final CreditCardRepository creditCardRepository;
     private final DebitCardRepository debitCardRepository;
-    private final List<Validator<Object>> reminderPostValidator;
-    private final List<Validator<Object>> reminderPutValidator;
+    private final List<ReminderValidator<Object>> reminderPostValidator;
+    private final List<ReminderValidator<Object>> reminderPutValidator;
 
     @Autowired
     public ReminderService(ReminderRepository reminderRepository,
                            CardRepository cardRepository, CreditCardRepository creditCardRepository,  DebitCardRepository debitCardRepository,
-                           List<Validator<Object>> reminderValidator, List<Validator<Object>> reminderPutValidator){
+                           List<ReminderValidator<Object>> reminderValidator, List<ReminderValidator<Object>> reminderPutValidator){
         this.reminderRepository = reminderRepository;
         this.cardRepository = cardRepository;
         this.creditCardRepository = creditCardRepository;

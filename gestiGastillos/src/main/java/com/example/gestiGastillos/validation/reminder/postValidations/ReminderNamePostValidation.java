@@ -6,6 +6,7 @@ import com.example.gestiGastillos.model.Reminder;
 import com.example.gestiGastillos.repository.ReminderRepository;
 import com.example.gestiGastillos.validation.Validator;
 import com.example.gestiGastillos.validation.reminder.ReminderName;
+import com.example.gestiGastillos.validation.reminder.ReminderValidator;
 import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ReminderNamePostValidation implements Validator<Object> {
+public class ReminderNamePostValidation implements ReminderValidator<Object> {
     private final ReminderRepository reminderRepository;
 
     @Autowired

@@ -4,10 +4,11 @@ import com.example.gestiGastillos.dto.reminder.ReminderDataDTO;
 import com.example.gestiGastillos.dto.reminder.UpdateReminderDTO;
 import com.example.gestiGastillos.validation.ExpirationDate;
 import com.example.gestiGastillos.validation.Validator;
+import com.example.gestiGastillos.validation.reminder.ReminderValidator;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReminderDatePostValidation implements Validator<Object> {
+public class ReminderDatePostValidation implements ReminderValidator<Object> {
 
     @Override
     public void validation(Object dto) {
