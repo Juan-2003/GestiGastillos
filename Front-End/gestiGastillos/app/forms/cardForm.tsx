@@ -23,7 +23,7 @@ export default function Cardform() {
   const user_id = 1;
 
   const handleSubmit = async () => {
-    fetch("http://10.214.91.96:8080/gestiGastillos/creditCard/register", {
+    fetch("http://192.168.100.19:8080/gestiGastillos/creditCard/register", {
       // Reemplaza con la IP y el puerto del backend
       method: "POST",
       headers: {
@@ -111,7 +111,7 @@ export default function Cardform() {
             <TextClass text="Fecha de vencimiento" />
             <TextInput
               style={globalStyles.textInput}
-              placeholder="DD/MM/YYYY"
+              placeholder="YYYY-MM-DD"
               value={fechaVencimiento}
               onChangeText={setFechaVencimiento}
             />

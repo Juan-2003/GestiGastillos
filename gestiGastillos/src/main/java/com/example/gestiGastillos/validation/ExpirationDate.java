@@ -12,6 +12,5 @@ public class ExpirationDate {
         if(expirationDate.isBefore(LocalDate.now()) || expirationDate.equals(LocalDate.now())){
             throw new InvalidCreditLimitException("La fecha ingresada no puede ser el dia en curso, ni dias previos: " + expirationDate);
         }
-        throw new RuntimeException("dgfrosdfkjed");
     }
 }
