@@ -3,36 +3,71 @@ import globalStyles from "@/styles/GlobalStyles";
 import { StyleSheet, View, Text, FlatList, Image } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ButtonClass from "@/components/buttons";
-import cards from "@/json/cards.json";
 import { useEffect, useState } from "react";
 
 interface Props {
   navigation: StackNavigationProp<any>;
 }
 
-interface CardItem {
-  id: number;
-  type: string;
+interface User {
+  user_id: number;
   name: string;
-  digitos: number;
-  fechaVencimiento: string;
-  saldo: number;
-  deudaActual: number;
 }
+
+interface Card {
+  card_id: number;
+  card_name: string;
+  last_digits: string;
+  expiration_date: string;
+}
+
+interface CreditCardItem {
+  tarjeta_credito_id: number;
+  user: User;
+  card: Card;
+  debt: number;
+  credit_limit: string;
+  type: string;
+}
+
+interface DebitCardItem {
+  tarjeta_credito_id: number;
+  user: User;
+  card: Card;
+  current_balance: number;
+  type: string;
+}
+
+type CardItem = CreditCardItem | DebitCardItem;
 
 const handleFetchItem = async (): Promise<CardItem[]> => {
   try {
-    const response = await fetch("http://192.168.100.19:8080/gestiGastillos/cards", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await fetch(
+      "http://192.168.100.17:8080/gestiGastillos/cards",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    });
-
-    if(response.ok){
-      console.log("Se obtuvieron las tarjetas satisfactoriamente!!");
-      return await response.json();
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Se obtuvieron las tarjetas satisfactoriamente!! ", data);
+      console.log("Tarjetas de credito ", data.credit_cards);
+      console.log("Tarjetas de debito ",data.debit_cards);
+      const allCards = [
+        ...data.credit_cards.map((card: CreditCardItem) => ({
+          ...card,
+          type: 'credit',
+        })),
+        ...data.debit_cards.map((card: DebitCardItem) => ({
+          ...card,
+          type: 'debit',
+        })),
+      ];
+      return allCards;
     } else {
       const errorData = await response.json();
       if (response.status === 409) {
@@ -41,11 +76,10 @@ const handleFetchItem = async (): Promise<CardItem[]> => {
       console.log(errorData);
       throw new Error("Error al obtener las tarjetas");
     }
-  }
-  catch (error) {
+  } catch (error) {
     return [];
   }
-}
+};
 
 export default function Card({ navigation }: Props) {
   const [cards, setCards] = useState<CardItem[]>([]);
@@ -54,7 +88,7 @@ export default function Card({ navigation }: Props) {
     const fetchData = async () => {
       const data = await handleFetchItem();
       setCards(data);
-      console.log("Datos almacenados en cards:", data);  // Verificar los datos aquí
+      console.log("Datos almacenados en cards:", data); // Verificar los datos aquí
     };
     fetchData();
   }, []);
@@ -65,71 +99,74 @@ export default function Card({ navigation }: Props) {
       <View style={styles.middleContainer}>
         <FlatList
           data={cards} // Datos a renderizar
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.tarjeta_credito_id.toString()}
           renderItem={({ item }) => (
             <View style={styles.cardContainer}>
-
               <View style={styles.topCard}>
-
                 <View style={styles.typeContainer}>
-                  <Text style={styles.text}>{item.type}</Text>
+                  <Text style={styles.text}>
+                    {item.type === "credit" ? "Tarjeta de Crédito" : "Tarjeta de Débito"}
+                  </Text>
                 </View>
 
                 <View style={styles.nameContainer}>
-                  <Text style={styles.text}>{item.name}</Text>
+                  <Text style={styles.text}>{item.card.card_name}</Text>
                 </View>
-
+ 
                 <View style={styles.iconsContainer}>
                   <Image
-                    source={require('@/assets/images/editIcon.png')}
+                    source={require("@/assets/images/editIcon.png")}
                     style={styles.image}
                   />
                   <Image
-                    source={require('@/assets/images/deleteIcon.png')}
+                    source={require("@/assets/images/deleteIcon.png")}
                     style={styles.image}
                   />
                 </View>
-
               </View>
 
               <View style={styles.middleCard}>
-                <Text style={styles.digits}>{item.digitos}</Text>
+                <Text style={styles.digits}>{item.card.last_digits}</Text>
               </View>
 
               <View style={styles.bottomCard}>
-
                 <View style={styles.dateContainer}>
-                  <Text style={styles.dateText}>{item.fechaVencimiento}</Text>
+                  <Text style={styles.dateText}>
+                    {item.card.expiration_date}
+                  </Text>
                 </View>
 
                 <View style={styles.numberContainer}>
                   <Text style={styles.text}>Saldo:</Text>
-                  <Text style={styles.textNumber}>{item.saldo}</Text>
+                  <Text style={styles.textNumber}>
+                    {item.type === "credit" ? item.debt : item.current_balance}
+                  </Text>
                 </View>
-
-                <View style={styles.numberContainer}>
-                  <Text style={styles.text}>Deuda:</Text>
-                  <Text style={styles.textNumber}>{item.deudaActual}</Text>
-                </View>
-
+                {item.type === "credit" && (
+                  <View style={styles.numberContainer}>
+                    <Text style={styles.text}>Deuda:</Text>
+                    <Text style={styles.textNumber}>{item.debt}</Text>
+                  </View>
+                )}
               </View>
             </View>
           )}
           ListFooterComponent={
-          <View style={styles.bottomContainer}>
-            <ButtonClass
-              text="Agregar Tarjeta"
-              onPressNavigation={() => navigation.navigate("Cardform")}
-            />
-          </View>
+            <View style={styles.bottomContainer}>
+              <ButtonClass
+                text="Agregar Tarjeta"
+                onPressNavigation={() => navigation.navigate("Cardform")}
+              />
+            </View>
           }
           ListEmptyComponent={
-            <Text style={styles.emptyMessage}>Aún no has agregado alguna tarjeta :c</Text>
+            <Text style={styles.emptyMessage}>
+              Aún no has agregado alguna tarjeta :c
+            </Text>
           }
         />
       </View>
     </View>
-
   );
 }
 
@@ -138,7 +175,7 @@ const styles = StyleSheet.create({
     flex: 3,
   },
   bottomContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 50,
   },
   cardContainer: {
@@ -149,7 +186,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     elevation: 5,
     borderWidth: 1,
-    borderColor: "#9e292b"
+    borderColor: "#9e292b",
   },
   topCard: {
     flex: 1,
@@ -199,21 +236,21 @@ const styles = StyleSheet.create({
   },
   iconsContainer: {
     flex: 0.3,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    alignItems: "center",
+    justifyContent: "space-around",
     flexDirection: "row",
     //backgroundColor: 'yellow'
   },
   text: {
     fontSize: 16,
     color: "#FFFFFF",
-    textAlign: 'center',
+    textAlign: "center",
     padding: 2,
   },
   emptyMessage: {
     fontSize: 20,
     color: "red",
-    textAlign: 'center',
+    textAlign: "center",
     marginVertical: 100,
   },
   dateText: {
@@ -233,6 +270,6 @@ const styles = StyleSheet.create({
   image: {
     height: 38,
     width: 38,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
 });
