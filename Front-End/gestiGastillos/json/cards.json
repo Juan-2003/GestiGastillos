@@ -1,32 +1,14 @@
 {
-    "cards": [
-      {
-        "id": "1",
-        "type": "Tarjeta Credito",
-        "name": "La Consentida ",
-        "digitos":"8245",
-        "saldo": "$100",
-        "deudaActual": "$0",
-        "fechaVencimiento":"28/27"
-      },
-      {
-        "id": "2",
-        "type": "Tarjeta Credito",
-        "name": "LA DUEÑA DE MIS QUINCENAS 😈",
-        "saldo": "$20,000",
-        "deudaActual": "$512.40",
-        "digitos":"1412",
-        "fechaVencimiento":"15/30"
-      },
-      {
-        "id": "3",
-        "type": "Tarjeta Credito",
+  "cards": [
+    {
+      "user_id": 1,
+      "credit_limit": "500",
+      "debt": 100,
+      "card": {
         "name": "LA CAPRICHOSA 🥵",
-        "saldo": "$2,000",
-        "deudaActual": "$0",
-        "digitos":"6265",
-        "fechaVencimiento":"08/29"
+        "last_digits": 5617,
+        "expiration_date": "2025-12-10"
       }
-    ]
-  }
-  
+    }
+  ]
+}

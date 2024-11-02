@@ -1,16 +1,11 @@
 import TopBar from "@/components/topBar";
 import globalStyles from "@/styles/GlobalStyles";
 import { StyleSheet, View } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
-import DepositList from "../components/DepositList";
-import ExpenseList from "../components/ExpenseList";
+import DepositList from "../../../../components/DepositList";
+import ExpenseList from "../../../../components/ExpenseList";
 
-interface Props {
-  navigation: StackNavigationProp<any>;
-}
-
-export default function IncomeExpenses({ navigation }: Props) {
+export default function IncomeExpenses() {
   return (
     <View style={globalStyles.container}>
       <TopBar title="INGRESOS GASTOS" />

@@ -1,6 +1,7 @@
 import ButtonClass from "@/components/buttons";
-import { View, StyleSheet, Text } from "react-native";
-import ContextContainer from "./ContextContainer";
+import { View, StyleSheet } from "react-native";
+import ContextContainer from "@/components/ContextContainer";
+import { FlatList } from "react-native-gesture-handler";
 
 export default function DepositList (){
     return (

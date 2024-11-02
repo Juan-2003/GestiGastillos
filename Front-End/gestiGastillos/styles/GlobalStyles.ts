@@ -35,6 +35,11 @@ const globalStyles = StyleSheet.create({
     height: 300,
     resizeMode: "stretch",
   },
+  iconImage: {
+    width: 24,
+    height: 24,
+    marginLeft: 15,
+  },
   imageContainer: {
     flex: 3,
     alignItems: "center",

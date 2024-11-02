@@ -1,6 +1,6 @@
 import ButtonClass from "@/components/buttons";
 import { View, StyleSheet } from "react-native";
-import ContextContainer from "./ContextContainer";
+import ContextContainer from "@/components/ContextContainer";
 
 export default function ExpenseList() {
   return (

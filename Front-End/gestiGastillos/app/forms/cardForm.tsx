@@ -9,16 +9,12 @@ import {
 import { useState } from "react";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
-import { Picker } from "@react-native-picker/picker";
+import { Picker } from '@react-native-picker/picker';
 import TextClass from "@/components/TextClass";
 import TopBarForms from "@/components/TopBarForms";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { handleSubmit } from "../src/auth/api/cardServices";
 
-interface Props {
-  navigation: StackNavigationProp<any>;
-}
-
-export default function Cardform({ navigation }: Props) {
+export default function Cardform() {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [digitos, setDigitos] = useState("");
@@ -26,39 +22,6 @@ export default function Cardform({ navigation }: Props) {
   const [deudaActual, setDeudaActual] = useState<number>();
   const [fechaVencimiento, setFechaVencimiento] = useState("");
   const user_id = 1;
-
-  const handleSubmit = async () => {
-    fetch("http://192.168.100.17:8080/gestiGastillos/creditCard/register", {
-      // Reemplaza con la IP y el puerto del backend
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_id,
-        credit_limit: limite,
-        debt: deudaActual,
-        card: {
-          name,
-          last_digits: digitos,
-          expiration_date: fechaVencimiento,
-        },
-      }),
-    }).then((response) => {
-      console.log(response.status);
-      if (response.ok) {
-        console.log("Usuario creado satisfactoriamente!!");
-        navigation.navigate("Card");
-        return response.json();
-      } else {
-        return response.json().then((data) => {
-          if (response.status == 409) {
-            console.log(data);
-          }
-        });
-      }
-    });
-  };
 
   return (
     <View style={globalStyles.container}>
@@ -82,21 +45,12 @@ export default function Cardform({ navigation }: Props) {
               keyboardType="numeric"
             />
 
-            <TextClass text="Saldo actual" />
-            <TextInput
-              style={globalStyles.textInput}
-              value={limite}
-              onChangeText={setLimite}
-              keyboardType="numeric"
-            />
-
-            <TextClass text="Selecciones el tipo de tarjeta" />
+            <TextClass text="Selecciona el tipo de tarjeta" />
             <View style={styles.pickerContainer}>
               <Picker
                 selectedValue={type}
                 onValueChange={(itemValue) => setType(itemValue)}
                 style={styles.picker}
-
               >
                 <Picker.Item label="Seleccionar" value="" />
                 <Picker.Item label="Tarjeta de Crédito" value="credito" />
@@ -104,17 +58,39 @@ export default function Cardform({ navigation }: Props) {
               </Picker>
             </View>
 
-            {type === 'credito' && (
+            {type ? (
               <>
-                <TextClass text="Deuda actual" />
-                <TextInput
-                  style={globalStyles.textInput}
-                  value={deudaActual ? deudaActual.toString() : ""}
-                  onChangeText={(text) => setDeudaActual(parseFloat(text))}
-                  keyboardType="numeric"
-                />
+                {type === 'credito' ? (
+                  <>
+                    <TextClass text="Limite:" />
+                    <TextInput
+                      style={globalStyles.textInput}
+                      value={limite}
+                      onChangeText={setLimite}
+                      keyboardType="numeric"
+                    />
+
+                    <TextClass text="Deuda:" />
+                    <TextInput
+                      style={globalStyles.textInput}
+                      value={deudaActual ? deudaActual.toString() : ""}
+                      onChangeText={(text) => setDeudaActual(parseFloat(text))}
+                      keyboardType="numeric"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <TextClass text="Balance:" />
+                    <TextInput
+                      style={globalStyles.textInput}
+                      value={limite}
+                      onChangeText={setLimite}
+                      keyboardType="numeric"
+                    />
+                  </>
+                )}
               </>
-            )}
+            ) : null}
 
             <TextClass text="Fecha de vencimiento" />
             <TextInput
@@ -123,9 +99,10 @@ export default function Cardform({ navigation }: Props) {
               value={fechaVencimiento}
               onChangeText={setFechaVencimiento}
             />
+
           </View>
           <View style={globalStylesMenu.containerBottom}>
-            <Pressable style={globalStyles.button} onPress={handleSubmit}>
+            <Pressable style={globalStyles.button} onPress={() => handleSubmit(type, user_id, name, digitos, fechaVencimiento, limite, deudaActual)}>
               <Text style={globalStyles.text}>Agregar</Text>
             </Pressable>
           </View>
@@ -136,12 +113,11 @@ export default function Cardform({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-const styles = StyleSheet.create({
   picker: {
     height: 50,
     width: '100%',
   },
-  
+
   pickerContainer: {
     width: "70%",
     justifyContent: "center",

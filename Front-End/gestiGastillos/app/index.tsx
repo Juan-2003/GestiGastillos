@@ -36,13 +36,13 @@ export default function Index() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Register"
-          component={Register}
+          name="Home"
+          component={DrawerNavigation}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="DrawerNavigation"
-          component={DrawerNavigation}
+          name="Register"
+          component={Register}
           options={{ headerShown: false }}
         />
         <Stack.Screen

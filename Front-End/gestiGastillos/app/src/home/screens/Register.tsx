@@ -29,8 +29,8 @@ export default function Register({ navigation }: Props) {
         </View>
         <View style={registerStyles.buttonContainer}>
           <ButtonClass
-            text="Crear Perfil"
-            onPressNavigation={() => navigation.navigate("DrawerNavigation")}
+            text="CREAR PERFIL"
+            onPressNavigation={() => navigation.navigate("Home")}
           />
         </View>
         
