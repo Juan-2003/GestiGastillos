@@ -10,25 +10,48 @@ interface Props {
   navigation: StackNavigationProp<any>;
 }
 
-interface CardItem {
-  id: number;
-  type: string;
+interface User {
+  user_id: number;
   name: string;
-  digitos: number;
-  fechaVencimiento: string;
-  saldo: number;
-  deudaActual: number;
 }
+
+interface Card {
+  card_id: number;
+  card_name: string;
+  last_digits: string;
+  expiration_date: string;
+}
+
+interface CreditCardItem {
+  tarjeta_credito_id: number;
+  user: User;
+  card: Card;
+  debt: number;
+  credit_limit: string;
+  type: string;
+}
+
+interface DebitCardItem {
+  tarjeta_credito_id: number;
+  user: User;
+  card: Card;
+  current_balance: number;
+  type: string;
+}
+
+type CardItem = CreditCardItem | DebitCardItem;
 
 const handleFetchItem = async (): Promise<CardItem[]> => {
   try {
-    const response = await fetch("http://192.168.100.19:8080/gestiGastillos/cards", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-    });
+    const response = await fetch(
+      "http://192.168.100.17:8080/gestiGastillos/cards",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (response.ok) {
       console.log("Se obtuvieron las tarjetas satisfactoriamente!!");
@@ -41,11 +64,10 @@ const handleFetchItem = async (): Promise<CardItem[]> => {
       console.log(errorData);
       throw new Error("Error al obtener las tarjetas");
     }
-  }
-  catch (error) {
+  } catch (error) {
     return [];
   }
-}
+};
 
 export default function Card({ navigation }: Props) {
   const [cards, setCards] = useState<CardItem[]>([]);
@@ -54,7 +76,7 @@ export default function Card({ navigation }: Props) {
     const fetchData = async () => {
       const data = await handleFetchItem();
       setCards(data);
-      console.log("Datos almacenados en cards:", data);  // Verificar los datos aquí
+      console.log("Datos almacenados en cards:", data); // Verificar los datos aquí
     };
     fetchData();
   }, []);
@@ -65,7 +87,7 @@ export default function Card({ navigation }: Props) {
       <View style={cardStyles.middleContainer}>
         <FlatList
           data={cards} // Datos a renderizar
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.tarjeta_credito_id.toString()}
           renderItem={({ item }) => (
             <View style={cardStyles.cardContainer}>
 
@@ -89,7 +111,6 @@ export default function Card({ navigation }: Props) {
                     style={cardStyles.image}
                   />
                 </View>
-
               </View>
 
               <View style={cardStyles.middleCard}>
@@ -129,7 +150,6 @@ export default function Card({ navigation }: Props) {
         />
       </View>
     </View>
-
   );
 }
 

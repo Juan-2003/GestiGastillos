@@ -10,6 +10,7 @@ import IncomeForm from "./forms/IncomeForm";
 import ReminderForm from "./forms/ReminderForm";
 import SavingPlansForm from "./forms/SavingPlansForm";
 import { useEffect } from "react";
+import Card from "./src/auth/screens/Card";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +23,7 @@ export default function Index() {
   
   return (
       <Stack.Navigator
-        initialRouteName="Welcome"
+        initialRouteName="Home"
         screenOptions={{ 
           headerShown: false,
           gestureEnabled: true, 
@@ -44,6 +45,11 @@ export default function Index() {
           component={DrawerNavigation}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+        name="Card"
+        component={Card}
+        options={{ headerShown: false }}
+      />
         <Stack.Screen
           name="Cardform"
           component={Cardform}
