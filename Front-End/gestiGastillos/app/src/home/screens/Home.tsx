@@ -1,5 +1,5 @@
 import globalStyles from "@/styles/GlobalStyles";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import TopBar from "@/components/topBar";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 

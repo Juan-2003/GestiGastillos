@@ -23,7 +23,7 @@ export default function TopBar({ title }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 0.65,
-    backgroundColor: "#811111FF",
+    backgroundColor: "#0078FF",
   },
   itemContainer: {
     flex: 1,

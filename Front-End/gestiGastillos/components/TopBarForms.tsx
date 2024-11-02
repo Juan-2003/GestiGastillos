@@ -23,7 +23,7 @@ export default function TopBarForms({ title }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 0.65,
-    backgroundColor: "rgba(98, 21, 21, 0.95)",
+    backgroundColor: "#0078FF",
   },
   itemContainer: {
     flex: 1,

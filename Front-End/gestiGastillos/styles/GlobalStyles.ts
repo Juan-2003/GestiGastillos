@@ -6,14 +6,14 @@ const globalStyles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    backgroundColor: "#BA2828",
+    backgroundColor: "#0078FF",
     alignItems: "center",
     width: "80%",
     padding: 6,
     borderRadius: 10,
     elevation: 5,
     borderWidth: 1,
-    borderColor: "#9e292b"
+    borderColor: "#005AC0"
   },
   text: {
     color: "white",
@@ -44,18 +44,15 @@ const globalStyles = StyleSheet.create({
     borderBottomWidth: 1,
     width: '70%',
     borderBottomColor: "#000000",
-    marginLeft: 60,
-    marginRight: 60,
     marginBottom: 40,
   },
   textContainer: {
     width: '70%',
-    justifyContent: 'flex-start' 
+    justifyContent: 'flex-start',
   },
   inputTextContainer: {
     alignItems: "center",
     paddingTop: 30,
-    //backgroundColor: "green",
   },
 });
 

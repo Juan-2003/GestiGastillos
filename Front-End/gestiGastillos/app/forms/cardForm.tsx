@@ -61,6 +61,7 @@ export default function Cardform() {
       <View style={globalStylesMenu.container}>
         <ScrollView style={globalStylesMenu.containerMiddle}>
           <View style={globalStyles.inputTextContainer}>
+
             <TextClass text="Nombre de la tarjeta" />
             <TextInput
               style={globalStyles.textInput}
@@ -73,39 +74,41 @@ export default function Cardform() {
               style={globalStyles.textInput}
               value={digitos}
               onChangeText={setDigitos}
+              keyboardType="numeric"
             />
 
             <TextClass text="Saldo actual" />
-              <TextInput
-                style={globalStyles.textInput}
-                value={limite}
-                onChangeText={setLimite}
-              />
+            <TextInput
+              style={globalStyles.textInput}
+              value={limite}
+              onChangeText={setLimite}
+              keyboardType="numeric"
+            />
 
             <TextClass text="Selecciones el tipo de tarjeta" />
             <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={type}
-                  onValueChange={(itemValue) => setType(itemValue)}
-                  style={styles.picker}
-                
-                >
-                  <Picker.Item label="Seleccionar" value="" />
-                  <Picker.Item label="Tarjeta de Crédito" value="credito" />
-                  <Picker.Item label="Tarjeta de Débito" value="debito" />
-                </Picker>
+              <Picker
+                selectedValue={type}
+                onValueChange={(itemValue) => setType(itemValue)}
+                style={styles.picker}
+
+              >
+                <Picker.Item label="Seleccionar" value="" />
+                <Picker.Item label="Tarjeta de Crédito" value="credito" />
+                <Picker.Item label="Tarjeta de Débito" value="debito" />
+              </Picker>
             </View>
 
             {type === 'credito' && (
-            <View style={styles.textContainer}>
-              <TextClass text="deuda actual" />
+              <>
+                <TextClass text="Deuda actual" />
                 <TextInput
-                  style={styles.textInput}
+                  style={globalStyles.textInput}
                   value={deudaActual ? deudaActual.toString() : ""}
                   onChangeText={(text) => setDeudaActual(parseFloat(text))}
                   keyboardType="numeric"
                 />
-              </View>
+              </>
             )}
 
             <TextClass text="Fecha de vencimiento" />
@@ -128,36 +131,16 @@ export default function Cardform() {
   );
 }
 
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
   picker: {
     height: 50,
     width: '100%',
-    justifyContent:"space-between",
-    alignItems:"center",
-    
-
-
   },
-  pickerContainer:{
-    width:"71%",
-    justifyContent:"center",
-    borderBottomWidth:0.5,
-    borderColor:"black",
-    marginBottom:40,
-  },
-  textContainer:{
-    width: '70%',
-    justifyContent: 'center',
-    
-    
-  },
- 
-  textInput:{
-    borderBottomWidth: 1,
-    width: '100%',
-    borderBottomColor: "#A9BBBD",
-    marginRight: 60,
+  pickerContainer: {
+    width: "70%",
+    justifyContent: "center",
+    borderBottomWidth: 0.5,
+    borderColor: "black",
     marginBottom: 40,
-  }
-  
+  },
 })

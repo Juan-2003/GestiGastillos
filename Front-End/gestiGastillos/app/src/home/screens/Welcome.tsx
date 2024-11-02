@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Button, Image } from "react-native";
+import { View, Text, Pressable, Image } from "react-native";
 import ButtonClass from "../../../../components/buttons";
 import globalStyles from "@/styles/GlobalStyles";
 import { StyleSheet } from "react-native";
@@ -20,13 +20,10 @@ export default function Welcome({navigation}:Props) {
       </View>
 
       <View style={styles.buttonContainer}>
-
         <ButtonClass text="Registro" onPressNavigation={() => navigation.navigate('Register')} />
-
         <Pressable style={globalStyles.button}>
           <Text style={globalStyles.text}>Salir</Text>
         </Pressable>
-
       </View>
 
     </View>
@@ -39,7 +36,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingBottom: 25,
-    //backgroundColor: "green",
   },
   
 });

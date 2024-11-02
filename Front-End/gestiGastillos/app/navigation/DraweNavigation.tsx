@@ -20,7 +20,7 @@ export default function DrawerNavigation() {
       screenOptions={{
         headerShown: true,
         drawerStyle: {
-          backgroundColor: "#6B0D0DFF",
+          backgroundColor: "#27C1F9",
         },
         drawerItemStyle: {
           marginVertical: 10,

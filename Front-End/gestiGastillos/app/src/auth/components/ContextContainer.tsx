@@ -28,7 +28,7 @@ export default function ContextContainer({ text }: Props) {
 
 const styles = StyleSheet.create({
     dataContainer: {
-        backgroundColor: "#A63738",
+        backgroundColor: "#27C1F9",
         padding: 16,
         flexDirection: "row",
         borderRadius: 10,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         marginVertical: 3,
         marginHorizontal: 6,
         borderWidth: 1,
-        borderColor: "#9e292b"
+        borderColor: "#1E91BB"
     },
     textContainer: {
         flex: 1,

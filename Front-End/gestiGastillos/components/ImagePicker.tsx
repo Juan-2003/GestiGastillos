@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     borderWidth: 3,
     borderRadius: 200,
-    borderColor: "#BF1515"
+    borderColor: "#27C1F9"
     //backgroundColor: "red",
   },
 });
