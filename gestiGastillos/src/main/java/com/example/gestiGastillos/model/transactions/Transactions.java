@@ -5,6 +5,7 @@ import com.example.gestiGastillos.dto.transactions.income.IncomeDataDTO;
 import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeDTO;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.dto.transactions.expense.ExpenseDataDTO;
+import com.example.gestiGastillos.validation.Transactions.PostValidations.TransactionPaymentMethodValidator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -88,13 +89,6 @@ public class Transactions {
         if(updateIncomeDTO.concept() != this.concept){
             this.concept = updateIncomeDTO.concept();
         }
-        if(!this.category.name().equals(updateIncomeDTO.category())){
-            this.category = TransactionCategory.fromSpanish(updateIncomeDTO.category());
-        }
-
-        if(this.paymentMethod.name() != updateIncomeDTO.paymentMethod()){
-            this.paymentMethod = PaymentMethod.fromSpanish(updateIncomeDTO.paymentMethod());
-        }
     }
 
     //Actualizar egreso
@@ -104,13 +98,6 @@ public class Transactions {
         }
         if(updateExpenseDTO.concept() != this.concept){
             this.concept = updateExpenseDTO.concept();
-        }
-        if(!this.category.name().equals(updateExpenseDTO.category())){
-            this.category = TransactionCategory.fromSpanish(updateExpenseDTO.category());
-        }
-
-        if(this.paymentMethod.name() != updateExpenseDTO.paymentMethod()){
-            this.paymentMethod = PaymentMethod.fromSpanish(updateExpenseDTO.paymentMethod());
         }
     }
 }
