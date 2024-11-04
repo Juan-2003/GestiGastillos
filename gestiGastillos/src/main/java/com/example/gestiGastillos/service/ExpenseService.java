@@ -3,6 +3,7 @@ package com.example.gestiGastillos.service;
 import com.example.gestiGastillos.dto.transactions.expense.UpdateExpenseDTO;
 import com.example.gestiGastillos.dto.transactions.expense.UpdateExpenseResponseDTO;
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
+import com.example.gestiGastillos.infra.exceptions.ExpenseAmount;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.transactions.TransactionType;
@@ -55,7 +56,7 @@ public class ExpenseService {
                     .orElseThrow(() -> new EntityNotFoundException("Tarjeta de debito no encontrada con el id: " + debitCardId));
 
             if (debitCard.getCurrentBalance()<expenseDataDTO.amount()){
-                throw new RuntimeException("El monto no puede ser mayor al current balance");
+                throw new ExpenseAmount("El monto no puede ser mayor al current balance");
             }
             Double currentBalance = debitCard.getCurrentBalance();
             Double amount = expenseDataDTO.amount();
