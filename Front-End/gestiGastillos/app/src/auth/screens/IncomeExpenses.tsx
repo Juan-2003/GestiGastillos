@@ -4,16 +4,21 @@ import { StyleSheet, View } from "react-native";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import DepositList from "../../../../components/DepositList";
 import ExpenseList from "../../../../components/ExpenseList";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-export default function IncomeExpenses() {
+interface Props {
+  navigation: StackNavigationProp<any>;
+}
+
+export default function IncomeExpenses({ navigation }: Props) {
   return (
     <View style={globalStyles.container}>
       <TopBar title="INGRESOS GASTOS" />
       <View style={globalStylesMenu.container}>
         <View style={styles.middleContainer}>
           <View style={styles.listContainer}>
-            <DepositList />
-            <ExpenseList />
+            <DepositList navigation={navigation} />
+            <ExpenseList navigation={navigation}/>
           </View>
         </View>
       </View>

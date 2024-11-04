@@ -9,7 +9,7 @@ export default function ExpensesForm(){
     return(
         <View style={globalStyles.container}>
       
-        <TopBarForms title="EGRESO"/>
+        <TopBarForms title="GASTO"/>
             <View style={globalStylesMenu.container}>
             
                 <View style={globalStylesMenu.containerMiddle}>

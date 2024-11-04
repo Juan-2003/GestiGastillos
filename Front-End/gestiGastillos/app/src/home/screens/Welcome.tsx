@@ -14,7 +14,7 @@ export default function Welcome({navigation}:Props) {
 
       <View style={globalStyles.imageContainer}>
         <Image
-          source={require("@/assets/images/Logo.png")}
+          source={require("@/assets/images/Logo2.png")}
           style={globalStyles.image} // Ajusta el tamaño según sea necesario
         />
       </View>

@@ -1,34 +1,61 @@
 import ButtonClass from "@/components/buttons";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, FlatList, Text } from "react-native";
 import ContextContainer from "@/components/ContextContainer";
-import { FlatList } from "react-native-gesture-handler";
+import { useState } from "react";
+import Income from "@/json/item.json";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-export default function DepositList (){
-    return (
-        <View style={styles.incomeContainer}>
-              <View style={styles.flatListContainer}>
-                <ContextContainer text="Quincena"/>
-                <ContextContainer text="Tanda"/>
-              </View>
-              <View style={styles.containerBottom}>
-                <ButtonClass text="INGRESO" />
-              </View>
-            </View>
-    );
+interface Props {
+  navigation: StackNavigationProp<any>;
+}
+
+export default function DepositList({ navigation }: Props) {
+  const items = Income.Incomes;
+
+  return (
+    <View style={styles.incomeContainer}>
+      <View style={styles.flatListContainer}>
+        <FlatList
+          data={items}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) =>
+            <ContextContainer item={item} />
+          }
+          ListEmptyComponent={
+            <Text style={styles.emptyMessage}>
+              No tienes ingresos registrados
+            </Text>
+          }
+        />
+      </View>
+      <View style={styles.containerBottom}>
+        <ButtonClass
+          text="INGRESO"
+          onPressNavigation={() => navigation.navigate("IncomeForm")}
+        />
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    flatListContainer: {
-      flex: 2,
-    },
-    containerBottom: {
-      flex: 0.2,
-      paddingTop: 10,
-      paddingBottom: 5,
-      alignItems: "center",
-    },
-    incomeContainer: {
-      flex: 1,
-      borderRightWidth: 1,
-    },
-  });
+  flatListContainer: {
+    flex: 1,
+  },
+  containerBottom: {
+    flex: 0.1,
+    paddingTop: 20,
+    alignItems: "center",
+  },
+  incomeContainer: {
+    flex: 1,
+    borderRightWidth: 1,
+    borderColor: '#27C1F9',
+  },
+  emptyMessage: {
+    fontSize: 20,
+    color: "#F80000FF",
+    textAlign: 'center',
+    marginVertical: 230,
+  },
+});

@@ -1,0 +1,54 @@
+{
+    "Expenses": [
+        {
+            "id" : 1,
+            "type" : "2 Kg de bistec",
+            "amount" : 180,
+            "concept" : "Compre 2 kilos de Bistec",
+            "category" : "Comida",
+            "payment_method" : "Efectivo"
+        },
+        {
+            "id" : 3,
+            "type" : "Pago de la tarjeta departamental",
+            "amount" : 500,
+            "concept" : "Realice el pago mensual de la tarjeta departamenta",
+            "category" : "Pagos",
+            "payment_method" : "Efectivo"
+        },
+        {
+            "id" : 4,
+            "type" : "Ropa",
+            "amount" : 1200,
+            "concept" : "Compre ropa en la tienda departamental ...",
+            "category" : "Ropa",
+            "payment_method" : "Efectivo"
+        },
+        {
+            "id" : 2,
+            "type" : "Deposito en el OXXO",
+            "amount" : 500,
+            "concept" : "Hoy a las 6:40 pm hice un deposito a mi",
+            "category" : "Pagos",
+            "payment_method" : "Efectivo"
+        }
+    ],
+    "Incomes" : [
+        {
+            "id" : 1,
+            "type" : "Quincena",
+            "amount" : 4800,
+            "concept" : "El pago de la quincena de hoy 14/05 aaaaaaaaaaaaaa",
+            "category" : "Ingreso",
+            "payment_method" : "Efectivo"
+        },
+        {
+            "id" : 2,
+            "type" : "Tanda",
+            "amount" : 1200,
+            "concept" : "Recibi el pago de la tanda de la semana pasada aaa",
+            "category" : "Ingreso",
+            "payment_method" : "Efectivo"
+        }
+    ]
+}

@@ -23,7 +23,7 @@ export default function Index() {
   
   return (
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Welcome"
         screenOptions={{ 
           headerShown: false,
           gestureEnabled: true, 
