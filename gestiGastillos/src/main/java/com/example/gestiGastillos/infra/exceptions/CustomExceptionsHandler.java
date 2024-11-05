@@ -1,5 +1,6 @@
 package com.example.gestiGastillos.infra.exceptions;
 
+import com.sun.jdi.InvalidTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -22,7 +23,11 @@ public class CustomExceptionsHandler {
                     InvalidLastDigitsException.class,
                     InvalidCardNameException.class,
                     DateException.class,
-                    ReminderNameException.class
+                    ReminderNameException.class,
+                    ExpenseAmount.class,
+                    InvalidPaymentMethodException.class,
+                    InvalidCategoryException.class,
+                    InvalidTypeException.class
             )
     );
 
@@ -44,7 +49,11 @@ public class CustomExceptionsHandler {
             InvalidLastDigitsException.class,
             InvalidCardNameException.class,
             DateException.class,
-            ReminderNameException.class
+            ReminderNameException.class,
+            ExpenseAmount.class,
+            InvalidPaymentMethodException.class,
+            InvalidCategoryException.class,
+            InvalidTypeException.class
     })
     public ResponseEntity<DataErrorValidation> handleBadRequestCustomExceptions(RuntimeException e){
         for(Class<? extends RuntimeException> exeptionClass : customExeptions){
