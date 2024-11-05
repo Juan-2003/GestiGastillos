@@ -21,18 +21,18 @@ export default function Card({ navigation }: Props) {
       const combinedCards: CardItem[] = [
         ...data.credit_cards?.map(card => ({ ...card, type: 'credit' })), // Añadimos el tipo a las tarjetas de crédito
         ...data.debit_cards?.map(card => ({ ...card, type: 'debit' }))    // Añadimos el tipo a las tarjetas de débito
-    ];
+      ];
       setCards(combinedCards);
       console.log("Datos almacenados en cards:", data); // Verificar los datos aquí
     };
     fetchData();
   }, []);
 
-  console.log("tarjetas: ",cards);
+  console.log("tarjetas: ", cards);
   return (
-    <View style={globalStyles.container}>
+    <>
       <TopBar title="TARJETAS" />
-      <View style={cardStyles.middleContainer}>
+      <View style={globalStyles.middleContainer}>
         <FlatList
           data={cards}
           keyExtractor={(item) => {
@@ -42,7 +42,7 @@ export default function Card({ navigation }: Props) {
               return `debit_${item.tarjeta_debito_id?.toString()}`; // Prefijo para tarjeta de débito
             }
           }}
-          renderItem={({ item }) => <CardItemComponent item={item} />}
+          renderItem={({ item }) => <CardItemComponent item={item} />} // Renderizar las tarjetas
           ListFooterComponent={
             <View style={cardStyles.bottomContainer}>
               <ButtonClass
@@ -58,6 +58,6 @@ export default function Card({ navigation }: Props) {
           }
         />
       </View>
-    </View>
+    </>
   );
 }

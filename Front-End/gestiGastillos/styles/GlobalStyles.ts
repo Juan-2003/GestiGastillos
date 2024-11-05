@@ -2,9 +2,31 @@
 import { StyleSheet } from "react-native";
 
 const globalStyles = StyleSheet.create({
+  // Contenedores
   container: {
     flex: 1,
   },
+  listContainer: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  middleContainer: {
+    flex: 3,
+  },
+  textContainer: {
+    width: '70%',
+    justifyContent: 'flex-start',
+  },
+  inputTextContainer: {
+    alignItems: "center",
+    paddingTop: 30,
+  },
+  imageContainer: {
+    flex: 3,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  // Estilos
   button: {
     backgroundColor: "#0078FF",
     alignItems: "center",
@@ -15,15 +37,6 @@ const globalStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#005AC0"
   },
-  text: {
-    color: "white",
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-  textForm: {
-    fontWeight: 'bold',
-    color: 'black'
-},
   input: {
     borderColor: "gray",
     borderBottomWidth: 2,
@@ -40,24 +53,22 @@ const globalStyles = StyleSheet.create({
     height: 24,
     marginLeft: 15,
   },
-  imageContainer: {
-    flex: 3,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   textInput: {
     borderBottomWidth: 1,
+    fontSize: 12,
     width: '70%',
     borderBottomColor: "#000000",
     marginBottom: 40,
   },
-  textContainer: {
-    width: '70%',
-    justifyContent: 'flex-start',
+  // Texto
+  text: {
+    color: "white",
+    fontWeight: 'bold',
+    fontSize: 20,
   },
-  inputTextContainer: {
-    alignItems: "center",
-    paddingTop: 30,
+  textForm: {
+    fontWeight: 'bold',
+    color: 'black'
   },
 });
 

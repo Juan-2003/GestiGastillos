@@ -1,9 +1,9 @@
-import ButtonClass from "@/components/buttons";
 import { View, StyleSheet, FlatList, Text } from "react-native";
-import ContextContainer from "@/components/ContextContainer";
-import { useEffect, useState } from "react";
-import Income from "@/json/item.json";
 import { StackNavigationProp } from "@react-navigation/stack";
+import ButtonClass from "@/components/buttons";
+import ContextContainer from "@/components/ItemContainer";
+import Income from "@/json/item.json";
+import flatListComponent from "@/styles/FlatListComponent";
 
 interface Props {
   navigation: StackNavigationProp<any>;
@@ -13,8 +13,8 @@ export default function ExpenseList({ navigation }: Props) {
   const items = Income.Expenses;
 
   return (
-    <View style={styles.expenseContainer}>
-      <View style={styles.flatListContainer}>
+    <View style={flatListComponent.expenseContainer}>
+      <View style={flatListComponent.flatListContainer}>
         <FlatList
           data={items}
           keyExtractor={(item) => item.id.toString()}
@@ -22,13 +22,13 @@ export default function ExpenseList({ navigation }: Props) {
             <ContextContainer item={item} />
           }
           ListEmptyComponent={
-            <Text style={styles.emptyMessage}>
+            <Text style={flatListComponent.emptyMessage}>
               No tienes gastos registrados
             </Text>
           }
         />
       </View>
-      <View style={styles.containerBottom}>
+      <View style={flatListComponent.containerBottom}>
         <ButtonClass
           text="GASTO"
           onPressNavigation={() => navigation.navigate("ExpensesForm")}
@@ -37,25 +37,3 @@ export default function ExpenseList({ navigation }: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  flatListContainer: {
-    flex: 1,
-  },
-  expenseContainer: {
-    flex: 1,
-    borderLeftWidth: 1,
-    borderColor: '#27C1F9'
-  },
-  containerBottom: {
-    flex: 0.1,
-    paddingTop: 20,
-    alignItems: "center",
-  },
-  emptyMessage: {
-    fontSize: 20,
-    color: "#F80000FF",
-    textAlign: 'center',
-    marginVertical: 230,
-  },
-});

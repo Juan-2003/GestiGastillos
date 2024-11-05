@@ -1,9 +1,7 @@
 import { StyleSheet } from "react-native";
 
 const cardStyles = StyleSheet.create({
-    middleContainer: {
-      flex: 3,
-    },
+    
     bottomContainer: {
       alignItems: 'center',
       marginVertical: 50,
