@@ -3,6 +3,7 @@ package com.example.gestiGastillos.service;
 import com.example.gestiGastillos.dto.transactions.expense.UpdateExpenseDTO;
 import com.example.gestiGastillos.dto.transactions.expense.UpdateExpenseResponseDTO;
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
+import com.example.gestiGastillos.infra.exceptions.ExpenseAmount;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.transactions.TransactionType;
@@ -12,6 +13,7 @@ import com.example.gestiGastillos.dto.transactions.expense.ExpenseResponseDTO;
 import com.example.gestiGastillos.repository.CreditCardRepository;
 import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.TransactionsRepository;
+import com.example.gestiGastillos.validation.Transactions.PostValidations.TransactionValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,15 +25,19 @@ public class ExpenseService {
     private final TransactionsRepository transactionsRepository;
     private final DebitCardRepository debitCardRepository;
     private final CreditCardRepository creditCardRepository;
+    private final List<TransactionValidator<Object>> expenseValidator;
 
     @Autowired
-    public ExpenseService(TransactionsRepository transactionsRepository, DebitCardRepository debitCardRepository, CreditCardRepository creditCardRepository ){
+    public ExpenseService(TransactionsRepository transactionsRepository, DebitCardRepository debitCardRepository, CreditCardRepository creditCardRepository, List<TransactionValidator<Object>> expenseValidator) {
         this.transactionsRepository = transactionsRepository;
         this.debitCardRepository = debitCardRepository;
         this.creditCardRepository = creditCardRepository;
+        this.expenseValidator = expenseValidator;
     }
 
     public ExpenseResponseDTO registerExpense(ExpenseDataDTO expenseDataDTO){
+        expenseValidator.forEach(i -> i.validation(expenseDataDTO));
+
         Transactions transaction;
         if(expenseDataDTO.creditCardId() != null){//El egreso se hizo con trarjeta de credito
             Long creditCardId = expenseDataDTO.creditCardId();
@@ -49,6 +55,9 @@ public class ExpenseService {
             DebitCard debitCard = debitCardRepository.findById(debitCardId)
                     .orElseThrow(() -> new EntityNotFoundException("Tarjeta de debito no encontrada con el id: " + debitCardId));
 
+            if (debitCard.getCurrentBalance()<expenseDataDTO.amount()){
+                throw new ExpenseAmount("El monto no puede ser mayor al current balance");
+            }
             Double currentBalance = debitCard.getCurrentBalance();
             Double amount = expenseDataDTO.amount();
             debitCard.setCurrentBalance(currentBalance - amount);

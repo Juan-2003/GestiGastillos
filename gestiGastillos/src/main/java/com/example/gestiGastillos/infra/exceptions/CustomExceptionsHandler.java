@@ -26,8 +26,7 @@ public class CustomExceptionsHandler {
                     ReminderNameException.class,
                     ExpenseAmount.class,
                     InvalidPaymentMethodException.class,
-                    InvalidCategoryException.class,
-                    InvalidTypeException.class
+                    InvalidCategoryException.class
             )
     );
 
@@ -53,8 +52,12 @@ public class CustomExceptionsHandler {
             ExpenseAmount.class,
             InvalidPaymentMethodException.class,
             InvalidCategoryException.class,
-            InvalidTypeException.class
+            InvalidTypeException.class,
+            ExpenseAmount.class,
+            InvalidPaymentMethodException.class,
+            InvalidCategoryException.class,
     })
+
     public ResponseEntity<DataErrorValidation> handleBadRequestCustomExceptions(RuntimeException e){
         for(Class<? extends RuntimeException> exeptionClass : customExeptions){
             if(exeptionClass.isInstance(e)){

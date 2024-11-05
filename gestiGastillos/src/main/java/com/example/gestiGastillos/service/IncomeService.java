@@ -10,10 +10,10 @@ import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.transactions.TransactionType;
 import com.example.gestiGastillos.model.transactions.Transactions;
-import com.example.gestiGastillos.model.transactions.income.IncomeValidator;
 import com.example.gestiGastillos.repository.CardRepository;
 import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.TransactionsRepository;
+import com.example.gestiGastillos.validation.Transactions.PostValidations.TransactionValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,10 +25,10 @@ public class IncomeService {
     private final TransactionsRepository transactionsRepository;
     private final CardRepository cardRepository;
     private final DebitCardRepository debitCardRepository;
-    private final List<IncomeValidator> incomeValidator;
+    private final List<TransactionValidator<Object>> incomeValidator;
 
     @Autowired
-    public IncomeService(TransactionsRepository transactionsRepository, CardRepository cardRepository, DebitCardRepository debitCardRepository, List<IncomeValidator> incomeValidator){
+    public IncomeService(TransactionsRepository transactionsRepository, CardRepository cardRepository, DebitCardRepository debitCardRepository, List<TransactionValidator<Object>> incomeValidator){
         this.transactionsRepository =  transactionsRepository;
         this.cardRepository = cardRepository;
         this.incomeValidator = incomeValidator;
