@@ -4,10 +4,10 @@ export interface User {
 }
 
 export interface Card {
-  card_id: number;
+  card_id?: number;
   card_name: string;
-  last_digits: string;
-  expiration_date: string;
+  last_digits?: string;
+  expiration_date?: string;
 }
 
 export interface CreditCardItem {
@@ -78,36 +78,47 @@ export const handleFetchItem = async (): Promise<CardItem[]> => {
 };
 
 export const handleSubmit = async (
-  navigation,
+  navigation: any,
   type: string,
   user_id: number,
   name: string,
   digitos: string,
   fechaVencimiento: string,
   limite: string,
-  deudaActual?: number
+  deudaActual?: number,
+  onSuccess?: () => void
 ) => {
-  const cardData: CardData = {
-    user_id,
-    card: {
+  // DTO de la tarjeta CardDataDTO
+  const CardDataDTO = {
       name,
       last_digits: digitos,
       expiration_date: fechaVencimiento,
-    },
   };
 
   // Definir la URL según el tipo de tarjeta
   const url =
-    type === "credito"
+    type === "credit"
       ? "http://192.168.100.17:8080/gestiGastillos/creditCard/register"
-      : "http://192.168.100.17:8080/gestiGastillos/debitCard"; // Ajusta la ruta para tarjetas de débito
+      : "http://192.168.100.17:8080/gestiGastillos/debitCard";
 
-  // Agregar propiedades específicas según el tipo de tarjeta
-  if (type === "credito") {
-    cardData.credit_limit = limite;
-    cardData.debt = deudaActual;
-  } else if (type === "debito") {
-    cardData.current_balance = limite; // Ajusta este campo según tu modelo de datos
+  let body: any = {};
+
+  // Construimos los DTO's para tarjetas de credito o debito
+  if (type === "credit") {
+    // Para tarjetas de credito creamos el CreditCardDataDTO
+    body = {
+      user_id,
+      card: CardDataDTO,
+      credit_limit: limite,
+      debt: deudaActual,
+    };
+  } else if (type === "debit") {
+    // Para tarjetas de debito creamos el DebitCardDataDTO
+    body = {
+      user_id,
+      currentBalance: limite,
+      card: CardDataDTO
+    };
   }
 
   try {
@@ -116,7 +127,7 @@ export const handleSubmit = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(cardData),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -127,8 +138,12 @@ export const handleSubmit = async (
 
     const data = await response.json();
     console.log("Tarjeta añadida:", data);
+
+    if (onSuccess) {
+      onSuccess();
+    }
+
     navigation.navigate("Card");
-    // Aquí puedes navegar a otra pantalla o mostrar un mensaje de éxito
   } catch (error) {
     console.error("Error de red:", error);
   }
@@ -137,7 +152,8 @@ export const handleSubmit = async (
 export const handleDelete = async (
   id: number,
   type: string,
-): Promise<CardItem[]> => {
+  onSuccess: () => void
+): Promise<void> => {
   const url =
     type === "credit"
       ? `http://192.168.100.17:8080/gestiGastillos/creditCard/delete/${id}`
@@ -163,38 +179,80 @@ export const handleDelete = async (
       throw new Error("Error al eliminar las tarjetas");
     }
   } catch (error) {
-    return [];
+    console.error("Error al eliminar la tarjeta: ", error);
   }
 };
 
 export const handleEdit = async (
+  navigation: any,
+  id: number,
   type: string,
-): Promise<CardItem[]> => {
+  name: string,
+  limite: string,
+  deudaActual?: number,
+  onSuccess?: () => void
+) => {
+  const user_id = 1; // Si este valor es dinámico, deberías obtenerlo de alguna parte
+
+  // DTO para card
+  const updateCardDTO = {
+    name,
+  };
+
+  // Comprobamos el tipo de tarjeta y construimos el DTO correspondiente
   const url =
     type === "credit"
-      ? `http://192.168.100.17:8080/gestiGastillos/creditCard/update`
-      : `http://192.168.100.17:8080/gestiGastillos/debitCard/update`; // Ajusta la ruta para tarjetas de débito
+      ? "http://192.168.100.17:8080/gestiGastillos/creditCard/update"
+      : "http://192.168.100.17:8080/gestiGastillos/debitCard/update";
+
+  let body: any = {}; // Variable para el cuerpo de la solicitud
+
+  if (type === "credit") {
+    // Para tarjetas de crédito, usamos el DTO UpdateCreditCardDTO
+    body = {
+      userId: user_id,
+      credit_card_id: id,
+      credit_limit: limite,
+      debt: deudaActual,
+      card: updateCardDTO,
+    };
+  } else if (type === "debit") {
+    // Para tarjetas de débito, usamos el DTO UpdateDebitCardDTO
+    body = {
+      userId: user_id,
+      debit_card_id: id,
+      current_balance: limite, // Campo específico de tarjetas de débito
+      card: updateCardDTO,
+    };
+  }
 
   try {
     const response = await fetch(url, {
-      method: "DELETE",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(body),
     });
 
     if (response.ok) {
-      console.log("Tarjeta eliminada satisfactoriamente!!");
-      onSuccess(); // Llama al callback para refrescar la lista
+      const data = await response.json();
+      console.log("Tarjeta actualizada!!");
+
+      if (onSuccess) {
+        onSuccess();
+      }
+
+      navigation.navigate("Card");
     } else {
       const errorData = await response.json();
       if (response.status === 409) {
         console.log("Error 409:", errorData);
       }
       console.log(errorData);
-      throw new Error("Error al eliminar las tarjetas");
+      throw new Error("Error al actualizar la tarjeta");
     }
   } catch (error) {
-    return [];
+    console.error(error);
   }
 };

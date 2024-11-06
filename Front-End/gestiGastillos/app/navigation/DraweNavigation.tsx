@@ -19,6 +19,8 @@ export default function DrawerNavigation() {
     <Drawer.Navigator
       initialRouteName="Home"
       screenOptions={{
+        swipeEnabled: true,
+        drawerType: 'front',
         drawerStyle: {
           backgroundColor: "#27C1F9",
         },

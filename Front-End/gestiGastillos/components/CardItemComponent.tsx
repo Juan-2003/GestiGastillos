@@ -9,17 +9,28 @@ import {
   handleEdit,
 } from "../app/src/auth/api/cardServices";
 import cardStyles from "@/styles/CardStyles";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 interface CardItemComponentProps {
   item: CardItem;
+  onDelete: (cardId: number, cardType: string) => void;
+  onUpdate: (item: CardItem) => void;
 }
 
-const CardItemComponent: React.FC<CardItemComponentProps> = ({ item }) => {
+const CardItemComponent: React.FC<CardItemComponentProps> = ({
+  item,
+  onDelete,
+  onUpdate,
+}) => {
   return (
     <View style={cardStyles.cardContainer}>
       <View style={cardStyles.topCard}>
         <View style={cardStyles.typeContainer}>
-          <Text style={cardStyles.text}>{item.type}</Text>
+          <Text style={cardStyles.text}>
+            {item.type === "credit"
+              ? "Tarjeta de Crédito"
+              : "Tarjeta de Débito"}
+          </Text>
         </View>
 
         <View style={cardStyles.nameContainer}>
@@ -27,13 +38,22 @@ const CardItemComponent: React.FC<CardItemComponentProps> = ({ item }) => {
         </View>
 
         <View style={cardStyles.iconsContainer}>
-          <TouchableOpacity onPress={handleEdit}>
+          <TouchableOpacity onPress={() => onUpdate(item)}>
             <Image
               source={require("@/assets/images/editIcon.png")}
               style={cardStyles.image}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDelete(item.type === 'credit' ? item.tarjeta_credito_id : item.tarjeta_debito_id, item.type)}>
+          <TouchableOpacity
+            onPress={() =>
+              onDelete(
+                item.type === "credit"
+                  ? item.tarjeta_credito_id
+                  : item.tarjeta_debito_id,
+                item.type
+              )
+            }
+          >
             <Image
               source={require("@/assets/images/deleteIcon.png")}
               style={cardStyles.image}

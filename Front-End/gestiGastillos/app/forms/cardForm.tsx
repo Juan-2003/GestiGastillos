@@ -6,27 +6,120 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
 import { Picker } from "@react-native-picker/picker";
 import TextClass from "@/components/TextClass";
 import TopBarForms from "@/components/TopBarForms";
-import { handleSubmit } from "../src/auth/api/cardServices";
+import {
+  handleSubmit,
+  CardItem,
+  CreditCardItem,
+  DebitCardItem,
+  handleEdit,
+} from "../src/auth/api/cardServices";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+
+type RootStackParamList = {
+  Card: undefined;
+  CardForm: { card: CardItem };
+};
 
 interface Props {
-  navigation: StackNavigationProp<any>;
+  navigation: StackNavigationProp<RootStackParamList, "CardForm">;
+  route: RouteProp<RootStackParamList, "CardForm">;
+  onCardAdd: () => void;
+  onCardUpdate: () => void;
 }
 
-export default function Cardform({ navigation }: Props) {
-  const [name, setName] = useState("");
-  const [type, setType] = useState("");
-  const [digitos, setDigitos] = useState("");
-  const [limite, setLimite] = useState("");
-  const [deudaActual, setDeudaActual] = useState<number>();
-  const [fechaVencimiento, setFechaVencimiento] = useState("");
+export default function Cardform({
+  navigation,
+  route,
+  onCardAdd,
+  onCardUpdate,
+}: Props) {
+  const { card } = route.params || {};
+
+  const [name, setName] = useState(card?.card.card_name || "");
+  const [type, setType] = useState(card?.type || "");
+  const [digitos, setDigitos] = useState(card?.card.last_digits || "");
+  const [limite, setLimite] = useState(
+    card?.type === "credit"
+      ? (card as CreditCardItem)?.credit_limit
+      : (card as DebitCardItem)?.current_balance.toString() || ""
+  );
+  const [deudaActual, setDeudaActual] = useState<number | undefined>(
+    card?.type === "credit" ? (card as CreditCardItem).debt : undefined
+  );
+  const [fechaVencimiento, setFechaVencimiento] = useState(
+    card?.card.expiration_date || ""
+  );
+
   const user_id = 1;
+
+  useEffect(() => {
+    if (card) {
+      setName(card.card.card_name);
+      setLimite(
+        card.type === "credit"
+          ? (card as CreditCardItem)?.credit_limit
+          : (card as DebitCardItem)?.current_balance.toString() || ""
+      );
+      if (card.type === "credit") {
+        setDeudaActual((card as CreditCardItem).debt || undefined);
+      } else {
+        setDeudaActual(undefined);
+      }
+    }
+  }, [card]);
+
+  const handleAction = () => {
+    // Verificar que los campos no estén vacíos
+    if (!name || !digitos || !fechaVencimiento || !limite) {
+      alert("Por favor, completa todos los campos obligatorios.");
+      return;
+    }
+
+    // Verificar si es una tarjeta de crédito
+    if (type === "credit" && deudaActual === undefined) {
+      alert("Por favor, ingrese la deuda actual de la tarjeta de crédito.");
+      return;
+    }
+
+    // Convertir `deudaActual` a undefined si no está presente
+    const deuda =
+      type === "credit" && deudaActual === undefined ? 0 : deudaActual;
+
+    if (card) {
+      // Si ya estamos editando una tarjeta, llamamos a handleEdit
+      handleEdit(
+        navigation,
+        card.type === "credit"
+          ? card.tarjeta_credito_id
+          : card.tarjeta_debito_id,
+        type,
+        name,
+        limite,
+        deuda,
+        onCardUpdate
+      );
+    } else {
+      // Si estamos creando una tarjeta nueva, llamamos a handleSubmit
+      handleSubmit(
+        navigation,
+        type,
+        user_id,
+        name,
+        digitos,
+        fechaVencimiento,
+        limite,
+        deuda,
+        onCardAdd
+      );
+    }
+  };
 
   return (
     <View style={globalStyles.container}>
@@ -41,30 +134,34 @@ export default function Cardform({ navigation }: Props) {
               onChangeText={setName}
             />
 
-            <TextClass text="Últimos 4 dígitos" />
-            <TextInput
-              style={globalStyles.textInput}
-              value={digitos}
-              onChangeText={setDigitos}
-              keyboardType="numeric"
-            />
+            {!card ? (
+              <>
+                <TextClass text="Últimos 4 dígitos" />
+                <TextInput
+                  style={globalStyles.textInput}
+                  value={digitos}
+                  onChangeText={setDigitos}
+                  keyboardType="numeric"
+                />
 
-            <TextClass text="Selecciona el tipo de tarjeta" />
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={type}
-                onValueChange={(itemValue) => setType(itemValue)}
-                style={styles.picker}
-              >
-                <Picker.Item label="Seleccionar" value="" />
-                <Picker.Item label="Tarjeta de Crédito" value="credito" />
-                <Picker.Item label="Tarjeta de Débito" value="debito" />
-              </Picker>
-            </View>
+                <TextClass text="Selecciona el tipo de tarjeta" />
+                <View style={styles.pickerContainer}>
+                  <Picker
+                    selectedValue={type}
+                    onValueChange={(itemValue) => setType(itemValue)}
+                    style={styles.picker}
+                  >
+                    <Picker.Item label="Seleccionar" value="" />
+                    <Picker.Item label="Tarjeta de Crédito" value="credit" />
+                    <Picker.Item label="Tarjeta de Débito" value="debit" />
+                  </Picker>
+                </View>
+              </>
+            ) : null}
 
             {type ? (
               <>
-                {type === "credito" ? (
+                {type === "credit" ? (
                   <>
                     <TextClass text="Limite:" />
                     <TextInput
@@ -77,8 +174,20 @@ export default function Cardform({ navigation }: Props) {
                     <TextClass text="Deuda:" />
                     <TextInput
                       style={globalStyles.textInput}
-                      value={deudaActual ? deudaActual.toString() : ""}
-                      onChangeText={(text) => setDeudaActual(parseFloat(text))}
+                      value={
+                        deudaActual !== undefined ? deudaActual.toString() : ""
+                      }
+                      onChangeText={(text) => {
+                        if (text === "") {
+                          setDeudaActual(undefined);
+                        } else {
+                          const parsedValue = parseFloat(text);
+                          // Verificamos si el valor es un número válido (isNaN)
+                          if (!isNaN(parsedValue)) {
+                            setDeudaActual(parsedValue);
+                          }
+                        }
+                      }}
                       keyboardType="numeric"
                     />
                   </>
@@ -96,32 +205,24 @@ export default function Cardform({ navigation }: Props) {
               </>
             ) : null}
 
-            <TextClass text="Fecha de vencimiento" />
-            <TextInput
-              style={globalStyles.textInput}
-              placeholder="YYYY-MM-DD"
-              value={fechaVencimiento}
-              onChangeText={setFechaVencimiento}
-              keyboardType="numeric"
-            />
+            {!card ? (
+              <>
+                <TextClass text="Fecha de vencimiento" />
+                <TextInput
+                  style={globalStyles.textInput}
+                  placeholder="YYYY-MM-DD"
+                  value={fechaVencimiento}
+                  onChangeText={setFechaVencimiento}
+                  keyboardType="numeric"
+                />
+              </>
+            ) : null}
           </View>
           <View style={globalStylesMenu.containerBottom}>
-            <Pressable
-              style={globalStyles.button}
-              onPress={() =>
-                handleSubmit(
-                  navigation,
-                  type,
-                  user_id,
-                  name,
-                  digitos,
-                  fechaVencimiento,
-                  limite,
-                  deudaActual
-                )
-              }
-            >
-              <Text style={globalStyles.text}>Agregar</Text>
+            <Pressable style={globalStyles.button} onPress={handleAction}>
+              <Text style={globalStyles.text}>
+                {card ? "Editar" : "Agregar"}
+              </Text>
             </Pressable>
           </View>
         </ScrollView>

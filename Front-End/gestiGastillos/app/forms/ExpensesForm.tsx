@@ -4,7 +4,7 @@ import globalStyles from "@/styles/GlobalStyles";
 import ButtonClass from "@/components/buttons";
 import TextClass from "@/components/TextClass";
 import TopBarForms from "@/components/TopBarForms";
-import MethodPickerComponent from "@/components/methodPickerComponent";
+import MethodPickerComponent from "@/components/MethodPickerComponent";
 
 export default function ExpensesForm() {
     return (

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, Pressable, SafeAreaView, Image } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { DrawerActions, NavigationContainer, useNavigation } from '@react-navigation/native';
 
@@ -12,7 +12,10 @@ export default function TopBarForms({ title }: Props) {
     <SafeAreaView style={styles.container}>
       <View style={styles.itemContainer}>
         <Pressable style={styles.iconContainer} onPress={() => navigation.goBack()}>
-            <MaterialCommunityIcons name="arrow-left-bold-outline" size={50} color="white" />
+            <Image 
+              source={require("@/assets/images/backArrow.png")}
+              style={styles.image}
+            />
         </Pressable>
         <Text style={styles.title}>{title}</Text>
       </View>
@@ -45,4 +48,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     //backgroundColor: 'green'
   },
+  image: {
+    width: 50,
+  height: 50,
+  transform: [{ scaleX: -1 }]
+  }
 });
