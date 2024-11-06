@@ -26,7 +26,7 @@ export default function Cardform({ navigation }: Props) {
   const [limite, setLimite] = useState("");
   const [deudaActual, setDeudaActual] = useState<number>();
   const [fechaVencimiento, setFechaVencimiento] = useState("");
-  const user_id = 1;
+  const user_id = 2;
 
   return (
     <View style={globalStyles.container}>

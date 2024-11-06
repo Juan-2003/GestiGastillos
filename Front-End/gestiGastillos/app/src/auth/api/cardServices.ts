@@ -1,3 +1,6 @@
+import { ip } from "../IP/Ip";
+
+
 export interface User {
   user_id: number;
   name: string;
@@ -52,7 +55,7 @@ export function isCreditCardItem(item: CardItem): item is CreditCardItem {
 export const handleFetchItem = async (): Promise<CardItem[]> => {
   try {
     const response = await fetch(
-      "http://192.168.100.17:8080/gestiGastillos/cards",
+      `http://${ip}:8080/gestiGastillos/cards`,
       {
         method: "GET",
         headers: {
@@ -99,8 +102,8 @@ export const handleSubmit = async (
   // Definir la URL según el tipo de tarjeta
   const url =
     type === "credito"
-      ? "http://192.168.100.17:8080/gestiGastillos/creditCard/register"
-      : "http://192.168.100.17:8080/gestiGastillos/debitCard"; // Ajusta la ruta para tarjetas de débito
+      ? `http://${ip}:8080/gestiGastillos/creditCard/register`
+      : `http://${ip}:8080/gestiGastillos/debitCard`; // Ajusta la ruta para tarjetas de débito
 
   // Agregar propiedades específicas según el tipo de tarjeta
   if (type === "credito") {
@@ -140,8 +143,8 @@ export const handleDelete = async (
 ): Promise<CardItem[]> => {
   const url =
     type === "credit"
-      ? `http://192.168.100.17:8080/gestiGastillos/creditCard/delete/${id}`
-      : `http://192.168.100.17:8080/gestiGastillos/debitCard/delete/${id}`; // Ajusta la ruta para tarjetas de débito
+      ? `http://${ip}:8080/gestiGastillos/creditCard/delete/${id}`
+      : `http://${ip}:8080/gestiGastillos/debitCard/delete/${id}`; // Ajusta la ruta para tarjetas de débito
 
   try {
     const response = await fetch(url, {
@@ -172,8 +175,8 @@ export const handleEdit = async (
 ): Promise<CardItem[]> => {
   const url =
     type === "credit"
-      ? `http://192.168.100.17:8080/gestiGastillos/creditCard/update`
-      : `http://192.168.100.17:8080/gestiGastillos/debitCard/update`; // Ajusta la ruta para tarjetas de débito
+      ? `http://${ip}:8080/gestiGastillos/creditCard/update`
+      : `http://${ip}:8080/gestiGastillos/debitCard/update`; // Ajusta la ruta para tarjetas de débito
 
   try {
     const response = await fetch(url, {

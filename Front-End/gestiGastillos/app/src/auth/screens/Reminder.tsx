@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, FlatList } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ButtonClass from "@/components/buttons";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
-
+import ReminderItem from "@/components/ReminderItem";
 import cards from "@/json/cards.json";
 
 interface Props {
@@ -16,7 +16,9 @@ export default function Reminder({ navigation }: Props) {
     <View style={globalStyles.container}>
       <TopBar title="RECORDATORIOS" />
       <View style={globalStylesMenu.container}>
-        <View style={globalStylesMenu.containerMiddle}></View>
+        <View style={globalStylesMenu.containerMiddle}>
+          <ReminderItem />
+        </View>
 
         <View style={globalStylesMenu.containerBottom}>
           <ButtonClass
