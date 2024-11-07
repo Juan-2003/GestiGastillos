@@ -4,7 +4,8 @@ import { StyleSheet, View,Text,FlatList, } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ButtonClass from "@/components/buttons";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
-
+import SavingPlansEmoji from "@/components/SavingPlansEmoji";
+import SavingPlansItem from "@/components/SavingPlansItem";
 import cards from "@/json/cards.json"
 
 interface Props {
@@ -23,7 +24,8 @@ export default function SavingPlans({navigation}:Props) {
       <View style={globalStylesMenu.container}>
        
         <View style={globalStylesMenu.containerMiddle}>
-            
+            <SavingPlansEmoji />
+            <SavingPlansItem />
               
              
         </View>

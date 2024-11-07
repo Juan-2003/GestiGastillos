@@ -70,6 +70,17 @@ const globalStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black'
   },
+  picker: {
+    height: 50,
+    width: "100%",
+  },
+  pickerContainer: {
+    width: "70%",
+    justifyContent: "center",
+    borderBottomWidth: 0.5,
+    borderColor: "black",
+    marginBottom: 40,
+  },
 });
 
 export default globalStyles;
