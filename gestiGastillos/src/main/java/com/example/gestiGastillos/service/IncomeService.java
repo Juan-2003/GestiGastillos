@@ -57,7 +57,7 @@ public class IncomeService {
 
             if(debitCard.getCard().getSaving() != null){
                 Saving saving = debitCard.getCard().getSaving();
-                SavingStatus savingStatus = SavingStatusEvalutator.savingStatusEvaluator(oldCurrentBalance, newCurrentBalance, saving.getTargetAmount());
+                SavingStatus savingStatus = SavingStatusEvalutator.savingStatusEvaluator(newCurrentBalance, saving.getTargetAmount());
                 saving.setStatus(savingStatus);
                 savingRepository.save(saving);
             }

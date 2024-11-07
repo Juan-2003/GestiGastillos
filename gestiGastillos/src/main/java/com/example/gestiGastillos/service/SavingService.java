@@ -1,7 +1,10 @@
 package com.example.gestiGastillos.service;
 
+import com.example.gestiGastillos.dto.creditCard.CreditCardResponseDTO;
 import com.example.gestiGastillos.dto.saving.SavingDataDTO;
 import com.example.gestiGastillos.dto.saving.SavingResponseDTO;
+import com.example.gestiGastillos.dto.saving.UpdateSavingDTO;
+import com.example.gestiGastillos.dto.saving.UpdateSavingResponseDTO;
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.model.Saving;
 import com.example.gestiGastillos.model.card.Card;
@@ -13,8 +16,13 @@ import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.SavingRepository;
 import com.example.gestiGastillos.util.SavingStatus;
 import com.example.gestiGastillos.util.SavingStatusEvalutator;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 @Service
 public class SavingService {
@@ -31,9 +39,12 @@ public class SavingService {
     public SavingResponseDTO registerSaving(SavingDataDTO savingDataDTO){
         DebitCard debitCard =  debitCardRepository.findById(savingDataDTO.debitCardId())
                 .orElseThrow(() -> new EntityNotFoundException("Tarjeta de debito no encontrada con id: " + savingDataDTO.debitCardId()));
+
         Card card = debitCard.getCard();
-        SavingStatus savingStatus = SavingStatusEvalutator.savingStatusEvaluator(debitCard.getCurrentBalance(), debitCard.getCurrentBalance(), savingDataDTO.targetAmount());
+
+        SavingStatus savingStatus = SavingStatusEvalutator.savingStatusEvaluator(debitCard.getCurrentBalance(), savingDataDTO.targetAmount());
         Saving saving = new Saving(savingDataDTO, card, savingStatus);
+
         savingRepository.save(saving);
         card.setSaving(saving);
         cardRepository.save(card);
@@ -46,6 +57,27 @@ public class SavingService {
                 .orElseThrow(() -> new EntityNotFoundException("Ahorro no econtrado con id: " + id));
 
         return new SavingResponseDTO(saving);
+    }
+
+    public List<SavingResponseDTO> getSavingList(Pageable pageable){
+        return savingRepository.findAll(pageable).map(SavingResponseDTO::new).getContent();
+    }
+
+    public UpdateSavingResponseDTO updateSaving(UpdateSavingDTO updateSavingDTO){
+        Saving saving = savingRepository.findById(updateSavingDTO.savingId())
+                .orElseThrow(() -> new EntityNotFoundException("Ahorro no econtrado con id: " + updateSavingDTO.savingId()));
+
+        saving.update(updateSavingDTO);
+        savingRepository.save(saving);
+
+        return new UpdateSavingResponseDTO(saving);
+    }
+
+    public void deleteSaving(Long id){
+        Saving saving = savingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("'Saving' no encontrado con id: " + id));
+
+        savingRepository.delete(saving);
     }
 
 

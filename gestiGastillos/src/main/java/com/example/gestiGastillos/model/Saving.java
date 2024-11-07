@@ -1,8 +1,10 @@
 package com.example.gestiGastillos.model;
 
 import com.example.gestiGastillos.dto.saving.SavingDataDTO;
+import com.example.gestiGastillos.dto.saving.UpdateSavingDTO;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.util.SavingStatus;
+import com.example.gestiGastillos.util.SavingStatusEvalutator;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,5 +37,16 @@ public class Saving {
        this.targetAmount = savingDataDTO.targetAmount();
        this.status = savingStatus;
        this.card = card;
+   }
+
+   public void update(UpdateSavingDTO updateSavingDTO){
+       if(!updateSavingDTO.name().equals(this.name)){
+           this.name = updateSavingDTO.name();
+       }
+       if(!updateSavingDTO.targetAmount().equals(this.targetAmount)){
+           this.targetAmount = updateSavingDTO.targetAmount();
+           SavingStatus savingStatus = SavingStatusEvalutator.savingStatusEvaluator(card.getDebitCard().getCurrentBalance(), targetAmount);
+           setStatus(savingStatus);
+       }
    }
 }

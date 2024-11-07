@@ -17,6 +17,7 @@ public class UserService {
     }
 
     public UserResponseDTO signUpRequest(UserDataDTO userDataDTO){
+        System.out.println("1");
         User user = new User(userDataDTO.name());
         userRepository.save(user);
 
