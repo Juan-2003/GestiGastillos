@@ -16,6 +16,8 @@ public record SavingResponseDTO(
 
         String status,
 
+        String current_balance,
+
         @JsonProperty("debit_card_id")
         Long debitCardId
 ) {
@@ -25,6 +27,7 @@ public record SavingResponseDTO(
                 saving.getName(),
                 saving.getTargetAmount(),
                 saving.getStatus().toString(),
+                String.valueOf(saving.getCard().getDebitCard().getCurrentBalance()),
                 saving.getCard().getDebitCard().getId()
         );
     }

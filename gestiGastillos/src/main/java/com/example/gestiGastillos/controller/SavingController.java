@@ -45,7 +45,6 @@ public class SavingController {
 
     @GetMapping("/savingList")
     public ResponseEntity<List<SavingResponseDTO>> getSavingList(Pageable pageable){
-        System.out.println("vndviv");
         List<SavingResponseDTO> savingList = savingService.getSavingList(pageable);
         return ResponseEntity.ok(savingList);
     }
