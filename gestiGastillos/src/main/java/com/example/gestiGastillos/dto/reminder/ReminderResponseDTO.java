@@ -4,7 +4,7 @@ import com.example.gestiGastillos.model.Reminder;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"reminder_id", "name", "message", "date", "card_id"})
+@JsonPropertyOrder({"reminder_id", "name", "message", "date", "credit_card_id"})
 public record ReminderResponseDTO(
         @JsonProperty("reminder_id")
         Long id,
@@ -12,8 +12,11 @@ public record ReminderResponseDTO(
         String message,
         String date,
 
-        @JsonProperty("card_id")
-        Long cardId
+        @JsonProperty("credit_card_id")
+        Long creditCardId,
+
+        @JsonProperty("debit_card_id")
+        Long debitCardId
 ) {
         public ReminderResponseDTO(Reminder reminder){
                 this(
@@ -21,7 +24,8 @@ public record ReminderResponseDTO(
                         reminder.getName(),
                         reminder.getMessage(),
                         reminder.getDate(),
-                        (reminder.getCard() == null) ? null : reminder.getCard().getId()
+                        (reminder.getCard() == null) ? null : (reminder.getCard().getCreditCard() == null) ? null : reminder.getCard().getCreditCard().getId(),
+                        (reminder.getCard() == null) ? null : (reminder.getCard().getDebitCard() == null) ? null : reminder.getCard().getDebitCard().getId()
                 );
         }
 }
