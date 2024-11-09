@@ -1,6 +1,6 @@
 import { View, StyleSheet,Text, TouchableOpacity, Image } from "react-native";
 import cardStyles from "@/styles/CardStyles";
-import ItemContainer from "./ItemContainer";
+import ItemContainer from "./ItemComponent";
 
 export default function SavingPlansItem(){
     return(

@@ -193,8 +193,8 @@ export const handleEdit = async (
   // Comprobamos el tipo de tarjeta y construimos el DTO correspondiente
   const url =
     type === "credit"
-      ? "http://192.168.100.17:8080/gestiGastillos/creditCard/update"
-      : "http://192.168.100.17:8080/gestiGastillos/debitCard/update";
+      ? `http://${ip}:8080/gestiGastillos/creditCard/update`
+      : `http://${ip}:8080/gestiGastillos/debitCard/update`;
 
   let body: any = {}; // Variable para el cuerpo de la solicitud
 

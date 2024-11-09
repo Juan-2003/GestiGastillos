@@ -18,28 +18,18 @@ export default function Card({ navigation }: Props) {
   const [cards, setCards] = useState<CardItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const fetchData = async () => {
-        try {
-          setLoading(true); // Muestra el indicador de carga
-          const data: CardItem[] = await handleFetchItem();
-          const combinedCards: CardItem[] = [
-            ...data.filter((card) => card.type === "credit").map((card) => ({ ...card, type: "credit" })),
-            ...data.filter((card) => card.type === "debit").map((card) => ({ ...card, type: "debit" })),
-          ];
-          setCards(combinedCards);
-          console.log("Datos almacenados en cards:", data);
-        } catch (error) {
-          console.error("Error al cargar las tarjetas:", error);
-        } finally {
-          setLoading(false); // Oculta el indicador de carga cuando termina
-        }
-      };
-
-      fetchData();
-    }, [])
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+        const data = await handleFetchItem();
+        const combinedCards: CardItem[] = [
+            ...data.credit_cards?.map(card => ({ ...card, type: 'credit' })), // Añadimos el tipo a las tarjetas de crédito
+            ...data.debit_cards?.map(card => ({ ...card, type: 'debit' }))    // Añadimos el tipo a las tarjetas de débito
+        ];
+        setCards(combinedCards);
+        console.log("Datos almacenados en cards:", data); // Verificar los datos aquí
+    };
+    fetchData();
+}, []);
 
   const handleDeleteCard = async (cardId: number, cardType: string) => {
     await handleDelete(cardId, cardType, () => {

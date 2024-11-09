@@ -70,6 +70,11 @@ const globalStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black'
   },
+  imagetext:{
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
   picker: {
     height: 50,
     width: "100%",
