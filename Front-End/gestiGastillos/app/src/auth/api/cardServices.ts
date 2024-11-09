@@ -32,18 +32,6 @@ export interface DebitCardItem {
 
 export type CardItem = CreditCardItem | DebitCardItem;
 
-type CardData = {
-  user_id: number;
-  card: {
-    name: string;
-    last_digits: string;
-    expiration_date: string;
-  };
-  credit_limit?: string; // Opcional, solo para tarjetas de crédito
-  debt?: number; // Opcional, solo para tarjetas de crédito
-  current_balance?: string; // Opcional, solo para tarjetas de débito
-};
-
 export function isDebitCardItem(item: CardItem): item is DebitCardItem {
   return item.type === "debit";
 }
@@ -101,8 +89,8 @@ export const handleSubmit = async (
   // Definir la URL según el tipo de tarjeta
   const url =
     type === "credit"
-      ? "http://192.168.100.17:8080/gestiGastillos/creditCard/register"
-      : "http://192.168.100.17:8080/gestiGastillos/debitCard";
+      ? `http://${ip}:8080/gestiGastillos/creditCard/register`
+      : `http://${ip}:8080/gestiGastillos/debitCard`;
 
   let body: any = {};
 
@@ -119,7 +107,7 @@ export const handleSubmit = async (
     // Para tarjetas de debito creamos el DebitCardDataDTO
     body = {
       user_id,
-      currentBalance: limite,
+      current_balance: limite,
       card: CardDataDTO
     };
   }

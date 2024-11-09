@@ -19,7 +19,6 @@ export default function Reminder({ navigation }: Props) {
         <View style={globalStylesMenu.containerMiddle}>
           <ReminderItem />
         </View>
-
         <View style={globalStylesMenu.containerBottom}>
           <ButtonClass
             text="Agregar Recordatorio"

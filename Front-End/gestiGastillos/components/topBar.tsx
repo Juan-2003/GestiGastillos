@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    //backgroundColor: 'purple'
   },
   title: {
     flex: 1,
@@ -39,10 +38,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 30,
     fontWeight: "bold",
-    //backgroundColor: 'red'
   },
   iconContainer: {
-    paddingHorizontal: 10,
-    //backgroundColor: 'green'
+    flex: 0.2,
+    paddingHorizontal: 5,
   },
 });

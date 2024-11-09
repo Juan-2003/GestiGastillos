@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { View, Text, FlatList } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { handleFetchItem, CardItem, handleDelete } from "../api/cardServices";
+import { handleFetchItem, CardItem, handleDelete, CreditCardItem, DebitCardItem } from "../api/cardServices";
 import TopBar from "@/components/topBar";
 import globalStyles from "@/styles/GlobalStyles";
 import ButtonClass from "@/components/buttons";
@@ -23,10 +23,10 @@ export default function Card({ navigation }: Props) {
       const fetchData = async () => {
         try {
           setLoading(true); // Muestra el indicador de carga
-          const data = await handleFetchItem();
+          const data: CardItem[] = await handleFetchItem();
           const combinedCards: CardItem[] = [
-            ...data.credit_cards.map((card) => ({ ...card, type: "credit" })),
-            ...data.debit_cards.map((card) => ({ ...card, type: "debit" })),
+            ...data.filter((card) => card.type === "credit").map((card) => ({ ...card, type: "credit" })),
+            ...data.filter((card) => card.type === "debit").map((card) => ({ ...card, type: "debit" })),
           ];
           setCards(combinedCards);
           console.log("Datos almacenados en cards:", data);
@@ -47,8 +47,8 @@ export default function Card({ navigation }: Props) {
       setCards((prevCards) =>
         prevCards.filter((card) =>
           cardType === "credit"
-            ? card.tarjeta_credito_id !== cardId
-            : card.tarjeta_debito_id !== cardId
+            ? (card as CreditCardItem).tarjeta_credito_id !== cardId
+            : (card as DebitCardItem).tarjeta_debito_id !== cardId
         )
       );
     });
@@ -69,9 +69,9 @@ export default function Card({ navigation }: Props) {
           data={cards}
           keyExtractor={(item) => {
             if ("tarjeta_credito_id" in item) {
-              return `credit_${item.tarjeta_credito_id?.toString()}`; // Prefijo para tarjeta de crédito
+              return `credit_${(item as CreditCardItem).tarjeta_credito_id?.toString()}`; // Prefijo para tarjeta de crédito
             } else {
-              return `debit_${item.tarjeta_debito_id?.toString()}`; // Prefijo para tarjeta de débito
+              return `debit_${(item as DebitCardItem).tarjeta_debito_id?.toString()}`; // Prefijo para tarjeta de débito
             }
           }}
           renderItem={({ item }) => (
