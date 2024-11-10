@@ -1,0 +1,1 @@
+ALTER TABLE transactions ADD COLUMN date varchar(12) DEFAULT '2025-01-01';

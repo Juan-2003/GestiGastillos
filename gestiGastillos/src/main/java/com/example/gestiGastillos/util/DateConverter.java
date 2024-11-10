@@ -11,6 +11,7 @@ public class DateConverter {
         }
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        System.out.println(LocalDate.parse(date, dateTimeFormatter));
         try{
             return LocalDate.parse(date, dateTimeFormatter);
         }catch (DateTimeParseException e){

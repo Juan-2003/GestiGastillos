@@ -17,6 +17,9 @@ public record UpdateExpenseDTO(
 
         @NotBlank(message = "'concepto' no puede estar vacio")
         @Size(max = 50, message = "El concepto no puede exceder los 50 caracteres")
-        String concept
+        String concept,
+
+        @NotBlank(message = "'Fecha' no puede estar vacia")
+        String date
 ) {
 }

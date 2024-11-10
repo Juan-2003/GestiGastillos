@@ -36,6 +36,9 @@ public class Transactions {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
+    @Column(name = "date")
+    private String date;
+
     @ManyToOne
     @JoinColumn(name = "card_id")
     private Card card;
@@ -48,6 +51,7 @@ public class Transactions {
         this.concept = incomeDataDTO.concept();
         this.category = TransactionCategory.fromSpanish(incomeDataDTO.category());
         this.paymentMethod = PaymentMethod.fromSpanish(incomeDataDTO.paymentMethod());
+        this.date = incomeDataDTO.date();
         this.card = card;
     }
 
@@ -59,6 +63,7 @@ public class Transactions {
         this.concept = incomeDataDTO.concept();
         this.category = TransactionCategory.fromSpanish(incomeDataDTO.category());
         this.paymentMethod = PaymentMethod.fromSpanish(incomeDataDTO.paymentMethod());
+        this.date = incomeDataDTO.date();
     }
 
     //Egreso con cualquier tarjeta
@@ -68,6 +73,7 @@ public class Transactions {
         this.concept = expenseDataDTO.concept();
         this.category = TransactionCategory.fromSpanish(expenseDataDTO.category());
         this.paymentMethod = PaymentMethod.fromSpanish(expenseDataDTO.paymentMethod());
+        this.date = expenseDataDTO.date();
         this.card = card;
     }
 
@@ -78,6 +84,7 @@ public class Transactions {
         this.concept = expenseDataDTO.concept();
         this.category = TransactionCategory.fromSpanish(expenseDataDTO.category());
         this.paymentMethod = PaymentMethod.fromSpanish(expenseDataDTO.paymentMethod());
+        this.date = expenseDataDTO.date();
     }
 
     //Actualizar ingreso
@@ -99,5 +106,17 @@ public class Transactions {
         if(updateExpenseDTO.concept() != this.concept){
             this.concept = updateExpenseDTO.concept();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "id=" + id +
+                ", amount=" + amount +
+                ", concept='" + concept + '\'' +
+                ", type=" + type +
+                ", category=" + category +
+                ", paymentMethod=" + paymentMethod +
+                ", date='" + date + '\'' +
+                ", card=" + card;
     }
 }

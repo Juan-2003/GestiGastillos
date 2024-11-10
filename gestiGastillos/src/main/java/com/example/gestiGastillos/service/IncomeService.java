@@ -65,7 +65,6 @@ public class IncomeService {
             transactions = new Transactions(incomeDataDTO);
         }
 
-
         transactionsRepository.save(transactions);
 
         return new IncomeResponseDTO(transactions);
