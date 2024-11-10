@@ -26,7 +26,8 @@ public class CustomExceptionsHandler {
                     ReminderNameException.class,
                     ExpenseAmount.class,
                     InvalidPaymentMethodException.class,
-                    InvalidCategoryException.class
+                    InvalidCategoryException.class,
+                    TypeInvalidException.class
             )
     );
 
@@ -52,7 +53,7 @@ public class CustomExceptionsHandler {
             ExpenseAmount.class,
             InvalidPaymentMethodException.class,
             InvalidCategoryException.class,
-            InvalidTypeException.class,
+            TypeInvalidException.class,
             ExpenseAmount.class,
             InvalidPaymentMethodException.class,
             InvalidCategoryException.class,

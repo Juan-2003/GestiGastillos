@@ -16,6 +16,7 @@ import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.SavingRepository;
 import com.example.gestiGastillos.util.SavingStatus;
 import com.example.gestiGastillos.util.SavingStatusEvalutator;
+import com.example.gestiGastillos.validation.savings.postValidations.SavingNamePostValidation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -29,14 +30,20 @@ public class SavingService {
     private final SavingRepository savingRepository;
     private final DebitCardRepository debitCardRepository;
     private final CardRepository cardRepository;
+    private final SavingNamePostValidation<Object> savingNamePostValidation;
+
     @Autowired
-    public SavingService(SavingRepository savingRepository, DebitCardRepository debitCardRepository, CardRepository cardRepository){
+    public SavingService(SavingRepository savingRepository, DebitCardRepository debitCardRepository, CardRepository cardRepository, SavingNamePostValidation<Object> savingNamePostValidation) {
         this.savingRepository = savingRepository;
         this.debitCardRepository = debitCardRepository;
         this.cardRepository = cardRepository;
+        this.savingNamePostValidation = savingNamePostValidation;
     }
 
     public SavingResponseDTO registerSaving(SavingDataDTO savingDataDTO){
+
+        savingNamePostValidation.validation(savingDataDTO);
+
         DebitCard debitCard =  debitCardRepository.findById(savingDataDTO.debitCardId())
                 .orElseThrow(() -> new EntityNotFoundException("Tarjeta de debito no encontrada con id: " + savingDataDTO.debitCardId()));
 
@@ -64,6 +71,9 @@ public class SavingService {
     }
 
     public UpdateSavingResponseDTO updateSaving(UpdateSavingDTO updateSavingDTO){
+
+        savingNamePostValidation.validation(updateSavingDTO);
+
         Saving saving = savingRepository.findById(updateSavingDTO.savingId())
                 .orElseThrow(() -> new EntityNotFoundException("Ahorro no econtrado con id: " + updateSavingDTO.savingId()));
 

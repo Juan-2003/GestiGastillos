@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
 public record ReminderDataDTO(
-        @NotBlank
+        @NotBlank(message = "No puede estar vacio el nombre")
         String name,
 
-        @NotBlank
+        @NotBlank(message = "No puede estar vacio el mensaje")
         String message,
 
-        @NotBlank
+        @NotBlank(message = "La fecha no puede estar vacia")
         String date,
+
 
         @JsonProperty("credit_card_id")
         Long creditCardId,
