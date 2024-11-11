@@ -101,8 +101,8 @@ export const handleSubmit = async (
   // Definir la URL según el tipo de tarjeta
   const url =
     type === "credit"
-      ? "http://192.168.100.17:8080/gestiGastillos/creditCard/register"
-      : "http://192.168.100.17:8080/gestiGastillos/debitCard";
+      ? `http://${ip}:8080/gestiGastillos/creditCard/register`
+      : `http://${ip}:8080/gestiGastillos/debitCard`;
 
   let body: any = {};
 
@@ -119,7 +119,7 @@ export const handleSubmit = async (
     // Para tarjetas de debito creamos el DebitCardDataDTO
     body = {
       user_id,
-      currentBalance: limite,
+      current_balance: limite,
       card: CardDataDTO
     };
   }
@@ -205,8 +205,8 @@ export const handleEdit = async (
   // Comprobamos el tipo de tarjeta y construimos el DTO correspondiente
   const url =
     type === "credit"
-      ? "http://192.168.100.17:8080/gestiGastillos/creditCard/update"
-      : "http://192.168.100.17:8080/gestiGastillos/debitCard/update";
+      ? `http://${ip}:8080/gestiGastillos/creditCard/update`
+      : `http://${ip}/gestiGastillos/debitCard/update`;
 
   let body: any = {}; // Variable para el cuerpo de la solicitud
 
@@ -258,4 +258,20 @@ export const handleEdit = async (
   } catch (error) {
     console.error(error);
   }
+};
+
+
+
+// Obtener lista de tarjetas de crédito
+export const fetchCreditCards = async (): Promise<CardItem[]> => {
+  const response = await fetch(`http://${ip}:8080/gestiGastillos/creditCard/creditCardsList`);
+  if (!response.ok) throw new Error("Error fetching credit cards");
+  return await response.json();
+};
+
+// Obtener lista de tarjetas de débito
+export const fetchDebitCards = async (): Promise<CardItem[]> => {
+  const response = await fetch(`http://${ip}:8080/gestiGastillos/debitCard/debitCardsList`);
+  if (!response.ok) throw new Error("Error fetching debit cards");
+  return await response.json();
 };
