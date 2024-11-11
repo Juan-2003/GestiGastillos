@@ -93,6 +93,7 @@ public class IncomeService {
     }
 
     public UpdateIncomeResponseDTO updateIncome(UpdateIncomeDTO updateIncomeDTO){
+        incomeValidator.forEach(i -> i.validation(updateIncomeDTO));
         Transactions transaction = transactionsRepository.findById(updateIncomeDTO.incomeId())
                 .orElseThrow(() -> new EntityNotFoundException("Transaccion no encontrada con id: " + updateIncomeDTO.incomeId()));
 

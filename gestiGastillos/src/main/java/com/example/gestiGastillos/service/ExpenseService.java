@@ -107,6 +107,7 @@ public class ExpenseService {
     }
 
     public UpdateExpenseResponseDTO updateExpense(UpdateExpenseDTO updateExpenseDTO) {
+        expenseValidator.forEach(i -> i.validation(updateExpenseDTO));
         Transactions expenseTransaction = transactionsRepository.findById(updateExpenseDTO.expenseId())
                 .orElseThrow(() -> new EntityNotFoundException("La transaccion de egreso no ha sido encontrado con el id: " + updateExpenseDTO.expenseId() ));
 

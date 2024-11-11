@@ -2,6 +2,7 @@ package com.example.gestiGastillos.validation.Transactions.PostValidations;
 
 import com.example.gestiGastillos.dto.transactions.expense.ExpenseDataDTO;
 import com.example.gestiGastillos.dto.transactions.income.IncomeDataDTO;
+import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeDTO;
 import com.example.gestiGastillos.infra.exceptions.InvalidCategoryException;
 import com.example.gestiGastillos.model.transactions.TransactionCategory;
 import org.springframework.stereotype.Component;
