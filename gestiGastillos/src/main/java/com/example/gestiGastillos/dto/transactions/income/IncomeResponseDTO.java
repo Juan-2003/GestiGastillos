@@ -14,6 +14,7 @@ public record IncomeResponseDTO(
         Double amount,
         String concept,
         String category,
+        String date,
         @JsonProperty("payment_method")
         String paymentMethod,
         @JsonProperty("debit_card_id")
@@ -26,6 +27,7 @@ public record IncomeResponseDTO(
                         transaction.getAmount(),
                         transaction.getConcept(),
                         transaction.getCategory().name(),
+                        transaction.getDate(),
                         transaction.getPaymentMethod().name(),
                         (transaction.getCard() == null) ?  null : (transaction.getCard().getDebitCard() == null) ? null : transaction.getCard().getDebitCard().getId()
                 );

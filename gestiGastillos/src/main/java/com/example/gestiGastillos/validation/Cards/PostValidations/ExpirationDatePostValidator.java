@@ -2,17 +2,13 @@ package com.example.gestiGastillos.validation.Cards.PostValidations;
 
 import com.example.gestiGastillos.dto.creditCard.CreditCardDataDTO;
 import com.example.gestiGastillos.dto.debitCard.DebitCardDataDTO;
-import com.example.gestiGastillos.infra.exceptions.InvalidCreditLimitException;
 import com.example.gestiGastillos.validation.ExpirationDate;
-import com.example.gestiGastillos.validation.Validator;
-import com.example.gestiGastillos.util.DateConverter;
+import com.example.gestiGastillos.validation.Cards.CardValidator;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 
 
 @Component
-public class ExpirationDatePostValidator implements Validator<Object> {
+public class ExpirationDatePostValidator implements CardValidator<Object> {
     @Override
     public void validation(Object dto) {
         String expirationDate = "";
@@ -24,11 +20,8 @@ public class ExpirationDatePostValidator implements Validator<Object> {
             DebitCardDataDTO debitCardDataDTO = (DebitCardDataDTO) dto;
             expirationDate = debitCardDataDTO.cardDataDTO().expirationDate();
         }
-
         if(!expirationDate.isBlank()){
             ExpirationDate.expirationDateValidator(expirationDate);
-        }else{
-            throw new RuntimeException("La clase no es la apropiada");
         }
     }
 }

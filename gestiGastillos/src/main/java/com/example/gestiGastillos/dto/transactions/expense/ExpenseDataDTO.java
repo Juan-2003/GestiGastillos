@@ -25,6 +25,9 @@ public record ExpenseDataDTO(
         @JsonProperty("payment_method")
         String paymentMethod,
 
+        @NotBlank(message = "'Fecha' no puede estar vacia")
+        String date,
+
         @JsonProperty("debit_card_id")
         Long debitCardId,
 

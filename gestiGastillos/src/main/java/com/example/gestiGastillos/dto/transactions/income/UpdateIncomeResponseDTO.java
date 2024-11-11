@@ -10,6 +10,7 @@ public record UpdateIncomeResponseDTO(
         Double amount,
         String concept,
         String category,
+        String date,
         @JsonProperty("payment_method")
         String paymentMethod
 ) {
@@ -20,6 +21,7 @@ public record UpdateIncomeResponseDTO(
                 transaction.getAmount(),
                 transaction.getConcept(),
                 transaction.getCategory().name(),
+                transaction.getDate(),
                 transaction.getPaymentMethod().name()
         );
     }
