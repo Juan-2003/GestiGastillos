@@ -5,7 +5,6 @@ import Welcome from "./src/home/screens/Welcome";
 import Register from "./src/home/screens/Register";
 import DrawerNavigation from "./navigation/DraweNavigation";
 import Cardform from "./forms/cardForm";
-import ExpensesForm from "./forms/IncomeExpenseForm";
 import ReminderForm from "./forms/ReminderForm";
 import SavingPlansForm from "./forms/SavingPlansForm";
 import { useEffect } from "react";
@@ -22,7 +21,7 @@ export default function Index() {
 
   return (
     <Stack.Navigator
-      initialRouteName="IncomeExpenseForm"
+      initialRouteName="Welcome"
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,

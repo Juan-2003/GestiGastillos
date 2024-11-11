@@ -49,6 +49,7 @@ export default function ItemList({ navigation, type }: Props) {
   const handleUpdateItem = (item: MovementItem) => {
     navigation.navigate("IncomeExpenseForm", {
       Movement: item,
+      type: type
     });
   };
 
@@ -85,7 +86,9 @@ export default function ItemList({ navigation, type }: Props) {
       <View style={flatListComponent.containerBottom}>
         <ButtonClass
           text={type === 'income' ? 'INGRESO' : 'GASTO'}
-          onPressNavigation={() => navigation.navigate("IncomeExpenseForm")}
+          onPressNavigation={() => navigation.navigate("IncomeExpenseForm", {
+            type: type,
+          })}
         />
       </View>
     </View>

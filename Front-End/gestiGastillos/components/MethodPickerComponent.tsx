@@ -58,8 +58,8 @@ export default function MethodPickerComponent() {
                                 <Picker.Item label="Seleccionar tarjeta" value="" />
                                 {filteredCards.map((cardItem) => (
                                     <Picker.Item
-                                        key={type === 'credito' 
-                                            ? cardItem.tarjeta_credito_id 
+                                        key={type === 'credito'
+                                            ? cardItem.tarjeta_credito_id
                                             : cardItem.tarjeta_debito_id}
                                         label={cardItem.card.card_name}
                                         value={cardItem.card.card_id}
@@ -67,10 +67,16 @@ export default function MethodPickerComponent() {
                                 ))}
                             </Picker>
                         </View>
+                        <TextClass text="Monto" />
+                        <TextInput
+                            style={globalStyles.textInput}
+                            keyboardType="numeric"
+                            placeholder="Ingresa la cantidad"
+                        />
                     </>
                 ) : (
                     <>
-                        <TextClass text="Efectivo" />
+                        <TextClass text="Monto" />
                         <TextInput
                             style={globalStyles.textInput}
                             keyboardType="numeric"

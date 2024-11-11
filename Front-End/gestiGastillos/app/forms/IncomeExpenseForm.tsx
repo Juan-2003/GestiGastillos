@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
@@ -23,10 +24,11 @@ import {
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { useEffect, useState } from "react";
+import CategoryPickerComponent from "@/components/CategoryPickerComponent";
 
 type RootStackParamList = {
   IncomeExpenses: undefined;
-  IncomeExpenseForm: { item: MovementItem };
+  IncomeExpenseForm: { item: MovementItem, type: string };
 };
 
 interface Props {
@@ -43,7 +45,8 @@ export default function IncomeExpenseForm({
   onItemUpdate,
 }: Props) {
   // Recibir los datos si es que obtenemos un objeto en la ruta
-  const { item } = route.params || {};
+  const { item, type: title } = route.params || {};
+  console.log("titulo:", title);
 
   // Declaracion de variables
   const [type, setType] = useState(item?.type || "");
@@ -113,16 +116,16 @@ export default function IncomeExpenseForm({
     }
   };
 
-  const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
-
-  const handlePress = (iconName: string) => {
-    // Establecer el icono seleccionado
-    setSelectedIcon(iconName);
-  };
-
   return (
     <>
-      <TopBarForms title={item ? "EDITAR" : "AGREGAR"} />
+      <TopBarForms title={item
+        ? (title === 'income'
+          ? "EDITAR INGRESO"
+          : "EDITAR GASTO")
+        : (title === 'income'
+          ? "AGREGAR INGRESO"
+          : "AGREGAR GASTO")}
+      />
       <View style={globalStylesMenu.container}>
         <ScrollView style={globalStylesMenu.containerMiddle}>
           <View style={globalStyles.inputTextContainer}>
@@ -132,40 +135,16 @@ export default function IncomeExpenseForm({
               </Text>
             </View>
 
-            <View style={styles.imageSelectionContainer}>
-              <View style={styles.imageContainer}>
-                <Text style={globalStyles.imagetext}>Comida</Text>
-                <TouchableOpacity onPress={() => handlePress('Comida')}>
-                  <Image
-                    source={require("@/assets/images/foodIcon.png")}
-                    style={[styles.image, selectedIcon === 'Comida' && styles.selectedImage]}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.imageContainer}>
-                <Text style={globalStyles.imagetext}>Entretenimiento</Text>
-                <TouchableOpacity onPress={() => handlePress('Entretenimiento')}>
-                  <Image
-                    source={require("@/assets/images/enterteimentIcon.png")}
-                    style={[styles.image, selectedIcon === 'Entretenimiento' && styles.selectedImage]}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.imageContainer}>
-                <Text style={globalStyles.imagetext}>Educacion</Text>
-                <TouchableOpacity onPress={() => handlePress('Educacion')}>
-                  <Image
-                    source={require("@/assets/images/educationIcon.png")}
-                    style={[styles.image, selectedIcon === 'Educacion' && styles.selectedImage]}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
+            <CategoryPickerComponent
+              type={title}
+              setCategory={setCategory}
+            />
 
             <TextClass text="Titulo del movimiento" />
             <TextInput
               style={globalStyles.textInput}
               value={type}
+              onChangeText={setType}
               placeholder="Ingresa un pequeño titulo acerca del movimiento"
             />
 
@@ -173,16 +152,19 @@ export default function IncomeExpenseForm({
             <TextInput
               style={globalStyles.textInput}
               value={concept}
+              onChangeText={setConcept}
               placeholder="Ingresa una pequeña descripción del movimiento"
             />
 
             <MethodPickerComponent />
 
-            <TextClass text="Monto" />
-            <TextInput style={globalStyles.textInput} keyboardType="numeric" />
           </View>
           <View style={globalStylesMenu.containerBottom}>
-            <ButtonClass text="Agregar" />
+            <Pressable style={globalStyles.button} onPress={handleAction}>
+              <Text style={globalStyles.text}>
+                {item ? "Editar" : "Agregar"}
+              </Text>
+            </Pressable>
           </View>
         </ScrollView>
       </View>
@@ -190,26 +172,3 @@ export default function IncomeExpenseForm({
   );
 }
 
-const styles = StyleSheet.create({
-  imageSelectionContainer: {
-    width: "70%",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginVertical: 20,
-  },
-  imageContainer: {
-    alignItems: 'center',
-  },
-  image: {
-    width: 60,
-    height: 60,
-    marginTop: 5,
-  },
-  selectedImage: {
-    width: 70,
-    height: 70,
-    borderWidth: 2,
-    borderColor: '#27C1F9',
-    borderRadius: 25,
-  },
-});
