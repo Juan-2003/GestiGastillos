@@ -47,6 +47,15 @@ export default function CategoryPickerComponent({ type, setCategory }: Props) {
                             />
                         </TouchableOpacity>
                     </View>
+                    <View style={styles.imageContainer}>
+                        <Text style={globalStyles.imagetext}>Otros</Text>
+                        <TouchableOpacity onPress={() => handlePress('Otros')}>
+                            <Image
+                                source={require("@/assets/images/othersIcon.png")}
+                                style={[styles.image, selectedIcon === 'Otros' && styles.selectedImage]}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             ) : (
                 <View style={styles.imageSelectionContainer}>

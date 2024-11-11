@@ -81,13 +81,8 @@ export default function IncomeExpenseForm({
 
   const handleAction = () => {
     // Verificar que los campos no esten vacios
-    if (!type || !payment_method || !amount || !concept || !category) {
-      alert("Por favor, completa todos los campos obligatiorios.");
-      return;
-    }
-
+    
     // Convertir el undefined de monto en 0, si es que no hay monto
-    amount === undefined ? 0 : amount;
 
     if (item) {
       // Si estamos editanto un item:
@@ -102,6 +97,7 @@ export default function IncomeExpenseForm({
       );
     } else {
       // Si estamos creando un item nuevo:
+      console.log(type, amount, concept, category, payment_method, credit_id, debit_id)
       handleSubmitIncomeExpense(
         navigation,
         type,
@@ -156,7 +152,12 @@ export default function IncomeExpenseForm({
               placeholder="Ingresa una pequeña descripción del movimiento"
             />
 
-            <MethodPickerComponent />
+            <MethodPickerComponent 
+              setAmount={setAmount}
+              setPaymentMethod={setPaymentMethod}
+              setCreditId={setCreditId}
+              setDebitId={setDebitId}
+            />
 
           </View>
           <View style={globalStylesMenu.containerBottom}>
