@@ -50,7 +50,7 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseList);
     }
 
-    @PutMapping("/updateExpense")
+    @PutMapping("/update")
     @Transactional
     public ResponseEntity<UpdateExpenseResponseDTO> updateExpense(@Valid @RequestBody UpdateExpenseDTO updateExpenseDTO){
         UpdateExpenseResponseDTO updateExpenseResponseDTO = expenseService.updateExpense(updateExpenseDTO);

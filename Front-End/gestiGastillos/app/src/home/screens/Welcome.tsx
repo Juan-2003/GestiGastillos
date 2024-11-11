@@ -20,9 +20,9 @@ export default function Welcome({navigation}:Props) {
       </View>
 
       <View style={styles.buttonContainer}>
-        <ButtonClass text="Registro" onPressNavigation={() => navigation.navigate('Register')} />
+        <ButtonClass text="REGISTRO" onPressNavigation={() => navigation.navigate('Register')} />
         <Pressable style={globalStyles.button}>
-          <Text style={globalStyles.text}>Salir</Text>
+          <Text style={globalStyles.text}>SALIR</Text>
         </Pressable>
       </View>
 

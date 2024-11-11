@@ -32,18 +32,6 @@ export interface DebitCardItem {
 
 export type CardItem = CreditCardItem | DebitCardItem;
 
-type CardData = {
-  user_id: number;
-  card: {
-    name: string;
-    last_digits: string;
-    expiration_date: string;
-  };
-  credit_limit?: string; // Opcional, solo para tarjetas de crédito
-  debt?: number; // Opcional, solo para tarjetas de crédito
-  current_balance?: string; // Opcional, solo para tarjetas de débito
-};
-
 export function isDebitCardItem(item: CardItem): item is DebitCardItem {
   return item.type === "debit";
 }
@@ -206,7 +194,7 @@ export const handleEdit = async (
   const url =
     type === "credit"
       ? `http://${ip}:8080/gestiGastillos/creditCard/update`
-      : `http://${ip}/gestiGastillos/debitCard/update`;
+      : `http://${ip}:8080/gestiGastillos/debitCard/update`;
 
   let body: any = {}; // Variable para el cuerpo de la solicitud
 

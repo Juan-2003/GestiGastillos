@@ -19,17 +19,7 @@ public record UpdateExpenseDTO(
         @Size(max = 50, message = "El concepto no puede exceder los 50 caracteres")
         String concept,
 
-        @NotBlank(message = "'categoria' no puede estar vacia")
-        String category,
-
-        @NotBlank(message = "'metodo de pago' no puede estar vacia")
-        @JsonProperty("payment_method")
-        String paymentMethod,
-
-        @JsonProperty("debit_card_id")
-        Long debitCardId,
-
-        @JsonProperty("credit_card_id")
-        Long creditCardId
+        @NotBlank(message = "'Fecha' no puede estar vacia")
+        String date
 ) {
 }

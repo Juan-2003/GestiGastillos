@@ -18,6 +18,9 @@ public record UpdateExpenseResponseDTO(
         @JsonProperty("payment_method")
         String paymentMethod,
 
+
+        String date,
+
         @JsonProperty("debit_card_id")
         Long debitCardId,
 
@@ -32,6 +35,7 @@ public record UpdateExpenseResponseDTO(
                         transaction.getConcept(),
                         transaction.getCategory().name(),
                         transaction.getPaymentMethod().name(),
+                        transaction.getDate(),
                         (transaction.getCard() == null) ?  null : (transaction.getCard().getDebitCard() == null) ? null : transaction.getCard().getDebitCard().getId(),
                         (transaction.getCard() == null) ?  null : (transaction.getCard().getCreditCard() == null) ? null :transaction.getCard().getCreditCard().getId()
                 );

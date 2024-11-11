@@ -6,14 +6,18 @@ import com.example.gestiGastillos.dto.transactions.income.IncomeResponseDTO;
 import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeDTO;
 import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeResponseDTO;
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
+import com.example.gestiGastillos.model.Saving;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.transactions.TransactionType;
 import com.example.gestiGastillos.model.transactions.Transactions;
-import com.example.gestiGastillos.model.transactions.income.IncomeValidator;
 import com.example.gestiGastillos.repository.CardRepository;
 import com.example.gestiGastillos.repository.DebitCardRepository;
+import com.example.gestiGastillos.repository.SavingRepository;
 import com.example.gestiGastillos.repository.TransactionsRepository;
+import com.example.gestiGastillos.util.SavingStatus;
+import com.example.gestiGastillos.util.SavingStatusEvalutator;
+import com.example.gestiGastillos.validation.Transactions.PostValidations.TransactionValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,14 +29,17 @@ public class IncomeService {
     private final TransactionsRepository transactionsRepository;
     private final CardRepository cardRepository;
     private final DebitCardRepository debitCardRepository;
-    private final List<IncomeValidator> incomeValidator;
+    private final SavingRepository savingRepository;
+    private final List<TransactionValidator<Object>> incomeValidator;
 
     @Autowired
-    public IncomeService(TransactionsRepository transactionsRepository, CardRepository cardRepository, DebitCardRepository debitCardRepository, List<IncomeValidator> incomeValidator){
+    public IncomeService(TransactionsRepository transactionsRepository, CardRepository cardRepository, DebitCardRepository debitCardRepository, List<TransactionValidator<Object>> incomeValidator,
+                         SavingRepository savingRepository){
         this.transactionsRepository =  transactionsRepository;
         this.cardRepository = cardRepository;
         this.incomeValidator = incomeValidator;
         this.debitCardRepository = debitCardRepository;
+        this.savingRepository = savingRepository;
     }
 
     public IncomeResponseDTO registerIncome(IncomeDataDTO incomeDataDTO) {
@@ -43,15 +50,23 @@ public class IncomeService {
             DebitCard debitCard = debitCardRepository.findById(incomeDataDTO.debitCardId())
                     .orElseThrow(() -> new EntityNotFoundException("La tarjeta credito con el id: " + incomeDataDTO.debitCardId()));
 
-            Double currentBalance = debitCard.getCurrentBalance();
-            currentBalance += incomeDataDTO.amount();
-            debitCard.setCurrentBalance(currentBalance);
+            Double oldCurrentBalance = debitCard.getCurrentBalance();
+            Double newCurrentBalance = oldCurrentBalance + incomeDataDTO.amount();
+            debitCard.setCurrentBalance(newCurrentBalance);
             transactions = new Transactions(incomeDataDTO, debitCard.getCard());
+
+            if(debitCard.getCard().getSaving() != null){
+                Saving saving = debitCard.getCard().getSaving();
+                SavingStatus savingStatus = SavingStatusEvalutator.savingStatusEvaluator(newCurrentBalance, saving.getTargetAmount());
+                saving.setStatus(savingStatus);
+                savingRepository.save(saving);
+            }
         }else{
             transactions = new Transactions(incomeDataDTO);
         }
 
         transactionsRepository.save(transactions);
+
         return new IncomeResponseDTO(transactions);
     }
 

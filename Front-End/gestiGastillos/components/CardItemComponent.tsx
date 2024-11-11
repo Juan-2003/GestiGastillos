@@ -5,11 +5,8 @@ import {
   CreditCardItem,
   CardItem,
   isDebitCardItem,
-  handleDelete,
-  handleEdit,
 } from "../app/src/auth/api/cardServices";
 import cardStyles from "@/styles/CardStyles";
-import { StackNavigationProp } from "@react-navigation/stack";
 
 interface CardItemComponentProps {
   item: CardItem;
@@ -45,13 +42,12 @@ const CardItemComponent: React.FC<CardItemComponentProps> = ({
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              onDelete(
-                item.type === "credit"
-                  ? item.tarjeta_credito_id
-                  : item.tarjeta_debito_id,
-                item.type
-              )
+            onPress={() => {
+              const id = item.type === 'credit' ? (item as CreditCardItem).tarjeta_credito_id : (item as DebitCardItem).tarjeta_debito_id;
+              if (id !== undefined) {
+                onDelete(id, item.type);
+              }
+            }
             }
           >
             <Image

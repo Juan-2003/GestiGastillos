@@ -1,4 +1,4 @@
-package com.example.gestiGastillos.validation;
+package com.example.gestiGastillos.validation.Cards;
 
 /*
     1. Wacha Chiquis, la interfaz que las clases implementaran sera esta. ¿Porque el cambio?
@@ -9,6 +9,6 @@ package com.example.gestiGastillos.validation;
 
     Ahora ve al archivo de "ExpirationDatePostValidator" que esta en model -> creditCard -> PostValidations
  */
-public interface Validator<T> {
+public interface CardValidator<T> {
     void validation(T dto);
 }

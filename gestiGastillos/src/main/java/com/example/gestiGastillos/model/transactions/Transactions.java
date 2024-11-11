@@ -5,6 +5,7 @@ import com.example.gestiGastillos.dto.transactions.income.IncomeDataDTO;
 import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeDTO;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.dto.transactions.expense.ExpenseDataDTO;
+import com.example.gestiGastillos.validation.Transactions.PostValidations.TransactionPaymentMethodValidator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,9 @@ public class Transactions {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
+    @Column(name = "date")
+    private String date;
+
     @ManyToOne
     @JoinColumn(name = "card_id")
     private Card card;
@@ -47,6 +51,7 @@ public class Transactions {
         this.concept = incomeDataDTO.concept();
         this.category = TransactionCategory.fromSpanish(incomeDataDTO.category());
         this.paymentMethod = PaymentMethod.fromSpanish(incomeDataDTO.paymentMethod());
+        this.date = incomeDataDTO.date();
         this.card = card;
     }
 
@@ -58,6 +63,7 @@ public class Transactions {
         this.concept = incomeDataDTO.concept();
         this.category = TransactionCategory.fromSpanish(incomeDataDTO.category());
         this.paymentMethod = PaymentMethod.fromSpanish(incomeDataDTO.paymentMethod());
+        this.date = incomeDataDTO.date();
     }
 
     //Egreso con cualquier tarjeta
@@ -67,6 +73,7 @@ public class Transactions {
         this.concept = expenseDataDTO.concept();
         this.category = TransactionCategory.fromSpanish(expenseDataDTO.category());
         this.paymentMethod = PaymentMethod.fromSpanish(expenseDataDTO.paymentMethod());
+        this.date = expenseDataDTO.date();
         this.card = card;
     }
 
@@ -77,6 +84,7 @@ public class Transactions {
         this.concept = expenseDataDTO.concept();
         this.category = TransactionCategory.fromSpanish(expenseDataDTO.category());
         this.paymentMethod = PaymentMethod.fromSpanish(expenseDataDTO.paymentMethod());
+        this.date = expenseDataDTO.date();
     }
 
     //Actualizar ingreso
@@ -88,13 +96,6 @@ public class Transactions {
         if(updateIncomeDTO.concept() != this.concept){
             this.concept = updateIncomeDTO.concept();
         }
-        if(!this.category.name().equals(updateIncomeDTO.category())){
-            this.category = TransactionCategory.fromSpanish(updateIncomeDTO.category());
-        }
-
-        if(this.paymentMethod.name() != updateIncomeDTO.paymentMethod()){
-            this.paymentMethod = PaymentMethod.fromSpanish(updateIncomeDTO.paymentMethod());
-        }
     }
 
     //Actualizar egreso
@@ -105,12 +106,17 @@ public class Transactions {
         if(updateExpenseDTO.concept() != this.concept){
             this.concept = updateExpenseDTO.concept();
         }
-        if(!this.category.name().equals(updateExpenseDTO.category())){
-            this.category = TransactionCategory.fromSpanish(updateExpenseDTO.category());
-        }
+    }
 
-        if(this.paymentMethod.name() != updateExpenseDTO.paymentMethod()){
-            this.paymentMethod = PaymentMethod.fromSpanish(updateExpenseDTO.paymentMethod());
-        }
+    @Override
+    public String toString() {
+        return "id=" + id +
+                ", amount=" + amount +
+                ", concept='" + concept + '\'' +
+                ", type=" + type +
+                ", category=" + category +
+                ", paymentMethod=" + paymentMethod +
+                ", date='" + date + '\'' +
+                ", card=" + card;
     }
 }
