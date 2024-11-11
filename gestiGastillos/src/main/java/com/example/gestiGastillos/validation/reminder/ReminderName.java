@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 public class ReminderName {
-    public static void reminderNameValidation(String reminderName, List<Reminder> reminderList){
+    public static void reminderNameValidation(Long reminderId, String reminderName, List<Reminder> reminderList){
         boolean flag = reminderList.stream()
-                .anyMatch(r -> r.getName().equals(reminderName));
+                .anyMatch(r -> r.getName().equals(reminderName) && (reminderId == null || !r.getId().equals(reminderId)));
 
         if(flag){
             throw new ReminderNameException("Ya existe un recordatorio con el nombre: " + reminderName);

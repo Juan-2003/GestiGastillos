@@ -1,6 +1,5 @@
 package com.example.gestiGastillos.service;
 
-import com.example.gestiGastillos.dto.creditCard.CreditCardResponseDTO;
 import com.example.gestiGastillos.dto.debitCard.DebitCardDataDTO;
 import com.example.gestiGastillos.dto.debitCard.DebitCardResponseDTO;
 import com.example.gestiGastillos.dto.debitCard.UpdateDebitCardDTO;
@@ -11,25 +10,25 @@ import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.repository.CardRepository;
 import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.UserRepository;
-import com.example.gestiGastillos.validation.Validator;
+import com.example.gestiGastillos.validation.Cards.CardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
-import java.util.Optional;
+
 //1
 @Service
 public class DebitCardService {
     private final UserRepository userRepository;
     private final DebitCardRepository debitCardRepository;
     private final CardRepository cardRepository;
-    private final List<Validator<Object>> debitCardPostValidator;
-    private final List<Validator<Object>> debitCardPutValidator;
+    private final List<CardValidator<Object>> debitCardPostValidator;
+    private final List<CardValidator<Object>> debitCardPutValidator;
 
     @Autowired
     public DebitCardService(UserRepository userRepository, DebitCardRepository debitCardRepository,
-                            CardRepository cardRepository, List<Validator<Object>> debitCardPostValidator,
-                            List<Validator<Object>> debitCardPutValidator) {
+                            CardRepository cardRepository, List<CardValidator<Object>> debitCardPostValidator,
+                            List<CardValidator<Object>> debitCardPutValidator) {
         this.userRepository = userRepository;
         this.debitCardRepository = debitCardRepository;
         this.cardRepository = cardRepository;

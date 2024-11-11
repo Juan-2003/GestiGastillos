@@ -13,7 +13,6 @@ import com.example.gestiGastillos.repository.CardRepository;
 import com.example.gestiGastillos.repository.CreditCardRepository;
 import com.example.gestiGastillos.repository.DebitCardRepository;
 import com.example.gestiGastillos.repository.ReminderRepository;
-import com.example.gestiGastillos.validation.Validator;
 import com.example.gestiGastillos.validation.reminder.ReminderValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

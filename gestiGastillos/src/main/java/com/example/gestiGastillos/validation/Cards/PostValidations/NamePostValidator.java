@@ -4,18 +4,12 @@ import com.example.gestiGastillos.dto.creditCard.CreditCardDataDTO;
 import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardDTO;
 import com.example.gestiGastillos.dto.debitCard.DebitCardDataDTO;
 import com.example.gestiGastillos.dto.debitCard.UpdateDebitCardDTO;
-import com.example.gestiGastillos.infra.exceptions.InvalidCardNameException;
 import com.example.gestiGastillos.model.User;
-import com.example.gestiGastillos.model.creditCard.CreditCard;
-import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.validation.CardName;
-import com.example.gestiGastillos.validation.Validator;
+import com.example.gestiGastillos.validation.Cards.CardValidator;
 import com.example.gestiGastillos.repository.UserRepository;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /*
     2. Como puedes ver, en donde se declara la clase se implementa la interfaz "Validator" y
@@ -24,7 +18,7 @@ import java.util.List;
     Ahora vamos al archivo de NamePutValidator en la carpeta de PutValidations
  */
 @Component
-public class NamePostValidator implements Validator<Object> {
+public class NamePostValidator implements CardValidator<Object> {
     private final UserRepository userRepository;
 
     @Autowired
