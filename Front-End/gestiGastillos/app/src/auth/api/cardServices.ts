@@ -261,17 +261,3 @@ export const handleEdit = async (
 };
 
 
-
-// Obtener lista de tarjetas de crédito
-export const fetchCreditCards = async (): Promise<CardItem[]> => {
-  const response = await fetch(`http://${ip}:8080/gestiGastillos/creditCard/creditCardsList`);
-  if (!response.ok) throw new Error("Error fetching credit cards");
-  return await response.json();
-};
-
-// Obtener lista de tarjetas de débito
-export const fetchDebitCards = async (): Promise<CardItem[]> => {
-  const response = await fetch(`http://${ip}:8080/gestiGastillos/debitCard/debitCardsList`);
-  if (!response.ok) throw new Error("Error fetching debit cards");
-  return await response.json();
-};
