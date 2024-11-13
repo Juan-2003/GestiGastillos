@@ -71,11 +71,9 @@ public class SavingService {
     }
 
     public UpdateSavingResponseDTO updateSaving(UpdateSavingDTO updateSavingDTO){
-
-        savingNamePostValidation.validation(updateSavingDTO);
-
         Saving saving = savingRepository.findById(updateSavingDTO.savingId())
                 .orElseThrow(() -> new EntityNotFoundException("Ahorro no econtrado con id: " + updateSavingDTO.savingId()));
+        savingNamePostValidation.validation(updateSavingDTO);
 
         saving.update(updateSavingDTO);
         savingRepository.save(saving);
