@@ -8,6 +8,8 @@ export interface ReminderItem {
   date: string;
   credit_card_id?: number | null;
   debit_card_id?: number | null;
+  card_name:string;
+  last_digits:string;
 }
 
 // Función para obtener los recordatorios desde el backend

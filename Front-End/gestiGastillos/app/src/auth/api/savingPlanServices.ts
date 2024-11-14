@@ -52,4 +52,22 @@ export const getSavingList = async (): Promise<SavingResponseDTO[]> => {
   };
   
 
+// reminderServices.js
+export const deleteSaving = async (id: number) => {
+  try {
+    const response = await fetch(`http://${ip}:8080/gestiGastillos/saving/delete/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('No se pudo eliminar el plan');
+    }
+    return response;
+  } catch (error) {
+    console.error("Error al eliminar plan de ahorro:", error);
+    throw error;
+  }
+};
+
+
 

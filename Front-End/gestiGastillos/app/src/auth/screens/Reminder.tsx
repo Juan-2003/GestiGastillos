@@ -47,6 +47,8 @@ export default function Reminder({ navigation }: Props) {
         date={item.date}
         name={item.name}
         message={item.message}
+        card_name={item.card_name}
+        last_digits={item.last_digits}
         onDelete={handleDeleteReminder}
       />
       </View>

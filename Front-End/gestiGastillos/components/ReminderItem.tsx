@@ -6,22 +6,27 @@ import { RootStackParamList } from "@/app";
 import { Alert } from "react-native";
 import { ip } from "@/app/src/auth/IP/Ip";
 import { deleteReminder } from "@/app/src/auth/api/reminderServices";
+import { useState } from "react";
+import globalStyles from "@/styles/GlobalStyles";
 
 type EditReminderScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'EditReminderScreen'
->;
+  'EditReminderScreen' 
+  >;
 interface ReminderItemProps {
   date: string;
   name: string;
   message: string;
   id: number; // Necesitamos el ID para editar el recordatorio
+  card_name:string;
+  last_digits:string
   onDelete: (id: number) => void;
 }
 
-export default function ReminderItem({ date, name, message, id,onDelete }: ReminderItemProps) {
+export default function ReminderItem({ date, name, message, id,card_name,last_digits,onDelete }: ReminderItemProps) {
     const navigation = useNavigation<EditReminderScreenNavigationProp>();
-   
+    const [showDetails, setShowDetails] = useState(false); // Estado para mostrar u ocultar detalles
+
     
   const handleEdit = () => {
     // Navegar a la pantalla de edición pasando los datos del recordatorio
@@ -37,7 +42,9 @@ export default function ReminderItem({ date, name, message, id,onDelete }: Remin
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={() => setShowDetails(!showDetails)}>
+
+    
       <View style={styles.reminderContainer}>
         <View style={styles.interDataContainer}>
           <View style={styles.dataContainer}>
@@ -64,7 +71,17 @@ export default function ReminderItem({ date, name, message, id,onDelete }: Remin
           </View>
         </View>
       </View>
-    </View>
+    {showDetails && (
+        <>
+        <View style={styles.showBotton}>
+           <Text style={globalStyles.text}>Descripcion: {message}</Text>
+            <Text style={globalStyles.text}>Tarjeta: {card_name}</Text>
+            <Text style={globalStyles.text}>Nombre de tarjeta: {last_digits}</Text>
+        </View>
+
+        </>
+      )}
+      </TouchableOpacity>
   );
 }
 
@@ -74,6 +91,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   reminderContainer: {
+    flex:1,
     width: "90%",
     height: "100%",
     backgroundColor: "#27C1F9",
@@ -117,4 +135,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#FFFFFF",
   },
+  showBotton:{
+    flex:1,
+    width: "90%",
+    height: "30%",
+    marginTop:10,
+    justifyContent:"center",
+    paddingHorizontal:20,
+    paddingVertical:10,
+    backgroundColor: "#957EEC",
+    borderRadius:10,
+  }
 });

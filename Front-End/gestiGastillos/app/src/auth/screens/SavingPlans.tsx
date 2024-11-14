@@ -34,7 +34,9 @@ export default function SavingPlans({ navigation }: Props) {
       setLoading(false);
     }
   };
-  
+  const handleDeleteSavingPlan = (id: number) => {
+    setSavingPlans((prevSaving) => prevSaving.filter(saving => saving.saving_id !== id));
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -54,6 +56,7 @@ export default function SavingPlans({ navigation }: Props) {
         debit_card_id= {item.debit_card_id}
         debit_card_name={item.debit_card_name}
         last_digits={item.last_digits}
+        onDelete={handleDeleteSavingPlan}
         />
       </View>
     );
@@ -91,8 +94,8 @@ export default function SavingPlans({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   saving: {
-    marginTop:20,
-    marginBottom:30,
+
+  
     paddingBottom:10,
   },
   emojiContainer:{

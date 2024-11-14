@@ -36,7 +36,7 @@ export default function DrawerNavigation() {
       }}
     >
       <Drawer.Screen
-        name="Menú"
+        name="Home"
         component={Home}
         options={{
           headerShown: false,
