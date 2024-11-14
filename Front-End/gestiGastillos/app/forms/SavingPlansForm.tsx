@@ -1,48 +1,61 @@
 import React, { useEffect, useState } from "react";
-import { View, TextInput, Alert } from "react-native";
+import { View, TextInput, Alert,Pressable, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";  // Importa Picker
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
-import ButtonClass from "@/components/buttons";
 import TextClass from "@/components/TextClass";
 import TopBarForms from "@/components/TopBarForms";
 import { handleFetchItem } from "../src/auth/api/cardServices";
-import { CardItem } from "../src/auth/api/cardServices";
 import { ip } from "../src/auth/IP/Ip";
-export default function SavingPlansForm() {
-    const [debitCardId, setDebitCardId] = useState("");
-    const [target_amount, setTargetAmount] = useState("");
-    const [name, setName] = useState("");
-    const [cards, setCards] = useState<CardItem[]>([]);
+import { getDebitCardsList, DebitCardResponseDTO} from "../src/auth/api/debitCardServices";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { getSavingList } from "../src/auth/api/savingPlanServices";
+
+interface Props {
+    navigation: StackNavigationProp<any>;
+  }
+
+export default function SavingPlansForm({ navigation }: Props) {
+    const [debitCardId, setDebitCardId] = useState<number | null>(null);
+    const [target_amount, setTargetAmount] = useState<string>("");    const [name, setName] = useState("");
+    const [debitCards, setDebitCards] = useState<DebitCardResponseDTO[]>([]);
+
+
 
     useEffect(() => {
         const fetchCards = async () => {
             const fetchedCards = await handleFetchItem();
             const allCards = [...(fetchedCards.debit_cards || [])];
             console.log("Tarjetas:", allCards);
-            setCards(allCards);
+            setDebitCards(allCards);
         };
         fetchCards();
     }, []);
 
     const handleAddReminder = async () => {
+        console.log(debitCardId);
+        console.log(name)
+        console.log(target_amount)
+        const amount = parseFloat(target_amount);
         try {
-            const reminderData = {
-                name,
-                target_amount,
+            const SavingPlans = {
+                name:name,
+                target_amount:amount,
                 debit_card_id: debitCardId,
             };
 
-            const response = await fetch(`http://${ip}:8080/gestiGastillos/reminder`, {
+            const response = await fetch(`http://${ip}:8080/gestiGastillos/saving`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(reminderData),
+                body: JSON.stringify(SavingPlans),
             });
 
             if (response.ok) {
                 Alert.alert("Éxito", "Recordatorio creado exitosamente");
+                await getSavingList()
+                navigation.goBack();
             
             } else {
                 const errorText = await response.text();
@@ -75,11 +88,11 @@ export default function SavingPlansForm() {
                             onValueChange={(itemValue) => setDebitCardId(itemValue)}
                         >
                             <Picker.Item label="Selecciona una tarjeta" value="" />
-                            {cards.map((card) => (
+                            {debitCards.map((card) => (
                                 <Picker.Item
                                     key={card.card.card_id}
-                                    label={card.card.card_name} // o el campo que quieras mostrar como etiqueta
-                                    value={`${card.card.card_name} - ${card.card.last_digits}`}
+                                    label={`${card.card.card_name} - ${card.card.last_digits}`} // o el campo que quieras mostrar como etiqueta
+                                    value={card.tarjeta_debito_id}
                                 />
                             ))}
                         </Picker>
@@ -87,16 +100,18 @@ export default function SavingPlansForm() {
                         <TextClass text="Ingrese el objetivo de gasto" />
                         <TextInput
                             style={globalStyles.textInput}
-                            placeholder="Ingresa tu texto aquí"
+                            placeholder="Agrega el objetivo aqui"
                             value={target_amount}
-                            onChangeText={setTargetAmount}
+                            onChangeText={(text) => setTargetAmount(text)}
                             keyboardType="numeric"
                         />
                     </View>
                 </View>
                 <View style={globalStylesMenu.containerBottom}>
-                    <ButtonClass text="Agregar" onPress={handleAddReminder} />
-                </View>
+          <Pressable style={globalStyles.button} onPress={handleAddReminder}>
+            <Text style={globalStyles.text}>Agregar</Text>
+          </Pressable>
+        </View>
             </View>
         </View>
     );

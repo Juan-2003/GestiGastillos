@@ -1,25 +1,59 @@
 import { View, StyleSheet,Text, TouchableOpacity, Image } from "react-native";
 import cardStyles from "@/styles/CardStyles";
 import ItemContainer from "./ItemComponent";
+import { RootStackParamList } from "@/app";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation,  } from "@react-navigation/native"; // Importamos el hook de navegación
 
-export default function SavingPlansItem(){
+type EditSavingPlanScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'EditSavingPlans' 
+  >;
+
+interface saving{
+    saving_id: number;
+    name: string,
+    target_amount: number;
+    status: string;
+    current_balance: string;
+    debit_card_id: number;
+    debit_card_name:string,
+    last_digits:string
+}
+
+
+export default function SavingPlansItem({ saving_id, name, target_amount, status,current_balance,debit_card_id,last_digits,debit_card_name }: saving){
+
+    const navigation = useNavigation< EditSavingPlanScreenNavigationProp>();
+
+
+    const handleEdit = () => {
+        navigation.navigate("EditSavingPlans", { saving_id, name, target_amount,status,debit_card_id});
+    };
+    let imageUrl;
+    if (status === "VERY_POOR") {
+      imageUrl = require("@/assets/images/verybad.jpg");
+    } else if (status === "EXCELENT") {
+      imageUrl = require("@/assets/images/excelent.png");
+    }
+
     return(
         <View style={styles.container}>
             <View style={styles.SavingPlanContainer}>
                 <View style={styles.leftContaier}>
-                    <Text style={styles.digits}>4545</Text>
+                    <Text style={styles.digits}>{name}</Text>
                     <View style={styles.containerBottonText}>
-                        <Text style={styles.bottonText}>limite:400 </Text>
+                        <Text style={styles.bottonText}>objetivo:{target_amount}$ </Text>
                     </View>
                 </View>
                 <View style={styles.RightContaier}>
                     <View style={styles.ItemContainer}>
-                        <Image
-                            source={require("@/assets/images/emoji.png")}
+                        <Image 
+                            source={imageUrl}
                             style={styles.image}
                         />
-                        <TouchableOpacity>
-                            <Image
+                        <TouchableOpacity onPress={handleEdit}>
+                            <Image 
                                 source={require("@/assets/images/editIcon.png")}
                                 style={styles.image}
                                 />
@@ -32,7 +66,9 @@ export default function SavingPlansItem(){
                         </TouchableOpacity>
                     </View>
                     <View style={styles.containerBottonText}>
-                        <Text style={styles.bottonText}>Gastado: 1000</Text>
+                        <Text style={styles.bottonText}>guardado:{current_balance}</Text>
+                        <Text style={styles.bottonText}>hola:{last_digits}</Text>
+                        <Text style={styles.bottonText}>adios:{debit_card_name}</Text>
                     </View>
                 </View>
             </View>
@@ -42,12 +78,12 @@ export default function SavingPlansItem(){
 
 const styles=StyleSheet.create({
     container:{
-        flex:3, 
+        flex:1, 
         alignItems:"center"
     },
     SavingPlanContainer:{
-        width:"70%",
-        height:"30%",
+        width:"80%",
+        height:"100%",
         marginTop:40,
         backgroundColor:"#27C1F9",
         flexDirection:"row"

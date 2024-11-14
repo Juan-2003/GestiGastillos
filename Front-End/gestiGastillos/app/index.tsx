@@ -10,12 +10,15 @@ import SavingPlansForm from "./forms/SavingPlansForm";
 import { useEffect } from "react";
 import Card from "./src/auth/screens/Card";
 import EditReminderScreen from "./updateForms/EditReminderScreen";
-
+import IncomeExpenseForm from "./forms/IncomeExpenseForm";
+import EditSavingPlans from "./updateForms/EditSavingPlans";
 const Stack = createNativeStackNavigator();
 
 export type RootStackParamList = {
   ReminderList: undefined;
   EditReminderScreen: { id: number; name: string; message: string; date: string };
+  SavingPlansList:undefined;
+  EditSavingPlans:{saving_id:number,name:string,target_amount:number,status:string,debit_card_id:number}
 };
 
 const StackParam = createStackNavigator<RootStackParamList>();
@@ -59,15 +62,11 @@ export default function Index() {
           component={Cardform}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="IncomeForm"
-          component={IncomeForm}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ExpensesForm"
-          component={ExpensesForm}
-          options={{ headerShown: false }}
+       
+       <Stack.Screen
+       name="IncomeExpenseForm"
+        component={IncomeExpenseForm}
+        options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ReminderForm"
@@ -83,6 +82,12 @@ export default function Index() {
         <StackParam.Screen
           name="EditReminderScreen"
           component={EditReminderScreen}
+          options={{ headerShown: false }}
+        />
+        
+        <StackParam.Screen
+          name="EditSavingPlans"
+          component={EditSavingPlans}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
