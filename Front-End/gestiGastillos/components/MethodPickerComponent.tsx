@@ -56,13 +56,13 @@ export default function MethodPickerComponent({
         >
           <Picker.Item label="Seleccionar" value="" />
           <Picker.Item label="Efectivo" value="efectivo" />
-          <Picker.Item label="Tarjeta de Crédito" value="credito" />
-          <Picker.Item label="Tarjeta de Débito" value="debito" />
+          <Picker.Item label="Tarjeta de Crédito" value="tarjeta_credito" />
+          <Picker.Item label="Tarjeta de Débito" value="tarjeta_debito" />
         </Picker>
       </View>
 
       {type ? (
-        type === "credito" || type === "debito" ? (
+        type === "tarjeta_credito" || type === "tarjeta_debito" ? (
           <>
             <TextClass text="Elije tu tarjeta" />
             <View style={styles.pickerContainer}>
@@ -70,9 +70,9 @@ export default function MethodPickerComponent({
                 selectedValue={card}
                 onValueChange={(cardValue) => {
                   setCard(cardValue);
-                  if (type === "credito") {
+                  if (type === "tarjeta_credito") {
                     setCreditId(Number(cardValue));
-                  } else if (type === "debito") {
+                  } else if (type === "tarjeta_debito") {
                     setDebitId(Number(cardValue));
                   }
                 }}
@@ -82,7 +82,7 @@ export default function MethodPickerComponent({
                 {filteredCards.map((cardItem) => (
                   <Picker.Item
                     key={
-                      type === "credito"
+                      type === "tarjeta_credito"
                         ? cardItem.tarjeta_credito_id
                         : cardItem.tarjeta_debito_id
                     }

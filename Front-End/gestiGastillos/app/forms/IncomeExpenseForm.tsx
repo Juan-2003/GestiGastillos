@@ -28,7 +28,7 @@ import CategoryPickerComponent from "@/components/CategoryPickerComponent";
 
 type RootStackParamList = {
   IncomeExpenses: undefined;
-  IncomeExpenseForm: { item: MovementItem, type: string };
+  IncomeExpenseForm: { item?: MovementItem; type: string };
 };
 
 interface Props {
@@ -46,44 +46,45 @@ export default function IncomeExpenseForm({
 }: Props) {
   // Recibir los datos si es que obtenemos un objeto en la ruta
   const { item, type: title } = route.params || {};
-  console.log("titulo:", title);
+  console.log("item a actualizar: ",item);
 
   // Declaracion de variables
-  const [type, setType] = useState(item?.type || "");
-  const [payment_method, setPaymentMethod] = useState(
+  const [type, setType] = useState<string | undefined>(title || "");
+  const [payment_method, setPaymentMethod] = useState<string | undefined>(
     item?.payment_method || ""
   );
   const [amount, setAmount] = useState<number | undefined>(
     item?.amount || undefined
   );
-  const [concept, setConcept] = useState(item?.concept || "");
-  const [category, setCategory] = useState(item?.category || "");
+  const [concept, setConcept] = useState<string | undefined>(item?.concept || "");
+  const [category, setCategory] = useState<string | undefined>(item?.category || "");
   const [credit_id, setCreditId] = useState<number | undefined>(
     (item as ExpenseItem)?.credit_card_id || undefined
   );
   const [debit_id, setDebitId] = useState<number | undefined>(
     item?.debit_card_id || undefined
   );
+  const [date, setDate] = useState<string | undefined>(
+    item?.date || new Date().toISOString().split("T")[0]
+  );
 
   useEffect(() => {
     if (item as IncomeItem) {
-      setType(item.type);
-      setAmount(item.amount);
-      setConcept(item.concept);
-      setPaymentMethod(item.payment_method);
-      setDebitId(item.debit_card_id);
+      setType(item?.type);
+      setAmount(item?.amount);
+      setConcept(item?.concept);
+      setPaymentMethod(item?.payment_method);
+      setDate(item?.date);
+      setDebitId(item?.debit_card_id);
     }
     if (item as ExpenseItem) {
-      setAmount(item.amount);
-      setConcept(item.concept);
+      setAmount(item?.amount);
+      setConcept(item?.concept);
+      setDate(item?.date);
     }
   }, [item]);
 
   const handleAction = () => {
-    // Verificar que los campos no esten vacios
-    
-    // Convertir el undefined de monto en 0, si es que no hay monto
-
     if (item) {
       // Si estamos editanto un item:
       handleEditIncomeExpense(
@@ -93,11 +94,22 @@ export default function IncomeExpenseForm({
         amount,
         concept,
         payment_method,
+        date,
         onItemUpdate
       );
     } else {
       // Si estamos creando un item nuevo:
-      console.log(type, amount, concept, category, payment_method, credit_id, debit_id)
+      console.log(
+        "Tipo:", type,
+        "Cantidad:",amount,
+        "Concepto:",concept,
+        "Categoria:",category,
+        "Metodo:",payment_method,
+        "Fecha:",date,
+        "CreditoID:",credit_id,
+        "DebitoID:",debit_id
+      );
+
       handleSubmitIncomeExpense(
         navigation,
         type,
@@ -105,6 +117,7 @@ export default function IncomeExpenseForm({
         concept,
         category,
         payment_method,
+        date,
         credit_id,
         debit_id,
         onItemAdd
@@ -114,13 +127,16 @@ export default function IncomeExpenseForm({
 
   return (
     <>
-      <TopBarForms title={item
-        ? (title === 'income'
-          ? "EDITAR INGRESO"
-          : "EDITAR GASTO")
-        : (title === 'income'
-          ? "AGREGAR INGRESO"
-          : "AGREGAR GASTO")}
+      <TopBarForms
+        title={
+          item
+            ? title === "ingreso"
+              ? "EDITAR INGRESO"
+              : "EDITAR GASTO"
+            : title === "ingreso"
+            ? "AGREGAR INGRESO"
+            : "AGREGAR GASTO"
+        }
       />
       <View style={globalStylesMenu.container}>
         <ScrollView style={globalStylesMenu.containerMiddle}>
@@ -131,18 +147,7 @@ export default function IncomeExpenseForm({
               </Text>
             </View>
 
-            <CategoryPickerComponent
-              type={title}
-              setCategory={setCategory}
-            />
-
-            <TextClass text="Titulo del movimiento" />
-            <TextInput
-              style={globalStyles.textInput}
-              value={type}
-              onChangeText={setType}
-              placeholder="Ingresa un pequeño titulo acerca del movimiento"
-            />
+            <CategoryPickerComponent type={title} setCategory={setCategory} />
 
             <TextClass text="Concepto" />
             <TextInput
@@ -152,13 +157,20 @@ export default function IncomeExpenseForm({
               placeholder="Ingresa una pequeña descripción del movimiento"
             />
 
-            <MethodPickerComponent 
+            <MethodPickerComponent
               setAmount={setAmount}
               setPaymentMethod={setPaymentMethod}
               setCreditId={setCreditId}
               setDebitId={setDebitId}
             />
 
+            <TextClass text="Fecha del movimiento" />
+            <TextInput
+              style={globalStyles.textInput}
+              value={date}
+              onChangeText={setDate}
+              placeholder="Fecha del movimiento"
+            />
           </View>
           <View style={globalStylesMenu.containerBottom}>
             <Pressable style={globalStyles.button} onPress={handleAction}>
@@ -172,4 +184,3 @@ export default function IncomeExpenseForm({
     </>
   );
 }
-

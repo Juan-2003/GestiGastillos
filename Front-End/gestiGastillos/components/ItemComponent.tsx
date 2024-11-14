@@ -41,7 +41,7 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
             />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
-            const id = item.type === 'income' ? (item as IncomeItem).transaction_id : (item as ExpenseItem).transaction_id;
+            const id = item.type === 'ingreso' ? (item as IncomeItem).transaction_id : (item as ExpenseItem).transaction_id;
             if (id !== undefined){
                 onDelete(id, item.type);
             }

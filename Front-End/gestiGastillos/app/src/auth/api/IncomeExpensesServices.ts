@@ -8,6 +8,7 @@ export interface ExpenseItem {
   concept: string;
   category: string;
   payment_method: string;
+  date: string;
   debit_card_id?: number;
   credit_card_id?: number;
 }
@@ -20,26 +21,23 @@ export interface IncomeItem {
   concept: string;
   category: string;
   payment_method: string;
+  date: string;
   debit_card_id: number;
 }
 
 export type MovementItem = ExpenseItem | IncomeItem;
 
-export const handleFetchIncomeExpense = async (
-  type: string
-): Promise<MovementItem[]> => {
+export const handleFetchIncomeExpense = async (): Promise<MovementItem[]> => {
   try {
-    const url =
-      type === "income"
-        ? `http://${ip}:8080/gestiGastillos/income/incomeList`
-        : `http://${ip}:8080/gestiGastillos/expense/expenseList`;
-
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `http://${ip}:8080/gestiGastillos/transactions`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (response.ok) {
       console.log("Se obtuvieron los datos satisfactoriamente!!");
@@ -64,11 +62,11 @@ export const handleSubmitIncomeExpense = async (
   concept: string,
   category: string,
   payment_method: string,
+  date: string,
   credit_card_id?: number | null,
   debit_card_id?: number | null,
   onSuccess?: () => void
 ) => {
-
   // DTO de IncomeDataDTO
   const IncomeDataDTO = {
     type,
@@ -76,7 +74,8 @@ export const handleSubmitIncomeExpense = async (
     concept,
     category,
     payment_method,
-    debit_card_id: debit_card_id ?? null
+    date,
+    debit_card_id: debit_card_id ?? null,
   };
 
   // DTO de ExpenseDataDTO con propiedades comunes
@@ -86,6 +85,7 @@ export const handleSubmitIncomeExpense = async (
     concept: string;
     category: string;
     payment_method: string;
+    date: string;
     credit_card_id?: number;
     debit_card_id?: number;
   } = {
@@ -94,11 +94,12 @@ export const handleSubmitIncomeExpense = async (
     concept,
     category,
     payment_method,
+    date,
   };
 
   // Definir la URL según el tipo de tarjeta
   const url =
-    type === "income"
+    type === "ingreso"
       ? `http://${ip}:8080/gestiGastillos/income`
       : `http://${ip}:8080/gestiGastillos/expense`;
 
@@ -129,6 +130,7 @@ export const handleSubmitIncomeExpense = async (
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Error al agregar un ingreso o gasto:", errorData);
+      console.log(errorData);
       return;
     }
 
@@ -139,7 +141,7 @@ export const handleSubmitIncomeExpense = async (
       onSuccess();
     }
 
-    navigation.navigate("Ingresos/Gastos");
+    navigation.navigate("Income/Expense");
   } catch (error) {
     console.error("Error de red:", error);
   }
@@ -185,13 +187,14 @@ export const handleEditIncomeExpense = async (
   type: string,
   amount: number,
   concept: string,
-  
+
   // Parametros que recibira un gasto
   payment_method?: string,
 
+  date: string,
+
   onSuccess?: () => void
 ) => {
-
   const user_id = 1; // Usuario 1
 
   // DTO para un ingreso
@@ -200,15 +203,17 @@ export const handleEditIncomeExpense = async (
     type,
     amount,
     concept,
-    payment_method
-  }
+    payment_method,
+    date,
+  };
 
   // DTO para un gasto
   const UpdateExpenseDTO = {
     expense_id: item_id,
     amount,
-    concept
-  }
+    concept,
+    date,
+  };
 
   // Comprobamos el tipo de tarjeta y construimos el DTO correspondiente
   const url =
@@ -241,7 +246,7 @@ export const handleEditIncomeExpense = async (
         onSuccess();
       }
 
-      navigation.navigate("Card");
+      navigation.navigate("Income/Expense");
     } else {
       const errorData = await response.json();
       if (response.status === 409) {

@@ -19,16 +19,22 @@ interface Props {
 
 export default function ItemList({ navigation, type }: Props) {
   const [item, setItem] = useState<MovementItem[]>([]);
+  console.log(type);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await handleFetchIncomeExpense(type);
+      const data = await handleFetchIncomeExpense();
+      console.log(data);
       const combinedItems: MovementItem[] = [
-        ...data.income_item?.map((item) => ({ ...item, type: "income" })), // Añadimos el tipo a los ingresos
-        ...data.expense_item?.map((item) => ({ ...item, type: "expense" })), // Añadimos el tipo a los gastos
+        ...data.incomes?.map((item) => ({ ...item, type: "ingreso" })), // Añadimos el tipo a los ingresos
+        ...data.expenses?.map((item) => ({ ...item, type: "egreso" })), // Añadimos el tipo a los gastos
       ];
-      setItem(combinedItems);
-      console.log("Datos almacenados en items:", data); // Verificar los datos aquí
+
+      // Filtramos los items según el tipo que se pasa como prop
+      const filteredItems = combinedItems.filter((item) => item.type === type);
+
+      setItem(filteredItems);
+      console.log("Datos almacenados en items:", filteredItems); // Verificar los datos aquí
     };
     fetchData();
   }, []);
@@ -49,22 +55,23 @@ export default function ItemList({ navigation, type }: Props) {
   const handleUpdateItem = (item: MovementItem) => {
     navigation.navigate("IncomeExpenseForm", {
       Movement: item,
-      type: type
+      type: type,
     });
   };
 
+  console.log("items : !!!!", item);
   return (
     <View style={flatListComponent.expenseContainer}>
       <View style={flatListComponent.flatListContainer}>
         <FlatList
           data={item}
           keyExtractor={(item) => {
-            if (item.type === "income") {
-              return `income_${(
+            if (type === "ingreso") {
+              return `ingreso_${(
                 item as IncomeItem
               ).transaction_id?.toString()}`;
             } else {
-              return `expense_${(
+              return `egreso_${(
                 item as ExpenseItem
               ).transaction_id?.toString()}`;
             }
@@ -85,10 +92,12 @@ export default function ItemList({ navigation, type }: Props) {
       </View>
       <View style={flatListComponent.containerBottom}>
         <ButtonClass
-          text={type === 'income' ? 'INGRESO' : 'GASTO'}
-          onPressNavigation={() => navigation.navigate("IncomeExpenseForm", {
-            type: type,
-          })}
+          text={type === "ingreso" ? "INGRESO" : "GASTO"}
+          onPressNavigation={() =>
+            navigation.navigate("IncomeExpenseForm", {
+              type: type,
+            })
+          }
         />
       </View>
     </View>

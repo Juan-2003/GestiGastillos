@@ -2,7 +2,8 @@ package com.example.gestiGastillos.model.transactions;
 
 public enum TransactionCategory {
     ENTRETAIMENT("entretamient", "entretenimiento"),
-    EDUCATION("education", "educacion");
+    EDUCATION("education", "educacion"),
+    PAYDATE("paydate", "quincena");
 
     private String englishTransactionCategory;
     private String spanishTransactionCategory;

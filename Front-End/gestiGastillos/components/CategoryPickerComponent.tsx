@@ -18,7 +18,7 @@ export default function CategoryPickerComponent({ type, setCategory }: Props) {
 
     return (
         <>
-            {type === 'income' ? (
+            {type === 'ingreso' ? (
                 <View style={styles.imageSelectionContainer}>
                     <View style={styles.imageContainer}>
                         <Text style={globalStyles.imagetext}>Quincena</Text>

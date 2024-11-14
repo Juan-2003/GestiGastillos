@@ -15,8 +15,8 @@ export default function IncomeExpenses({ navigation }: Props) {
       <TopBar title="INGRESOS GASTOS" />
       <View style={globalStyles.middleContainer}>
         <View style={globalStyles.listContainer}>
-          <ItemList navigation={navigation} type="income"/>
-          <ItemList navigation={navigation} type="expense"/>
+          <ItemList navigation={navigation} type="ingreso"/>
+          <ItemList navigation={navigation} type="egreso"/>
         </View>
       </View>
     </>
