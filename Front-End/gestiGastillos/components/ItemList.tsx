@@ -34,7 +34,7 @@ export default function ItemList({ navigation, type }: Props) {
       const filteredItems = combinedItems.filter((item) => item.type === type);
 
       setItem(filteredItems);
-      console.log("Datos almacenados en items:", filteredItems); // Verificar los datos aquí
+      //console.log("Datos almacenados en items:", filteredItems); // Verificar los datos aquí
     };
     fetchData();
   }, []);

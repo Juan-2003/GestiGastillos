@@ -41,6 +41,7 @@ export default function Cardform({
   onCardUpdate,
 }: Props) {
   const { card } = route.params || {};
+  console.log("item a actualizar: ", card);
 
   const [name, setName] = useState(card?.card.card_name || "");
   const [type, setType] = useState(card?.type || "");

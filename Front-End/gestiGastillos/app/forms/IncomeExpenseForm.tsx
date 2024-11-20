@@ -2,15 +2,11 @@ import {
   View,
   TextInput,
   ScrollView,
-  Image,
-  StyleSheet,
   Text,
-  TouchableOpacity,
   Pressable,
 } from "react-native";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
-import ButtonClass from "@/components/buttons";
 import TextClass from "@/components/TextClass";
 import TopBarForms from "@/components/TopBarForms";
 import MethodPickerComponent from "@/components/MethodPickerComponent";
@@ -28,7 +24,7 @@ import CategoryPickerComponent from "@/components/CategoryPickerComponent";
 
 type RootStackParamList = {
   IncomeExpenses: undefined;
-  IncomeExpenseForm: { item?: MovementItem; type: string };
+  IncomeExpenseForm: { Movement: MovementItem, type: string };
 };
 
 interface Props {
@@ -45,8 +41,8 @@ export default function IncomeExpenseForm({
   onItemUpdate,
 }: Props) {
   // Recibir los datos si es que obtenemos un objeto en la ruta
-  const { item, type: title } = route.params || {};
-  console.log("item a actualizar: ",item);
+  const { Movement: item, type: title } = route.params || {};
+  console.log("item a actualizar: ", item);
 
   // Declaracion de variables
   const [type, setType] = useState<string | undefined>(title || "");
@@ -85,8 +81,10 @@ export default function IncomeExpenseForm({
   }, [item]);
 
   const handleAction = () => {
-    if (item) {
+    console.log("Item!!!!!!!!!!!: ",item)
+    if (item?.transaction_id) {
       // Si estamos editanto un item:
+      console.log("Entro a actualizar!!!!!!!");
       handleEditIncomeExpense(
         navigation,
         item.transaction_id,
@@ -99,6 +97,7 @@ export default function IncomeExpenseForm({
       );
     } else {
       // Si estamos creando un item nuevo:
+      console.log("Entro a crear!!!!!!!");
       console.log(
         "Tipo:", type,
         "Cantidad:",amount,
