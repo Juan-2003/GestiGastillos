@@ -86,6 +86,12 @@ const globalStyles = StyleSheet.create({
     borderColor: "black",
     marginBottom: 40,
   },
+  error:{
+  
+    fontSize:9,
+    color:"red",
+    width:"80%"
+  }
 });
 
 export default globalStyles;

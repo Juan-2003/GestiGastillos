@@ -12,7 +12,7 @@ interface EditSavinPlansScreenProps {
 }
 
 export default function EditSavingPlans({ route, navigation }:EditSavinPlansScreenProps) {
-  const { saving_id, name, target_amount,status,debit_card_id} = route.params; // Recibimos los parámetros de la navegación
+  const { saving_id, name, target_amount,status,debit_card_id} = route.params; 
 
   // Estado para los campos de texto del formulario
   const [newName, setNewName] = useState<string>(name);

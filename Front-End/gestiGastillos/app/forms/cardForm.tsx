@@ -6,7 +6,7 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
 import { Picker } from "@react-native-picker/picker";
@@ -18,10 +18,10 @@ import {
   CreditCardItem,
   DebitCardItem,
   handleEdit,
+  cardError
 } from "../src/auth/api/cardServices";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
-
+import { RouteProp, useFocusEffect } from "@react-navigation/native";
 type RootStackParamList = {
   Card: undefined;
   CardForm: { card: CardItem };
@@ -43,6 +43,16 @@ export default function Cardform({
   const { card } = route.params || {};
   console.log("item a actualizar: ", card);
 
+  const [error, setError] = useState<{ title: string; errorMessages: string[] } | null>(null);
+
+
+  useEffect(() => {
+    setError(cardError); 
+  }, [cardError]);
+
+
+
+
   const [name, setName] = useState(card?.card.card_name || "");
   const [type, setType] = useState(card?.type || "");
   const [digitos, setDigitos] = useState(card?.card.last_digits || "");
@@ -58,7 +68,7 @@ export default function Cardform({
     card?.card.expiration_date || ""
   );
 
-  const user_id = 1;
+  const user_id = 2;
 
   useEffect(() => {
     if (card) {
@@ -117,7 +127,7 @@ export default function Cardform({
         fechaVencimiento,
         limite,
         deuda,
-        onCardAdd
+        onCardAdd,
       );
     }
   };
@@ -220,7 +230,10 @@ export default function Cardform({
             ) : null}
           </View>
           <View style={globalStylesMenu.containerBottom}>
-            <Pressable style={globalStyles.button} onPress={handleAction}>
+            {error &&  <Text style={globalStyles.error}>
+                          {error.title}: {error.errorMessages.join(", ")}
+                        </Text>}
+            <Pressable style={globalStyles.button} onPress={handleAction} >
               <Text style={globalStyles.text}>
                 {card ? "Editar" : "Agregar"}
               </Text>

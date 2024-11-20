@@ -1,5 +1,8 @@
 import { ip } from "../IP/Ip";
-
+interface error{
+    error:any
+    
+}
 
 export interface User {
   user_id: number;
@@ -29,6 +32,8 @@ export interface DebitCardItem {
   current_balance: number;
   type: string;
 }
+
+export let cardError: any;
 
 export type CardItem = CreditCardItem | DebitCardItem;
 
@@ -77,7 +82,8 @@ export const handleSubmit = async (
   fechaVencimiento: string,
   limite: string,
   deudaActual?: number,
-  onSuccess?: () => void
+  onSuccess?: () => void,
+  
 ) => {
   // DTO de la tarjeta CardDataDTO
   const CardDataDTO = {
@@ -123,6 +129,8 @@ export const handleSubmit = async (
 
     if (!response.ok) {
       const errorData = await response.json();
+      cardError=errorData
+      console.log("holaasasasas", cardError)
       console.error("Error al agregar la tarjeta:", errorData);
       return;
     }
@@ -136,9 +144,13 @@ export const handleSubmit = async (
 
     navigation.navigate("Card");
   } catch (error) {
+    
     console.error("Error de red:", error);
   }
+
 };
+
+
 
 export const handleDelete = async (
   id: number,
@@ -247,5 +259,7 @@ export const handleEdit = async (
     console.error(error);
   }
 };
+
+
 
 

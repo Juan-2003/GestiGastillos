@@ -19,6 +19,7 @@ export default function SavingPlansForm({ navigation }: Props) {
     const [debitCardId, setDebitCardId] = useState<number | null>(null);
     const [target_amount, setTargetAmount] = useState<string>("");    const [name, setName] = useState("");
     const [debitCards, setDebitCards] = useState<DebitCardResponseDTO[]>([]);
+    const [error,setError]=useState(" ")
 
 
 
@@ -59,6 +60,7 @@ export default function SavingPlansForm({ navigation }: Props) {
             
             } else {
                 const errorText = await response.text();
+                setError(errorText)
                 console.error(`Error ${response.status}:`, errorText);
             }
         } catch (error) {
@@ -108,10 +110,11 @@ export default function SavingPlansForm({ navigation }: Props) {
                     </View>
                 </View>
                 <View style={globalStylesMenu.containerBottom}>
-          <Pressable style={globalStyles.button} onPress={handleAddReminder}>
-            <Text style={globalStyles.text}>Agregar</Text>
-          </Pressable>
-        </View>
+                    {error ? <Text style={globalStyles.error}>{error}</Text> : null}
+                    <Pressable style={globalStyles.button} onPress={handleAddReminder}>
+                        <Text style={globalStyles.text}>Agregar</Text>
+                    </Pressable>
+                </View>
             </View>
         </View>
     );

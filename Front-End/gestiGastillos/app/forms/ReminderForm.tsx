@@ -10,6 +10,7 @@ import { Picker } from "@react-native-picker/picker";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ip } from "../src/auth/IP/Ip";
 import { fetchReminders } from "../src/auth/api/reminderServices";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface Props {
   navigation: StackNavigationProp<any>;
@@ -22,6 +23,9 @@ export default function ReminderForm({ navigation }: Props) {
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [cardType, setCardType] = useState<"credit" | "debit" | null>(null);
+  const [error,setError]=useState(" ")
+  const [useCard, setUseCard] = useState<"yes" | "no" | null>(null); // Nuevo estado
+
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -62,6 +66,7 @@ export default function ReminderForm({ navigation }: Props) {
         navigation.goBack();
       } else {
         const errorText = await response.text();
+        setError(errorText);
         console.error(`Error ${response.status}:`, errorText);
       }
     } catch (error) {
@@ -75,55 +80,79 @@ export default function ReminderForm({ navigation }: Props) {
       <TopBarForms title="RECORDATORIOS" />
       <View style={globalStylesMenu.container}>
         <View style={globalStylesMenu.containerMiddle}>
+        <ScrollView>
           <View style={globalStyles.inputTextContainer}>
-
-            <TextClass text="Selecciona el tipo de tarjeta" />
-            <View style={styles.pickerContainer}>
+            <TextClass text="deseas utilizar una tarjeta"/>
+            <View  style={styles.pickerContainer}>
               <Picker
-                selectedValue={cardType}
-                onValueChange={(value) => {
-                  setCardType(value);
-                  setCardId(null); // Resetear el ID de la tarjeta al cambiar el tipo
-                }}
-                style={globalStyles.picker}
-              >
-                <Picker.Item label="Selecciona el tipo de tarjeta" value={null} />
-                <Picker.Item label="Crédito" value="credit" />
-                <Picker.Item label="Débito" value="debit" />
+                  selectedValue={useCard}
+                  onValueChange={(value) => {
+                    setUseCard(value);
+                    if (value === "no") {
+                      // Resetear valores si elige "No"
+                      setCardType(null);
+                      setCardId(null);
+                    }
+                  }}
+                  style={globalStyles.picker}
+                >
+                  <Picker.Item label="Selecciona una opción" value={null} />
+                  <Picker.Item label="Sí" value="yes" />
+                  <Picker.Item label="No" value="no" />
               </Picker>
             </View>
 
-            <TextClass text="Selecciona una tarjeta" />
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={card_id}
-                onValueChange={(itemValue) => setCardId(itemValue)}
-                style={globalStyles.picker}
-                enabled={cardType !== null}
-              >
-                <Picker.Item label="Selecciona una tarjeta" value={null} />
-                {cards
-                  .filter((card) =>
-                    (cardType === "credit" && card.tarjeta_credito_id) ||
-                    (cardType === "debit" && card.tarjeta_debito_id)
-                  )
-                  .map((card) => (
-                    <Picker.Item
-                      key={
-                        cardType === "credit"
-                          ? card.tarjeta_credito_id
-                          : card.tarjeta_debito_id
-                      }
-                      label={`${card.card.card_name} - ${card.card.last_digits}`}
-                      value={
-                        cardType === "credit"
-                          ? card.tarjeta_credito_id
-                          : card.tarjeta_debito_id
-                      }
-                    />
-                  ))}
-              </Picker>
-            </View>
+          {useCard === "yes" && (
+              <>
+                <TextClass text="Selecciona el tipo de tarjeta" />
+                <View style={styles.pickerContainer}>
+                  <Picker
+                    selectedValue={cardType}
+                    onValueChange={(value) => {
+                      setCardType(value);
+                      setCardId(null); // Resetear el ID de la tarjeta al cambiar el tipo
+                    }}
+                    style={globalStyles.picker}
+                  >
+                    <Picker.Item label="Selecciona el tipo de tarjeta" value={null} />
+                    <Picker.Item label="Crédito" value="credit" />
+                    <Picker.Item label="Débito" value="debit" />
+                  </Picker>
+                </View>
+
+                <TextClass text="Selecciona una tarjeta" />
+                <View style={styles.pickerContainer}>
+                  <Picker
+                    selectedValue={card_id}
+                    onValueChange={(itemValue) => setCardId(itemValue)}
+                    style={globalStyles.picker}
+                    enabled={cardType !== null}
+                  >
+                    <Picker.Item label="Selecciona una tarjeta" value={null} />
+                    {cards
+                      .filter((card) =>
+                        (cardType === "credit" && card.tarjeta_credito_id) ||
+                        (cardType === "debit" && card.tarjeta_debito_id)
+                      )
+                      .map((card) => (
+                        <Picker.Item
+                          key={
+                            cardType === "credit"
+                              ? card.tarjeta_credito_id
+                              : card.tarjeta_debito_id
+                          }
+                          label={`${card.card.card_name} - ${card.card.last_digits}`}
+                          value={
+                            cardType === "credit"
+                              ? card.tarjeta_credito_id
+                              : card.tarjeta_debito_id
+                          }
+                        />
+                      ))}
+                  </Picker>
+                </View>
+              </>
+            )}
 
             <TextClass text="Título" />
             <TextInput
@@ -149,9 +178,12 @@ export default function ReminderForm({ navigation }: Props) {
               value={date}
             />
           </View>
+          </ScrollView>
         </View>
 
+      
         <View style={globalStylesMenu.containerBottom}>
+        {error ? <Text style={styles.error}>{error}</Text> : null}
           <Pressable style={globalStyles.button} onPress={handleAddReminder}>
             <Text style={globalStyles.text}>Agregar</Text>
           </Pressable>
@@ -169,4 +201,9 @@ const styles = StyleSheet.create({
     borderColor: "black",
     marginBottom: 40,
   },
+  error:{
+    fontSize:9,
+    color:"red",
+    width:"80%"
+  }
 });
