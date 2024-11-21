@@ -1,3 +1,4 @@
+import React from "react";
 import { View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import TopBar from "@/components/topBar";
@@ -12,7 +13,7 @@ interface Props {
 export default function IncomeExpenses({ navigation }: Props) {
   return (
     <>
-      <TopBar title="INGRESOS GASTOS" />
+      <TopBar title="Tus movimientos  Ingresos // Gastos" />
       <View style={globalStyles.middleContainer}>
         <View style={globalStyles.listContainer}>
           <ItemList navigation={navigation} type="ingreso"/>

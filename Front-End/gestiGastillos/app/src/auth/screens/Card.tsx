@@ -53,7 +53,7 @@ export default function Card({ navigation }: Props) {
   console.log("tarjetas: ", cards);
   return (
     <>
-      <TopBar title="TARJETAS" />
+      <TopBar title="Tus Tarjetas" />
       <View style={globalStyles.middleContainer}>
         <FlatList
           data={cards}

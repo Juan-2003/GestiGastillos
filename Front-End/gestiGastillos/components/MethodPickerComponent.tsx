@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
 import { Picker } from "@react-native-picker/picker";
@@ -71,9 +72,9 @@ export default function MethodPickerComponent({
                 onValueChange={(cardValue) => {
                   setCard(cardValue);
                   if (type === "tarjeta_credito") {
-                    setCreditId(Number(cardValue));
+                    setCreditId(Number(cardValue.tarjeta_credito_id));
                   } else if (type === "tarjeta_debito") {
-                    setDebitId(Number(cardValue));
+                    setDebitId(Number(cardValue.tarjeta_debito_id));
                   }
                 }}
                 style={styles.picker}

@@ -66,6 +66,12 @@ const globalStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
+  title: {
+    color: '#00000',
+    fontSize: 30,
+    fontWeight: 'semibold',
+    textAlign: 'center',
+  },
   textForm: {
     fontWeight: 'bold',
     color: 'black'

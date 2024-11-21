@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   TextInput,
@@ -91,7 +92,6 @@ export default function IncomeExpenseForm({
         type,
         amount,
         concept,
-        payment_method,
         date,
         onItemUpdate
       );

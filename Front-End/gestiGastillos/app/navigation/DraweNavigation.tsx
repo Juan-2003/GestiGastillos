@@ -2,7 +2,7 @@ import * as React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { StatusBar, Image } from "react-native";
 import { useEffect } from "react";
-import Home from "../src/home/screens/Home";
+import Home from "../src/auth/screens/Home";
 import Card from "../src/auth/screens/Card";
 import IncomeExpenses from "../src/auth/screens/IncomeExpenses";
 import Reminder from "../src/auth/screens/Reminder";
@@ -17,7 +17,7 @@ export default function DrawerNavigation() {
   }, []);
   return (
     <Drawer.Navigator
-      initialRouteName="Home"
+      initialRouteName="Menu"
       screenOptions={{
         swipeEnabled: true,
         drawerType: 'front',
@@ -36,7 +36,7 @@ export default function DrawerNavigation() {
       }}
     >
       <Drawer.Screen
-        name="Home"
+        name="Menu"
         component={Home}
         options={{
           headerShown: false,
