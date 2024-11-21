@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/Logo2.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.juan_comparan.gestiGastillos"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +32,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "59005e31-8f14-4818-ae7e-4c494d5055cb"
+      }
     }
   }
 }

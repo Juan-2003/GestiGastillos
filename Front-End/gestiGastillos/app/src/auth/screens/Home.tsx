@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Image, Dimensions, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Image, Dimensions, Text, ScrollView, Alert, Button } from "react-native";
 import globalStyles from "@/styles/GlobalStyles";
 import TopBar from "@/components/topBar";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
@@ -8,22 +8,26 @@ import { BarChart } from "react-native-chart-kit";
 export default function Home() {
   const screenWidth = Dimensions.get('window').width; // Obtener el ancho de la pantalla
 
-  const data1 = [
-    { x: 'Ene', y: 500 },
-    { x: 'Feb', y: 1000 },
-    { x: 'Mar', y: 2000 },
-    { x: 'Abr', y: 8000 },
-    { x: 'May', y: 2000 },
-    { x: 'Jun', y: 3000 },
-  ];
-  const data2 = [
-    { x: 'Ene', y: 300 },
-    { x: 'Feb', y: 800 },
-    { x: 'Mar', y: 1500 },
-    { x: 'Abr', y: 5000 },
-    { x: 'May', y: 1500 },
-    { x: 'Jun', y: 2000 },
-  ];
+  const createPDF = async () => {
+    try {
+      const options = {
+        html: `
+          <h1 style="text-align: center; color: blue;">Mi primer PDF</h1>
+          <p>Generado desde Expo con EAS Build</p>
+        `,
+        fileName: 'mi_primer_pdf',
+        directory: 'Documents',
+      };
+
+      const file = await RNHTMLtoPDF.convert(options);
+
+      Alert.alert('PDF generado', `Guardado en: ${file.filePath}`);
+      console.log('PDF generado en:', file.filePath);
+    } catch (error) {
+      console.error('Error generando el PDF:', error);
+    }
+  };
+
 
   return (
     <View style={globalStyles.container}>
@@ -63,7 +67,12 @@ export default function Home() {
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
             }}
             style={styles.graphContainer}
+
           />
+
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Button title="Generar PDF" onPress={createPDF} />
+          </View>
 
         </ScrollView>
       </View>
