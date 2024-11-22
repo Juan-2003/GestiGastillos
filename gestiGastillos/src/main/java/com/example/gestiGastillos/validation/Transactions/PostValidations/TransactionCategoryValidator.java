@@ -15,13 +15,16 @@ public class TransactionCategoryValidator implements TransactionValidator<Object
         if(dto instanceof ExpenseDataDTO){
             ExpenseDataDTO expenseDataDTO = (ExpenseDataDTO) dto;
             userCategory = expenseDataDTO.category();
+            if (TransactionCategory.fromSpanish(userCategory)==null){
+                throw new InvalidCategoryException("Categoria no aceptada");
+            }
         }
         else if(dto instanceof IncomeDataDTO){
             IncomeDataDTO incomeDataDTO = (IncomeDataDTO) dto;
             userCategory = incomeDataDTO.category();
-        }
-        if (TransactionCategory.fromSpanish(userCategory)==null){
-            throw new InvalidCategoryException("Categoria no aceptada");
+            if (TransactionCategory.fromSpanish(userCategory)==null){
+                throw new InvalidCategoryException("Categoria no aceptada");
+            }
         }
     }
 }

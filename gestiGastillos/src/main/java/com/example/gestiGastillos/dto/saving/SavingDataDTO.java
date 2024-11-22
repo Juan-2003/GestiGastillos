@@ -11,6 +11,7 @@ public record SavingDataDTO(
         String name,
 
         @Positive(message = "El target_amount debe ser mayor a 0")
+        @NotBlank(message = "el target amount no debe estar en blanco")
         @JsonProperty("target_amount")
         Double targetAmount,
 

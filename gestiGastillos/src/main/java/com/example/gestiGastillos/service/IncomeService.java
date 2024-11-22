@@ -48,7 +48,7 @@ public class IncomeService {
         Transactions transactions;
         if(incomeDataDTO.debitCardId() != null){//La transaccion se hizo con tarjeta
             DebitCard debitCard = debitCardRepository.findById(incomeDataDTO.debitCardId())
-                    .orElseThrow(() -> new EntityNotFoundException("La tarjeta credito con el id: " + incomeDataDTO.debitCardId()));
+                    .orElseThrow(() -> new EntityNotFoundException("La tarjeta de debito con el id: " + incomeDataDTO.debitCardId()));
 
             Double oldCurrentBalance = debitCard.getCurrentBalance();
             Double newCurrentBalance = oldCurrentBalance + incomeDataDTO.amount();
