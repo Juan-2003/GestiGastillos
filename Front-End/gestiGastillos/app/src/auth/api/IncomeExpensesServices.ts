@@ -65,7 +65,10 @@ export const handleSubmitIncomeExpense = async (
   date: string,
   credit_card_id?: number | null,
   debit_card_id?: number | null,
-  onSuccess?: () => void
+  onSuccess?: () => void,
+  setError?: React.Dispatch<
+    React.SetStateAction<{ title: string; errorMessages: string[] } | null>
+  >
 ) => {
   // DTO de IncomeDataDTO
   const IncomeDataDTO = {
@@ -129,6 +132,14 @@ export const handleSubmitIncomeExpense = async (
 
     if (!response.ok) {
       const errorData = await response.json();
+      const errorTitle = errorData.title || "Error";
+      const errorMessages = Array.isArray(errorData.errorMessages)
+        ? errorData.errorMessages
+        : [errorData.errorMessages || "Error desconocido"];
+
+      if (setError) {
+        setError({ title: errorTitle, errorMessages });
+      }
       console.error("Error al agregar un ingreso o gasto:", errorData);
       console.log(errorData);
       return;
@@ -144,6 +155,12 @@ export const handleSubmitIncomeExpense = async (
     navigation.navigate("Income/Expense");
   } catch (error) {
     console.error("Error de red:", error);
+    if (setError) {
+      setError({
+        title: "Error de red",
+        errorMessages: ["No se pudo conectar al servidor"],
+      });
+    }
   }
 };
 
@@ -189,11 +206,13 @@ export const handleEditIncomeExpense = async (
   concept: string,
 
   // Parametros que recibira un gasto
-  payment_method?: string,
 
   date: string,
 
-  onSuccess?: () => void
+  onSuccess?: () => void,
+  setError?: React.Dispatch<
+    React.SetStateAction<{ title: string; errorMessages: string[] } | null>
+  >
 ) => {
   const user_id = 1; // Usuario 1
 
@@ -203,7 +222,6 @@ export const handleEditIncomeExpense = async (
     type,
     amount,
     concept,
-    payment_method,
     date,
   };
 
@@ -249,13 +267,25 @@ export const handleEditIncomeExpense = async (
       navigation.navigate("Income/Expense");
     } else {
       const errorData = await response.json();
-      if (response.status === 409) {
-        console.log("Error 409:", errorData);
+      const errorTitle = errorData.title || "Error";
+      const errorMessages = Array.isArray(errorData.errorMessages)
+        ? errorData.errorMessages
+        : [errorData.errorMessages || "Error desconocido"];
+
+      if (setError) {
+        setError({ title: errorTitle, errorMessages });
       }
+      console.error("Error al editar:", errorData);
       console.log(errorData);
-      throw new Error("Error al actualizar el item");
+      return;
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error de red:", error);
+    if (setError) {
+      setError({
+        title: "Error de red",
+        errorMessages: ["No se pudo conectar al servidor"],
+      });
+    }
   }
 };

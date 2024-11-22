@@ -27,8 +27,8 @@ export default function MethodPickerComponent({
     const fetchData = async () => {
       const data = await handleFetchItem();
       const combinedCards: CardItem[] = [
-        ...(fetchedCards.credit_cards || []),
-        ...(fetchedCards.debit_cards || []), // Añadimos el tipo a las tarjetas de débito
+        ...data.credit_cards?.map((card) => ({ ...card, type: "credit" })), // Añadimos el tipo a las tarjetas de crédito
+        ...data.debit_cards?.map((card) => ({ ...card, type: "debit" })), // Añadimos el tipo a las tarjetas de débito
       ];
       setCards(combinedCards);
       console.log("Datos almacenados en cards dentro del picker:", data); // Verificar los datos aquí
@@ -71,10 +71,13 @@ export default function MethodPickerComponent({
                 selectedValue={card}
                 onValueChange={(cardValue) => {
                   setCard(cardValue);
+                  // Si el tipo es tarjeta de crédito, se establece el ID de la tarjeta de crédito
                   if (type === "tarjeta_credito") {
-                    setCreditId(Number(cardValue));
-                  } else if (type === "tarjeta_debito") {
-                    setDebitId(Number(cardValue));
+                    setCreditId(Number(cardValue)); // Asegúrate de convertir el valor a un número
+                  }
+                  // Si el tipo es tarjeta de débito, se establece el ID de la tarjeta de débito
+                  else if (type === "tarjeta_debito") {
+                    setDebitId(Number(cardValue)); // Asegúrate de convertir el valor a un número
                   }
                 }}
                 style={styles.picker}
@@ -88,7 +91,11 @@ export default function MethodPickerComponent({
                         : cardItem.tarjeta_debito_id
                     }
                     label={cardItem.card.card_name}
-                    value={cardItem.card.card_id}
+                    value={
+                      type === "tarjeta_credito"
+                        ? cardItem.tarjeta_credito_id // Usamos tarjeta_credito_id aquí
+                        : cardItem.tarjeta_debito_id // Usamos tarjeta_debito_id aquí
+                    }
                   />
                 ))}
               </Picker>

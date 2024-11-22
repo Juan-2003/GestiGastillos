@@ -18,18 +18,19 @@ export default function Card({ navigation }: Props) {
   const [cards, setCards] = useState<CardItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
         const data = await handleFetchItem();
         const combinedCards: CardItem[] = [
-            ...data.credit_cards?.map(card => ({ ...card, type: 'credit' })), // Añadimos el tipo a las tarjetas de crédito
-            ...data.debit_cards?.map(card => ({ ...card, type: 'debit' }))    // Añadimos el tipo a las tarjetas de débito
+          ...data.credit_cards?.map(card => ({ ...card, type: 'credit' })),
+          ...data.debit_cards?.map(card => ({ ...card, type: 'debit' })),
         ];
         setCards(combinedCards);
-        console.log("Datos almacenados en cards:", data); // Verificar los datos aquí
-    };
-    fetchData();
-}, []);
+      };
+      fetchData();
+    }, []) // Solo se ejecutará cuando la pantalla se enfoque
+  );
 
   const handleDeleteCard = async (cardId: number, cardType: string) => {
     await handleDelete(cardId, cardType, () => {

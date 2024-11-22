@@ -83,7 +83,7 @@ export const handleSubmit = async (
   limite: string,
   deudaActual?: number,
   onSuccess?: () => void,
-  
+  setError?: React.Dispatch<React.SetStateAction<{ title: string; errorMessages: string[] } | null>>
 ) => {
   // DTO de la tarjeta CardDataDTO
   const CardDataDTO = {
@@ -129,8 +129,14 @@ export const handleSubmit = async (
 
     if (!response.ok) {
       const errorData = await response.json();
-      cardError=errorData
-      console.log("holaasasasas", cardError)
+      const errorTitle = errorData.title || "Error";
+      const errorMessages = Array.isArray(errorData.errorMessages)
+        ? errorData.errorMessages
+        : [errorData.errorMessages || "Error desconocido"];
+
+      if (setError) {
+        setError({ title: errorTitle, errorMessages});
+      }
       console.error("Error al agregar la tarjeta:", errorData);
       return;
     }
@@ -144,13 +150,16 @@ export const handleSubmit = async (
 
     navigation.navigate("Card");
   } catch (error) {
-    
     console.error("Error de red:", error);
+    if (setError) {
+      setError({
+        title: "Error de red",
+        errorMessages: ["No se pudo conectar al servidor"],
+      });
+    }
   }
 
 };
-
-
 
 export const handleDelete = async (
   id: number,
@@ -193,7 +202,8 @@ export const handleEdit = async (
   name: string,
   limite: string,
   deudaActual?: number,
-  onSuccess?: () => void
+  onSuccess?: () => void,
+  setError?: React.Dispatch<React.SetStateAction<{ title: string; errorMessages: string[] } | null>>
 ) => {
   const user_id = 1; // Si este valor es dinámico, deberías obtenerlo de alguna parte
 
@@ -213,7 +223,7 @@ export const handleEdit = async (
   if (type === "credit") {
     // Para tarjetas de crédito, usamos el DTO UpdateCreditCardDTO
     body = {
-      userId: user_id,
+      user_id: user_id,
       credit_card_id: id,
       credit_limit: limite,
       debt: deudaActual,
@@ -222,7 +232,7 @@ export const handleEdit = async (
   } else if (type === "debit") {
     // Para tarjetas de débito, usamos el DTO UpdateDebitCardDTO
     body = {
-      userId: user_id,
+      user_id: user_id,
       debit_card_id: id,
       current_balance: limite, // Campo específico de tarjetas de débito
       card: updateCardDTO,
@@ -249,14 +259,25 @@ export const handleEdit = async (
       navigation.navigate("Card");
     } else {
       const errorData = await response.json();
-      if (response.status === 409) {
-        console.log("Error 409:", errorData);
+      const errorTitle = errorData.title || "Error";
+      const errorMessages = Array.isArray(errorData.errorMessages)
+        ? errorData.errorMessages
+        : [errorData.errorMessages || "Error desconocido"];
+
+      if (setError) {
+        setError({ title: errorTitle, errorMessages});
       }
-      console.log(errorData);
-      throw new Error("Error al actualizar la tarjeta");
+      console.error("Error al agregar la tarjeta:", errorData);
+      return;
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error de red:", error);
+    if (setError) {
+      setError({
+        title: "Error de red",
+        errorMessages: ["No se pudo conectar al servidor"],
+      });
+    }
   }
 };
 

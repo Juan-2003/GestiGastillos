@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  TextInput,
-  ScrollView,
-  Text,
-  Pressable,
-} from "react-native";
+import { View, TextInput, ScrollView, Text, Pressable } from "react-native";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";
 import TextClass from "@/components/TextClass";
@@ -22,10 +16,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import CategoryPickerComponent from "@/components/CategoryPickerComponent";
+import { cardError } from "../src/auth/api/cardServices";
 
 type RootStackParamList = {
   IncomeExpenses: undefined;
-  IncomeExpenseForm: { Movement: MovementItem, type: string };
+  IncomeExpenseForm: { Movement: MovementItem; type: string };
 };
 
 interface Props {
@@ -43,7 +38,14 @@ export default function IncomeExpenseForm({
 }: Props) {
   // Recibir los datos si es que obtenemos un objeto en la ruta
   const { Movement: item, type: title } = route.params || {};
-  console.log("item a actualizar: ", item);
+  const [error, setError] = useState<{
+    title: string;
+    errorMessages: string[];
+  } | null>(null);
+
+  useEffect(() => {
+    setError(cardError);
+  }, [cardError]);
 
   // Declaracion de variables
   const [type, setType] = useState<string | undefined>(title || "");
@@ -53,8 +55,12 @@ export default function IncomeExpenseForm({
   const [amount, setAmount] = useState<number | undefined>(
     item?.amount || undefined
   );
-  const [concept, setConcept] = useState<string | undefined>(item?.concept || "");
-  const [category, setCategory] = useState<string | undefined>(item?.category || "");
+  const [concept, setConcept] = useState<string | undefined>(
+    item?.concept || ""
+  );
+  const [category, setCategory] = useState<string | undefined>(
+    item?.category || ""
+  );
   const [credit_id, setCreditId] = useState<number | undefined>(
     (item as ExpenseItem)?.credit_card_id || undefined
   );
@@ -68,7 +74,7 @@ export default function IncomeExpenseForm({
   useEffect(() => {
     if (item as IncomeItem) {
       setType(item?.type);
-      setAmount(item?.amount);
+      setAmount(item?.amount || 0);
       setConcept(item?.concept);
       setPaymentMethod(item?.payment_method);
       setDate(item?.date);
@@ -82,10 +88,21 @@ export default function IncomeExpenseForm({
   }, [item]);
 
   const handleAction = () => {
-    console.log("Item!!!!!!!!!!!: ",item)
+    console.log("Item!!!!!!!!!!!: ", item);
     if (item?.transaction_id) {
       // Si estamos editanto un item:
       console.log("Entro a actualizar!!!!!!!");
+      console.log(
+        "Tipo:",
+        type,
+        "Cantidad:",
+        amount,
+        "Concepto:",
+        concept,
+        "Fecha:",
+        date
+      );
+
       handleEditIncomeExpense(
         navigation,
         item.transaction_id,
@@ -93,20 +110,29 @@ export default function IncomeExpenseForm({
         amount,
         concept,
         date,
-        onItemUpdate
+        onItemUpdate,
+        setError
       );
     } else {
       // Si estamos creando un item nuevo:
       console.log("Entro a crear!!!!!!!");
       console.log(
-        "Tipo:", type,
-        "Cantidad:",amount,
-        "Concepto:",concept,
-        "Categoria:",category,
-        "Metodo:",payment_method,
-        "Fecha:",date,
-        "CreditoID:",credit_id,
-        "DebitoID:",debit_id
+        "Tipo:",
+        type,
+        "Cantidad:",
+        amount,
+        "Concepto:",
+        concept,
+        "Categoria:",
+        category,
+        "Metodo:",
+        payment_method,
+        "Fecha:",
+        date,
+        "CreditoID:",
+        credit_id,
+        "DebitoID:",
+        debit_id
       );
 
       handleSubmitIncomeExpense(
@@ -119,7 +145,8 @@ export default function IncomeExpenseForm({
         date,
         credit_id,
         debit_id,
-        onItemAdd
+        onItemAdd,
+        setError
       );
     }
   };
@@ -140,14 +167,20 @@ export default function IncomeExpenseForm({
       <View style={globalStylesMenu.container}>
         <ScrollView style={globalStylesMenu.containerMiddle}>
           <View style={globalStyles.inputTextContainer}>
-            <View>
-              <Text style={globalStyles.textForm}>
-                Selecciona una categoria:
-              </Text>
-            </View>
-
-            <CategoryPickerComponent type={title} setCategory={setCategory} />
-
+            // Si no es editar, seleccionas categoria
+            {!item && (
+              <>
+                <View>
+                  <Text style={globalStyles.textForm}>
+                    Selecciona una categoria:
+                  </Text>
+                </View>
+                <CategoryPickerComponent
+                  type={title}
+                  setCategory={setCategory}
+                />
+              </>
+            )}
             <TextClass text="Concepto" />
             <TextInput
               style={globalStyles.textInput}
@@ -155,14 +188,25 @@ export default function IncomeExpenseForm({
               onChangeText={setConcept}
               placeholder="Ingresa una pequeña descripción del movimiento"
             />
-
-            <MethodPickerComponent
-              setAmount={setAmount}
-              setPaymentMethod={setPaymentMethod}
-              setCreditId={setCreditId}
-              setDebitId={setDebitId}
-            />
-
+            {!item ? (
+              <MethodPickerComponent
+                setAmount={setAmount}
+                setPaymentMethod={setPaymentMethod}
+                setCreditId={setCreditId}
+                setDebitId={setDebitId}
+              />
+            ) : (
+              <>
+                <TextClass text="Monto" />
+                <TextInput
+                  style={globalStyles.textInput}
+                  value={amount ? String(amount) : ""}
+                  onChangeText={(text) => setAmount(Number(text))}
+                  keyboardType="numeric"
+                  placeholder="Ingresa la cantidad"
+                />
+              </>
+            )}
             <TextClass text="Fecha del movimiento" />
             <TextInput
               style={globalStyles.textInput}
@@ -172,6 +216,11 @@ export default function IncomeExpenseForm({
             />
           </View>
           <View style={globalStylesMenu.containerBottom}>
+            {error && (
+                <Text style={globalStyles.error}>
+                  {error.title}: {error.errorMessages.join(", ")}
+                </Text>
+            )}
             <Pressable style={globalStyles.button} onPress={handleAction}>
               <Text style={globalStyles.text}>
                 {item ? "Editar" : "Agregar"}

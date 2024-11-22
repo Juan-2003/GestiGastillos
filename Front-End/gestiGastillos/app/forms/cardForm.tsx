@@ -19,7 +19,7 @@ import {
   CreditCardItem,
   DebitCardItem,
   handleEdit,
-  cardError
+  cardError,
 } from "../src/auth/api/cardServices";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp, useFocusEffect } from "@react-navigation/native";
@@ -42,17 +42,14 @@ export default function Cardform({
   onCardUpdate,
 }: Props) {
   const { card } = route.params || {};
-  console.log("item a actualizar: ", card);
-
-  const [error, setError] = useState<{ title: string; errorMessages: string[] } | null>(null);
-
+  const [error, setError] = useState<{
+    title: string;
+    errorMessages: string[];
+  } | null>(null);
 
   useEffect(() => {
-    setError(cardError); 
+    setError(cardError);
   }, [cardError]);
-
-
-
 
   const [name, setName] = useState(card?.card.card_name || "");
   const [type, setType] = useState(card?.type || "");
@@ -69,7 +66,7 @@ export default function Cardform({
     card?.card.expiration_date || ""
   );
 
-  const user_id = 2;
+  const user_id = 1;
 
   useEffect(() => {
     if (card) {
@@ -88,18 +85,6 @@ export default function Cardform({
   }, [card]);
 
   const handleAction = () => {
-    // Verificar que los campos no estén vacíos
-    if (!name || !digitos || !fechaVencimiento || !limite) {
-      alert("Por favor, completa todos los campos obligatorios.");
-      return;
-    }
-
-    // Verificar si es una tarjeta de crédito
-    if (type === "credit" && deudaActual === undefined) {
-      alert("Por favor, ingrese la deuda actual de la tarjeta de crédito.");
-      return;
-    }
-
     // Convertir `deudaActual` a undefined si no está presente
     const deuda =
       type === "credit" && deudaActual === undefined ? 0 : deudaActual;
@@ -115,7 +100,8 @@ export default function Cardform({
         name,
         limite,
         deuda,
-        onCardUpdate
+        onCardUpdate,
+        setError
       );
     } else {
       // Si estamos creando una tarjeta nueva, llamamos a handleSubmit
@@ -129,6 +115,7 @@ export default function Cardform({
         limite,
         deuda,
         onCardAdd,
+        setError
       );
     }
   };
@@ -231,10 +218,12 @@ export default function Cardform({
             ) : null}
           </View>
           <View style={globalStylesMenu.containerBottom}>
-            {error &&  <Text style={globalStyles.error}>
-                          {error.title}: {error.errorMessages.join(", ")}
-                        </Text>}
-            <Pressable style={globalStyles.button} onPress={handleAction} >
+            {error && (
+              <Text style={globalStyles.error}>
+                {error.title}: {error.errorMessages.join(", ")}
+              </Text>
+            )}
+            <Pressable style={globalStyles.button} onPress={handleAction}>
               <Text style={globalStyles.text}>
                 {card ? "Editar" : "Agregar"}
               </Text>
