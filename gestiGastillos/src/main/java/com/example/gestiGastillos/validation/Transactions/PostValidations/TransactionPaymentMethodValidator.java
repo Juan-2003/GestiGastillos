@@ -23,7 +23,7 @@ public class TransactionPaymentMethodValidator implements TransactionValidator<O
             IncomeDataDTO incomeDataDTO = (IncomeDataDTO) dto;
             userPaymentMethod = incomeDataDTO.paymentMethod();
             if (PaymentMethod.CREDIT_CARD.equals(PaymentMethod.fromSpanish(userPaymentMethod))) {
-                throw new InvalidPaymentMethodException("No se puede cambiar el metodo de pago de un incremento a una tarjeta de credito");
+                throw new InvalidPaymentMethodException("No se permite tarjeta de credito en ingresos");
             }
             if(PaymentMethod.fromSpanish(userPaymentMethod) == null){
                 throw new InvalidPaymentMethodException("Metodo de pago no aceptado");

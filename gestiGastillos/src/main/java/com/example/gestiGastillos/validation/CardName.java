@@ -11,15 +11,6 @@ import com.example.gestiGastillos.model.debitCard.DebitCard;
 
 import java.util.List;
 
-/*
-    5. Es una clase normal la cual simplemente tiene la logica de la validacion, solo es que pide
-    los elementos necesarios para realizarla. Esto ahorra que aqui tengamos que llamar a un repositorio
-    para comunicarte con la Base de datos.
-    Lo unico que no me gusta es que se hacen mas clases, pero por otro lado, podemos llamar a esta logica en
-    donde queramos, como en las validaciones de la tarjeta de credito.
-
-    Vamos a CreditCardService
- */
 public class CardName {
 
     public static void cardNameValidation(String newCardName, User user, Object dto) {

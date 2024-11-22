@@ -3,10 +3,12 @@ package com.example.gestiGastillos.infra.exceptions;
 import com.sun.jdi.InvalidTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -27,11 +29,12 @@ public class CustomExceptionsHandler {
                     ExpenseAmount.class,
                     InvalidPaymentMethodException.class,
                     InvalidCategoryException.class,
-                    TypeInvalidException.class
+                    TypeInvalidException.class,
+                    SavingNameException.class
             )
     );
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<DataErrorValidation> handleBeanValidationError(MethodArgumentNotValidException e){
         Set<String> errorMessages =  new HashSet<>();
         e.getBindingResult().getFieldErrors().forEach(fieldError -> {
@@ -40,6 +43,15 @@ public class CustomExceptionsHandler {
         });
 
         return ResponseEntity.badRequest().body(new DataErrorValidation("Error en Bean Validation", errorMessages));
+    }
+
+    // Nuevo manejador para errores de deserialización (HttpMessageNotReadableException)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<DataErrorValidation> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        Set<String> errorMessages = new HashSet<>();
+        errorMessages.add("El formato del campo no es válido. Asegúrate de que los valores sean del tipo esperado.");
+
+        return ResponseEntity.badRequest().body(new DataErrorValidation("Error en formato de JSON", errorMessages));
     }
 
     @ExceptionHandler({
@@ -57,6 +69,7 @@ public class CustomExceptionsHandler {
             ExpenseAmount.class,
             InvalidPaymentMethodException.class,
             InvalidCategoryException.class,
+            SavingNameException.class
     })
 
     public ResponseEntity<DataErrorValidation> handleBadRequestCustomExceptions(RuntimeException e){

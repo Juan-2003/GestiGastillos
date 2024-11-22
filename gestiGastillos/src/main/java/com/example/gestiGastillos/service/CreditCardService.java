@@ -8,7 +8,7 @@ import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.User;
-import com.example.gestiGastillos.validation.Validator;
+import com.example.gestiGastillos.validation.Cards.CardValidator;
 import com.example.gestiGastillos.repository.CardRepository;
 import com.example.gestiGastillos.repository.CreditCardRepository;
 import com.example.gestiGastillos.repository.UserRepository;
@@ -18,24 +18,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/*
-    6.Mira la linea 29 y 30. Parece como lo teniamos antes, pero la diferencia es que la lista
-    sera de tipo "Validator" y a cada uno se le especifica con que DTO va a trabajar.
-
-    Si bajas al POST y el UPDATE veras que todo esta muy similar.
- */
 @Service
 public class CreditCardService {
     private final UserRepository userRepository;
     private final CreditCardRepository creditCardRepository;
     private final CardRepository cardRepository;
-    private final List<Validator<Object>> creditCardPostValidator;
-    private final List<Validator<Object>> creditCardPutValidator;
+    private final List<CardValidator<Object>> creditCardPostValidator;
+    private final List<CardValidator<Object>> creditCardPutValidator;
 
     @Autowired
     public CreditCardService(UserRepository userRepository, CreditCardRepository creditCardRepository,
-                             CardRepository cardRepository, List<Validator<Object>> creditCardPostValidator,
-                             List<Validator<Object>> creditCardPutValidator){
+                             CardRepository cardRepository, List<CardValidator<Object>> creditCardPostValidator,
+                             List<CardValidator<Object>> creditCardPutValidator){
         this.userRepository = userRepository;
         this.creditCardRepository = creditCardRepository;
         this.cardRepository = cardRepository;
@@ -78,6 +72,8 @@ public class CreditCardService {
         return  creditCardRepository.findAll(pageable).map(CreditCardResponseDTO::new).getContent();
     }
 
+
+    //Para que el userid en el UpdateCreditCardDTO
     public UpdateCreditCardResponseDTO updateCreditCard(UpdateCreditCardDTO updateCreditCardDTO){
         //Se valida que la tarjeta de credito exista mediante el id
         CreditCard creditCard = creditCardRepository.findById(updateCreditCardDTO.creditCardId())

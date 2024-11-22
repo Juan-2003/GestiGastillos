@@ -2,14 +2,12 @@ package com.example.gestiGastillos.validation.Cards.PostValidations;
 
 import com.example.gestiGastillos.dto.creditCard.CreditCardDataDTO;
 import com.example.gestiGastillos.dto.debitCard.DebitCardDataDTO;
-import com.example.gestiGastillos.infra.exceptions.InvalidLastDigitsException;
-import com.example.gestiGastillos.repository.UserRepository;
 import com.example.gestiGastillos.validation.LastDigits;
-import com.example.gestiGastillos.validation.Validator;
+import com.example.gestiGastillos.validation.Cards.CardValidator;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LastDigitsPostValidator implements Validator<Object> {
+public class LastDigitsPostValidator implements CardValidator<Object> {
     @Override
     public void validation(Object dto) {
         String lastDigits ="";
