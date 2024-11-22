@@ -1,14 +1,36 @@
-import React from 'react';
-import { View, StyleSheet, Image, Text, ScrollView, TouchableOpacity } from "react-native";
-import globalStyles from "@/styles/GlobalStyles"
+import React from "react";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import globalStyles from "@/styles/GlobalStyles";
 import TopBar from "@/components/topBar";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
-import BarChartComponent from '@/components/BarChartComponent';
-import TransactionComponent from '@/components/TransactionComponent';
+import BarChartComponent from "@/components/BarChartComponent";
+import TransactionComponent from "@/components/TransactionComponent";
+import { printToFileAsync } from "expo-print";
+import { shareAsync } from "expo-sharing";
 
 export default function Home() {
-  const createPDF = () => {
-    console.log("Presiono");
+  const html = `
+    <html>
+      <body>
+        <h1>Hola</h1>
+        <p style="color: red;">Este es un PDF de prueba</p>
+      </body>
+    </html>
+  `;
+  const createPDF = async () => {
+    const file = await printToFileAsync({
+      html: html,
+      base64: false,
+    });
+
+    await shareAsync(file.uri); 
   };
 
   return (
@@ -17,7 +39,6 @@ export default function Home() {
       <View style={globalStylesMenu.container}>
         <ScrollView style={styles.scrollViewContainer}>
           <View style={styles.container}>
-            
             <View style={styles.imageContainer}>
               <Image
                 source={require("@/assets/images/smilingIcon.png")}
@@ -35,7 +56,6 @@ export default function Home() {
             >
               <Text style={styles.text}>Generar reporte</Text>
             </TouchableOpacity>
-
           </View>
         </ScrollView>
       </View>
@@ -46,25 +66,25 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   scrollViewContainer: {
     flex: 1,
   },
   imageContainer: {
     flex: 0.2,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginVertical: 60,
   },
   buttonContainer: {
     backgroundColor: "#0078FF",
     height: 50,
-    width: '60%',
+    width: "60%",
     borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     // Sombras en iOS
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -75,13 +95,13 @@ const styles = StyleSheet.create({
     marginVertical: 40,
     marginHorizontal: 8,
     borderWidth: 1,
-    borderColor: "#005AC0"
+    borderColor: "#005AC0",
   },
   text: {
     color: "white",
-    fontWeight: 'semibold',
+    fontWeight: "semibold",
     fontSize: 24,
-    textAlign: 'center'
+    textAlign: "center",
   },
   image: {
     width: 150,

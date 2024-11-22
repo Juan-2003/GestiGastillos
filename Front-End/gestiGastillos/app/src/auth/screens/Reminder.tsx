@@ -60,6 +60,7 @@ export default function Reminder({ navigation }: Props) {
     return (
 
       <View style={globalStyles.container}>
+        <TopBar title="Rcordatorios"/>
         <Text>Cargando...</Text>
       </View>
     );

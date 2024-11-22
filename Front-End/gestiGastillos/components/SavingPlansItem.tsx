@@ -4,6 +4,7 @@ import { RootStackParamList } from "@/app";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native"; // Importamos el hook de navegación
 import { deleteSaving } from "@/app/src/auth/api/savingPlanServices";
+import React from "react";
 import globalStyles from "@/styles/GlobalStyles";
 
 type EditSavingPlanScreenNavigationProp = StackNavigationProp<
@@ -107,9 +108,12 @@ const styles = StyleSheet.create({
     height: "100%",
     padding:20,
     marginTop: 40,
+    borderRadius:10,
     backgroundColor: "#27C1F9",
     flexDirection: "row",
-
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#1E91BB",
   },
   leftContainer: {
     flex: 2,
@@ -154,9 +158,9 @@ const styles = StyleSheet.create({
     height: "30%",
     marginTop:10,
     justifyContent:"center",
-    
     paddingHorizontal:20,
-    backgroundColor: "#957EEC",
+    backgroundColor: "#27C1F9",
     borderRadius:10,
+    marginBottom:20,
   }
 });

@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useNavigation,  } from "@react-navigation/native"; // Importamos el hook de navegación
+import React from "react";
 import cardStyles from "@/styles/CardStyles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/app";
@@ -74,9 +75,11 @@ export default function ReminderItem({ date, name, message, id,card_name,last_di
     {showDetails && (
         <>
         <View style={styles.showBotton}>
+        
+
            <Text style={globalStyles.text}>Descripcion: {message}</Text>
-            <Text style={globalStyles.text}>Tarjeta: {card_name}</Text>
-            <Text style={globalStyles.text}>Nombre de tarjeta: {last_digits}</Text>
+           {card_name ? <Text style={globalStyles.text}>Tarjeta:{card_name}</Text> : null}
+           {last_digits ? <Text style={globalStyles.text}>Digitos:{last_digits}</Text> : null}
         </View>
 
         </>
@@ -95,7 +98,11 @@ const styles = StyleSheet.create({
     width: "90%",
     height: "100%",
     backgroundColor: "#27C1F9",
+    borderRadius:10,
     paddingVertical: 25,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#1E91BB"
   },
   interDataContainer: {
     flex: 1,
@@ -143,7 +150,10 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     paddingHorizontal:20,
     paddingVertical:10,
-    backgroundColor: "#957EEC",
+    backgroundColor: "#27C1F9",
     borderRadius:10,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#1E91BB"
   }
 });

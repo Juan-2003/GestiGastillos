@@ -1,4 +1,5 @@
 import { View, TextInput, Pressable, Text, StyleSheet } from "react-native";
+import React from "react";
 import { useEffect, useState } from "react";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
 import globalStyles from "@/styles/GlobalStyles";

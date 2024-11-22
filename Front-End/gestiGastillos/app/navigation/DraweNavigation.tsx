@@ -8,6 +8,7 @@ import IncomeExpenses from "../src/auth/screens/IncomeExpenses";
 import Reminder from "../src/auth/screens/Reminder";
 import SavingPlans from "../src/auth/screens/SavingPlans";
 import globalStyles from "@/styles/GlobalStyles";
+
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigation() {
@@ -17,7 +18,7 @@ export default function DrawerNavigation() {
   }, []);
   return (
     <Drawer.Navigator
-      initialRouteName="Menu"
+      initialRouteName="Home"
       screenOptions={{
         swipeEnabled: true,
         drawerType: 'front',
@@ -36,7 +37,7 @@ export default function DrawerNavigation() {
       }}
     >
       <Drawer.Screen
-        name="Menu"
+        name="Home"
         component={Home}
         options={{
           headerShown: false,

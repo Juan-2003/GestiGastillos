@@ -27,8 +27,8 @@ export default function MethodPickerComponent({
     const fetchData = async () => {
       const data = await handleFetchItem();
       const combinedCards: CardItem[] = [
-        ...data.credit_cards?.map((card) => ({ ...card, type: "credit" })), // Añadimos el tipo a las tarjetas de crédito
-        ...data.debit_cards?.map((card) => ({ ...card, type: "debit" })), // Añadimos el tipo a las tarjetas de débito
+        ...(fetchedCards.credit_cards || []),
+        ...(fetchedCards.debit_cards || []), // Añadimos el tipo a las tarjetas de débito
       ];
       setCards(combinedCards);
       console.log("Datos almacenados en cards dentro del picker:", data); // Verificar los datos aquí
@@ -39,8 +39,8 @@ export default function MethodPickerComponent({
   // Filtrar tarjetas según el tipo seleccionado
   const filteredCards = cards.filter(
     (card) =>
-      (type === "credito" && card.type === "credit") ||
-      (type === "debito" && card.type === "debit")
+      (type === "tarjeta_credito" && card.type === "credit") ||
+      (type === "tarjeta_debito" && card.type === "debit")
   );
 
   return (
@@ -72,9 +72,9 @@ export default function MethodPickerComponent({
                 onValueChange={(cardValue) => {
                   setCard(cardValue);
                   if (type === "tarjeta_credito") {
-                    setCreditId(Number(cardValue.tarjeta_credito_id));
+                    setCreditId(Number(cardValue));
                   } else if (type === "tarjeta_debito") {
-                    setDebitId(Number(cardValue.tarjeta_debito_id));
+                    setDebitId(Number(cardValue));
                   }
                 }}
                 style={styles.picker}
