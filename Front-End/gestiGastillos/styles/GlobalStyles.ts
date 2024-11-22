@@ -68,7 +68,7 @@ const globalStyles = StyleSheet.create({
   },
   title: {
     color: '#00000',
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'semibold',
     textAlign: 'center',
   },

@@ -1,3 +1,4 @@
+import React from "react";
 import { ip } from "../IP/Ip";
 import TopBar from "@/components/topBar";
 import globalStyles from "@/styles/GlobalStyles";

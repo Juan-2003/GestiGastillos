@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useEffect, useCallback } from "react";
 import { View, FlatList, Text, StyleSheet } from "react-native";
 import ReminderItem from "@/components/ReminderItem";

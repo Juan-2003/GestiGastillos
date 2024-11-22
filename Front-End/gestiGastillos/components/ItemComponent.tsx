@@ -1,3 +1,4 @@
+import React from "react";
 import { ExpenseItem, IncomeItem, MovementItem } from "@/app/src/auth/api/IncomeExpensesServices";
 import itemContainerStyle from "@/styles/ItemContainer";
 import { useState } from "react";
