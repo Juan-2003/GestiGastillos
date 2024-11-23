@@ -5,13 +5,13 @@ import com.example.gestiGastillos.dto.creditCard.CreditCardResponseDTO;
 import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardDTO;
 import com.example.gestiGastillos.dto.creditCard.UpdateCreditCardResponseDTO;
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
+import com.example.gestiGastillos.model.Reminder;
+import com.example.gestiGastillos.model.Saving;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.User;
+import com.example.gestiGastillos.repository.*;
 import com.example.gestiGastillos.validation.Cards.CardValidator;
-import com.example.gestiGastillos.repository.CardRepository;
-import com.example.gestiGastillos.repository.CreditCardRepository;
-import com.example.gestiGastillos.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,16 +23,20 @@ public class CreditCardService {
     private final UserRepository userRepository;
     private final CreditCardRepository creditCardRepository;
     private final CardRepository cardRepository;
+    private final SavingRepository savingRepository;
+    private final ReminderRepository reminderRepository;
     private final List<CardValidator<Object>> creditCardPostValidator;
     private final List<CardValidator<Object>> creditCardPutValidator;
 
     @Autowired
     public CreditCardService(UserRepository userRepository, CreditCardRepository creditCardRepository,
-                             CardRepository cardRepository, List<CardValidator<Object>> creditCardPostValidator,
-                             List<CardValidator<Object>> creditCardPutValidator){
+                             CardRepository cardRepository,SavingRepository savingRepository, ReminderRepository reminderRepository,
+                             List<CardValidator<Object>> creditCardPostValidator, List<CardValidator<Object>> creditCardPutValidator){
         this.userRepository = userRepository;
         this.creditCardRepository = creditCardRepository;
         this.cardRepository = cardRepository;
+        this.savingRepository = savingRepository;
+        this.reminderRepository = reminderRepository;
         this.creditCardPostValidator = creditCardPostValidator;
         this.creditCardPutValidator = creditCardPutValidator;
     }
@@ -93,8 +97,18 @@ public class CreditCardService {
         if(!creditCardRepository.existsById(id)){
             throw new EntityNotFoundException("Tarjeta no encontrada con el id: " + id);
         }
+
         CreditCard creditCard =  creditCardRepository.getReferenceById(id);
+        Card card = creditCard.getCard();
+
+        if(card.getSaving() != null){
+            savingRepository.delete(card.getSaving());
+        }
+        if(card.getReminder() != null){
+            reminderRepository.delete(card.getReminder());
+        }
+
+        cardRepository.delete(card);
         creditCardRepository.delete(creditCard);
-        cardRepository.delete(creditCard.getCard());
     }
 }

@@ -10,8 +10,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public record TransactionListResponseDTO(
+        @JsonProperty("income_sum")
+        double incomeSum,
+
+        @JsonProperty("expense_sum")
+        double expenseSum,
+
+        @JsonProperty("total_sum")
+        double totalSum,
+
         @JsonProperty("income")
         List<IncomeResponseDTO> incomeResponseDTO,
+
         @JsonProperty("expense")
         List<ExpenseResponseDTO> expenseResponseDTO
 

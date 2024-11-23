@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 public record UpdateExpenseResponseDTO(
         @JsonProperty("expense_id")
         Long expenseId,
+        String title,
         String type,
         Double amount,
         String concept,
@@ -30,6 +31,7 @@ public record UpdateExpenseResponseDTO(
         public UpdateExpenseResponseDTO(Transactions transaction){
                 this(
                         transaction.getId(),
+                        transaction.getTitle(),
                         transaction.getType().name(),
                         transaction.getAmount(),
                         transaction.getConcept(),

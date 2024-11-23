@@ -1,10 +1,7 @@
 package com.example.gestiGastillos.service;
 
 import com.example.gestiGastillos.dto.creditCard.CreditCardResponseDTO;
-import com.example.gestiGastillos.dto.saving.SavingDataDTO;
-import com.example.gestiGastillos.dto.saving.SavingResponseDTO;
-import com.example.gestiGastillos.dto.saving.UpdateSavingDTO;
-import com.example.gestiGastillos.dto.saving.UpdateSavingResponseDTO;
+import com.example.gestiGastillos.dto.saving.*;
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.model.Saving;
 import com.example.gestiGastillos.model.card.Card;
@@ -64,6 +61,12 @@ public class SavingService {
                 .orElseThrow(() -> new EntityNotFoundException("Ahorro no econtrado con id: " + id));
 
         return new SavingResponseDTO(saving);
+    }
+
+    public SavingGeneralStatusDTO getGeneralStatus(){
+        List<Saving> savingList = savingRepository.findAll();
+        SavingStatus savingStatus = SavingStatusEvalutator.generalSavingStatus(savingList);
+        return new SavingGeneralStatusDTO(savingStatus);
     }
 
     public List<SavingResponseDTO> getSavingList(Pageable pageable){

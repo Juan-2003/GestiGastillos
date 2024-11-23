@@ -6,10 +6,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.List;
 
-@JsonPropertyOrder({"transaction_id", "type", "amount", "concept", "category", "paymentMethod", "debit_card_id"})
+@JsonPropertyOrder({"transaction_id", "title", "type", "amount", "concept", "category", "paymentMethod", "debit_card_id"})
 public record IncomeResponseDTO(
         @JsonProperty("transaction_id")
         Long transactionId,
+        String title,
         String type,
         Double amount,
         String concept,
@@ -23,6 +24,7 @@ public record IncomeResponseDTO(
         public IncomeResponseDTO(Transactions transaction) {
                 this(
                         transaction.getId(),
+                        transaction.getTitle(),
                         transaction.getType().name(),
                         transaction.getAmount(),
                         transaction.getConcept(),

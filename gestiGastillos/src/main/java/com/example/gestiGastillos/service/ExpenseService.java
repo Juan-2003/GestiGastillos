@@ -43,8 +43,6 @@ public class ExpenseService {
 
     public ExpenseResponseDTO registerExpense(ExpenseDataDTO expenseDataDTO){
         expenseValidator.forEach(i -> i.validation(expenseDataDTO));
-        System.out.println(expenseDataDTO.creditCardId());
-        System.out.println(expenseDataDTO.debitCardId());
 
         Transactions transaction;
         if(expenseDataDTO.creditCardId() != null){//El egreso se hizo con trarjeta de credito

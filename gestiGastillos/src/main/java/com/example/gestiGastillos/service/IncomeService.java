@@ -46,7 +46,7 @@ public class IncomeService {
         incomeValidator.forEach(i -> i.validation(incomeDataDTO));
 
         Transactions transactions;
-        if(incomeDataDTO.debitCardId() != null){//La transaccion se hizo con tarjeta
+        if(incomeDataDTO.debitCardId() != null){//La transaccion se hizo con tarjeta de debuito
             DebitCard debitCard = debitCardRepository.findById(incomeDataDTO.debitCardId())
                     .orElseThrow(() -> new EntityNotFoundException("La tarjeta de debito con el id: " + incomeDataDTO.debitCardId()));
 
