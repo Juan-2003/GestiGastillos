@@ -45,7 +45,7 @@ export default function Index() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Welcome"
         screenOptions={{
           headerShown: false,
           gestureEnabled: true,
@@ -69,7 +69,7 @@ export default function Index() {
         />
         <Stack.Screen
           name="Card"
-          component={Card}
+          component={DrawerNavigation}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -86,7 +86,7 @@ export default function Index() {
 
         <Stack.Screen
           name="Income/Expense"
-          component={IncomeExpenses}
+          component={DrawerNavigation}
           options={{ headerShown: false }}
         />
 

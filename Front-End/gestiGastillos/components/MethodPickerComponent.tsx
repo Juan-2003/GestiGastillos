@@ -11,6 +11,7 @@ interface Props {
   setAmount: (amount: number) => void;
   setCreditId: (credit_id: number) => void;
   setDebitId: (debit_id: number) => void;
+  title: string;
 }
 
 export default function MethodPickerComponent({
@@ -18,6 +19,7 @@ export default function MethodPickerComponent({
   setAmount,
   setCreditId,
   setDebitId,
+  title,
 }: Props) {
   const [type, setType] = useState("");
   const [cards, setCards] = useState<CardItem[]>([]);
@@ -57,7 +59,9 @@ export default function MethodPickerComponent({
         >
           <Picker.Item label="Seleccionar" value="" />
           <Picker.Item label="Efectivo" value="efectivo" />
-          <Picker.Item label="Tarjeta de Crédito" value="tarjeta_credito" />
+          {title !== "ingreso" && (
+            <Picker.Item label="Tarjeta de Crédito" value="tarjeta_credito" />
+          )}
           <Picker.Item label="Tarjeta de Débito" value="tarjeta_debito" />
         </Picker>
       </View>

@@ -12,6 +12,8 @@ import {
   IncomeItem,
   MovementItem,
 } from "@/app/src/auth/api/IncomeExpensesServices";
+import { useFocusEffect } from "@react-navigation/native";
+
 
 interface Props {
   navigation: StackNavigationProp<any>;
@@ -22,23 +24,32 @@ export default function ItemList({ navigation, type }: Props) {
   const [item, setItem] = useState<MovementItem[]>([]);
   console.log(type);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await handleFetchIncomeExpense();
-      console.log(data);
-      const combinedItems: MovementItem[] = [
-        ...data.incomes?.map((item) => ({ ...item, type: "ingreso" })), // Añadimos el tipo a los ingresos
-        ...data.expenses?.map((item) => ({ ...item, type: "egreso" })), // Añadimos el tipo a los gastos
-      ];
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        const data = await handleFetchIncomeExpense();
 
-      // Filtramos los items según el tipo que se pasa como prop
-      const filteredItems = combinedItems.filter((item) => item.type === type);
+        const combinedItems: MovementItem[] = [
+          ...(data.incomes?.map((item) => ({ ...item, type: "ingreso" })) || []),
+          ...(data.expenses?.map((item) => ({ ...item, type: "egreso" })) || []),
+        ];
 
-      setItem(filteredItems);
-      console.log("Datos almacenados en items:", filteredItems);
-    };
-    fetchData();
-  }, []);
+        // Filtrar los items según el tipo de prop recibido
+        const filteredItems = combinedItems.filter((item) => item.type === type);
+
+        // Solo actualiza el estado si los datos han cambiado
+        setItem((prevItems) => {
+          // Si los datos son iguales, no se hace nada
+          if (JSON.stringify(prevItems) !== JSON.stringify(filteredItems)) {
+            return filteredItems;
+          }
+          return prevItems;
+        });
+      };
+
+      fetchData();
+    }, [type]) // Ahora 'type' es una dependencia, se ejecutará cada vez que 'type' cambie
+  );
 
   const handleDeleteItem = async (itemId: number, itemType: string) => {
     await handleDeleteIncomeExpense(itemId, itemType, () => {

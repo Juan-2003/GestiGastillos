@@ -152,7 +152,7 @@ export const handleSubmitIncomeExpense = async (
       onSuccess();
     }
 
-    navigation.navigate("Income/Expense");
+    navigation.goBack();
   } catch (error) {
     console.error("Error de red:", error);
     if (setError) {
@@ -264,7 +264,7 @@ export const handleEditIncomeExpense = async (
         onSuccess();
       }
 
-      navigation.navigate("Income/Expense");
+      navigation.goBack();
     } else {
       const errorData = await response.json();
       const errorTitle = errorData.title || "Error";

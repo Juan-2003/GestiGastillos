@@ -194,6 +194,7 @@ export default function IncomeExpenseForm({
                 setPaymentMethod={setPaymentMethod}
                 setCreditId={setCreditId}
                 setDebitId={setDebitId}
+                title={title}
               />
             ) : (
               <>

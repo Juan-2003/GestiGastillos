@@ -1,3 +1,4 @@
+import React from "react";
 import { StyleSheet, Text, View, Pressable, SafeAreaView } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { DrawerActions, NavigationContainer, useNavigation } from '@react-navigation/native';

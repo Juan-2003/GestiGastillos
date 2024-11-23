@@ -2,11 +2,12 @@ import { StyleSheet } from "react-native"
 
 const itemContainerStyle = StyleSheet.create({
     dataContainer: {
+        width: '90%',
         backgroundColor: "#27C1F9",
         paddingVertical: 12,
         paddingHorizontal: 4,
         flexDirection: "row",
-        borderRadius: 10,
+        borderRadius: 2,
         overflow: 'hidden',
         // Sombras en iOS
         shadowColor: "#000",
@@ -14,20 +15,21 @@ const itemContainerStyle = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         // Sombras en Android
-        elevation: 5,
-        marginVertical: 6,
+        elevation: 10,
+        marginTop: 6,
         marginHorizontal: 8,
         borderWidth: 1,
         borderColor: "#1E91BB"
     },
     detailContainer: {
         flexDirection: 'column',
-        padding: 8,
-        borderRadius: 8,
+        width: '90%',
+        padding: 9,
         overflow: 'hidden',
         backgroundColor: "rgba(39, 193, 249, 0.95)",
-        elevation: 5,
+        elevation: 10,
         borderWidth: 1,
+        borderTopWidth: 0,
         borderColor: "rgba(30, 145, 187, 0.95)"
     },
     textContainer: {

@@ -1,12 +1,6 @@
 import { ip } from "../IP/Ip";
 interface error{
     error:any
-    
-}
-
-export interface User {
-  user_id: number;
-  name: string;
 }
 
 export interface Card {
