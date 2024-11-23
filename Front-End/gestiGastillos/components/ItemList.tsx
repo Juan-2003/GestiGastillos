@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ItemComponent from "@/components/ItemComponent";
 import ButtonClass from "@/components/buttons";
 import flatListComponent from "@/styles/FlatListComponent";
+import React from "react";
 import {
   ExpenseItem,
   handleDeleteIncomeExpense,
@@ -34,7 +35,7 @@ export default function ItemList({ navigation, type }: Props) {
       const filteredItems = combinedItems.filter((item) => item.type === type);
 
       setItem(filteredItems);
-      //console.log("Datos almacenados en items:", filteredItems); // Verificar los datos aquí
+      console.log("Datos almacenados en items:", filteredItems);
     };
     fetchData();
   }, []);

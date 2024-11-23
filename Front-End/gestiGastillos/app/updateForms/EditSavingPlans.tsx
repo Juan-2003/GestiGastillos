@@ -17,7 +17,7 @@ export default function EditSavingPlans({ route, navigation }:EditSavinPlansScre
   // Estado para los campos de texto del formulario
   const [newName, setNewName] = useState<string>(name);
   const [newTargetAmount, setNewTargetAmount] = useState<string>(target_amount.toString());
-
+  const [error,setError]=useState(" ")
 
   const handleUpdate = async () => {
     const amount = parseFloat(newTargetAmount);
@@ -46,6 +46,7 @@ export default function EditSavingPlans({ route, navigation }:EditSavinPlansScre
           navigation.goBack(); 
         } else {
           const errorText = await response.text();
+          setError(errorText)
           console.error(`Error ${response.status}:`, errorText);
         }
     } catch (error) {
@@ -79,6 +80,7 @@ export default function EditSavingPlans({ route, navigation }:EditSavinPlansScre
         
         </View>
         <View style={globalStylesMenu.containerBottom}>
+        {error ? <Text style={globalStyles.error}>{error}</Text> : null}
           <Pressable style={globalStyles.button} onPress={handleUpdate}>
             <Text style={globalStyles.text}>Actualizar</Text>
           </Pressable>
