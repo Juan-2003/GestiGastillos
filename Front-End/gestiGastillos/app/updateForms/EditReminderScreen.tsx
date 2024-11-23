@@ -18,6 +18,7 @@ export default function EditReminderScreen({ route, navigation }: EditReminderSc
   const [newName, setNewName] = useState<string>(name);
   const [newMessage, setNewMessage] = useState<string>(message);
   const [newDate, setNewDate] = useState<string>(date);
+  const [error,setError]=useState(" ")
 
 
   const handleUpdate = async () => {
@@ -45,6 +46,7 @@ export default function EditReminderScreen({ route, navigation }: EditReminderSc
           navigation.goBack(); // Regresamos a la lista de recordatorios
         } else {
           const errorText = await response.text();
+          setError(errorText)
           console.error(`Error ${response.status}:`, errorText);
         }
     } catch (error) {
@@ -83,6 +85,7 @@ export default function EditReminderScreen({ route, navigation }: EditReminderSc
         />
         </View>
         <View style={globalStylesMenu.containerBottom}>
+        {error ? <Text style={globalStyles.error}>{error}</Text> : null}
           <Pressable style={globalStyles.button} onPress={handleUpdate}>
             <Text style={globalStyles.text}>Actualizar</Text>
           </Pressable>

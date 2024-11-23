@@ -53,9 +53,14 @@ export default function SavingPlansItem({
 
   let imageUrl;
   if (status === "VERY_POOR") {
-    imageUrl = require("@/assets/images/verybad.png");
+    imageUrl = require("@/assets/images/VERY_POOR.png");
   } else if (status === "EXCELENT") {
     imageUrl = require("@/assets/images/excelent.png");
+  }else if (status === "GOOD") {
+    imageUrl = require("@/assets/images/GOOD.png");
+  }
+  else if (status === "POOR") {
+    imageUrl = require("@/assets/images/POOR.png");
   }
 
   return (
@@ -162,5 +167,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#27C1F9",
     borderRadius:10,
     marginBottom:20,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#1E91BB"
   }
 });
