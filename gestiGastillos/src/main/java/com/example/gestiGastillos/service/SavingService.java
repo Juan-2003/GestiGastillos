@@ -68,8 +68,11 @@ public class SavingService {
         return new SavingResponseDTO(saving);
     }
 
-    public SavingGeneralStatusDTO getGeneralStatus(){
-        List<Saving> savingList = savingRepository.findAll();
+    public SavingGeneralStatusDTO getGeneralStatus(Long id){
+        List<Saving> savingList = savingRepository.getSavingsByUser(id);
+        for(Saving saving : savingList){
+            System.out.println(saving.getName());
+        }
         SavingStatus savingStatus = SavingStatusEvalutator.generalSavingStatus(savingList);
         return new SavingGeneralStatusDTO(savingStatus);
     }

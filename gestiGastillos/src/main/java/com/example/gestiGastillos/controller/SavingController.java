@@ -41,9 +41,9 @@ public class SavingController {
         return ResponseEntity.ok(savingResponseDTO);
     }
 
-    @GetMapping("/generalStatus")
-    public ResponseEntity<SavingGeneralStatusDTO> getGeneralStatus(){
-        SavingGeneralStatusDTO savingGeneralStatusDTO = savingService.getGeneralStatus();
+    @GetMapping("/generalStatus/{id}")
+    public ResponseEntity<SavingGeneralStatusDTO> getGeneralStatus(@PathVariable Long id){
+        SavingGeneralStatusDTO savingGeneralStatusDTO = savingService.getGeneralStatus(id);
         return ResponseEntity.ok(savingGeneralStatusDTO);
     }
 
