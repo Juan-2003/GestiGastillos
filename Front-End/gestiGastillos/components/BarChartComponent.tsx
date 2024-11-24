@@ -1,141 +1,124 @@
 import React from "react";
-import { Text, Dimensions, StyleSheet, View } from "react-native";
-import globalStyles from "@/styles/GlobalStyles";
+import { View, StyleSheet, Text } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
+import BarChartTitle from "./BarChartTitle";
 
 export default function BarChartComponent() {
+  
   const data = [
     {
-      value: 2500,
+      value: 10000,
       label: "Enero",
       frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
-      labelTextStyle: { color: "gray" },
+      labelTextStyle: { color: "gray" },      
     },
     { value: 2400, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 3500,
       label: "Febrero",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 3000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 3000, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 4500,
       label: "Marzo",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 4000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 4000, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 4500,
       label: "Abril",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 4000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 4000, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 4500,
       label: "Mayo",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 4000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 4000, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 4500,
       label: "Junio",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 4000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 4000, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 4500,
       label: "Julio",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 4000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 4000, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 4500,
       label: "Agosto",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 4000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 4000, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 4500,
       label: "Septiembre",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 4000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 4000, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 4500,
       label: "Octubre",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 4000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 4000, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 4500,
       label: "Noviembre",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 4000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 4000, frontColor: "rgba(39, 193, 249, 1)" },
     {
       value: 4500,
       label: "Diciembre",
-      frontColor: "rgba(0, 180, 0, 0.9)",
+      frontColor: "rgba(39, 193, 249, 0.5)",
       spacing: 1,
       labelWidth: 40,
       labelTextStyle: { color: "gray" },
     },
-    { value: 4000, frontColor: "rgba(255, 50, 50, 0.9)" },
+    { value: 4000, frontColor: "rgba(39, 193, 249, 1)" },
   ];
-
-  const renderTitle = () => {
-    return (
-      <>
-        <Text style={globalStyles.title}>Tu balance</Text>
-        <View style={styles.descriptionContainer}>
-          <View style={styles.descriptionIconTextContainer}>
-            <View style={styles.descriptionIconIncomes} />
-            <Text>Ingresos</Text>
-          </View>
-          <View style={styles.descriptionIconTextContainer}>
-            <View style={styles.descriptionIconExpenses} />
-            <Text>Gastos</Text>
-          </View>
-        </View>
-      </>
-    );
-  };
 
   return (
     <View style={styles.graphContainer}>
-      {renderTitle()}
+      <BarChartTitle />
       <View style={styles.graph}>
         <BarChart
           data={data}
@@ -152,6 +135,25 @@ export default function BarChartComponent() {
           yAxisLabelTexts={["0", "2k", "4k", "6k", "7k", "8k", "10k"]}
           yAxisTextStyle={{ color: "grey" }}
           stepValue={2000}
+          isAnimated
+          // Funcion para mostrar el valor
+          renderTooltip={(item: any) => {
+            return (
+              <View
+                style={{
+                  marginLeft: -12,
+                  position: 'absolute',
+                  bottom: -55,
+                  backgroundColor: '#F8F8F8F4',
+                  elevation: 2,
+                  paddingHorizontal: 6,
+                  paddingVertical: 2,
+                  borderRadius: 2,
+                }}>
+                <Text style={{color: 'grey'}}>{item.value}</Text>
+              </View>
+            );
+          }}
         />
       </View>
     </View>
@@ -167,32 +169,5 @@ const styles = StyleSheet.create({
   graph: {
     marginHorizontal: 6,
     marginVertical: 5,
-  },
-  titleContainer: {
-    backgroundColor: "red",
-  },
-  descriptionContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    marginTop: 24,
-  },
-  descriptionIconTextContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  descriptionIconIncomes: {
-    height: 12,
-    width: 12,
-    borderRadius: 6,
-    backgroundColor: "rgba(39, 193, 249, 0.5)",
-    marginRight: 8,
-  },
-  descriptionIconExpenses: {
-    height: 12,
-    width: 12,
-    borderRadius: 6,
-    backgroundColor: "rgba(39, 193, 249, 1)",
-    marginRight: 8,
   },
 });

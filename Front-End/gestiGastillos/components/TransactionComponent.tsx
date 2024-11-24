@@ -1,16 +1,51 @@
 import globalStyles from "@/styles/GlobalStyles";
-import React from "react"
+import React, { useState } from "react"
 import { View, Text, StyleSheet } from "react-native"
+import { useFocusEffect } from "@react-navigation/native";
+import { handleFetchIncomeExpense, MovementItem } from "@/app/src/auth/api/IncomeExpensesServices";
 
-export default function TransactionComponent() {
+interface Props {
+    type: string;
+}
+
+export default function TransactionComponent({ type }: Props) {
+    const [item, setItem] = useState<MovementItem[]>([]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const fetchData = async () => {
+                const data = await handleFetchIncomeExpense();
+
+                const combinedItems: MovementItem[] = [
+                    ...(data.incomes?.map((item) => ({ ...item, type: "ingreso" })) || []),
+                    ...(data.expenses?.map((item) => ({ ...item, type: "egreso" })) || []),
+                ];
+
+                // Filtrar los items según el tipo de prop recibido
+                const filteredItems = combinedItems.filter((item) => item.type === "egreso" && item.amount >= 1000);
+
+                // Solo actualiza el estado si los datos han cambiado
+                setItem((prevItems) => {
+                    // Si los datos son iguales, no se hace nada
+                    if (JSON.stringify(prevItems) !== JSON.stringify(filteredItems)) {
+                        return filteredItems;
+                    }
+                    return prevItems;
+                });
+            };
+
+            fetchData();
+        }, [type]) // Ahora 'type' es una dependencia, se ejecutará cada vez que 'type' cambie
+    );
+
     return (
         <>
-            <Text style={globalStyles.title}>Tus movimientos recientes</Text>
+            <Text style={globalStyles.title}>Tus gastos mas caros</Text>
             <View style={styles.expensesMainContainer}>
                 <View style={styles.expensesContainer}>
                     <View style={styles.itemContainer}>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>Item 1</Text>
+                            <Text style={styles.text}></Text>
                         </View>
                     </View>
                     <View style={styles.itemContainer}>
@@ -48,6 +83,8 @@ const styles = StyleSheet.create({
     },
     itemContainer: {
         flex: 0.333,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
         borderBottomWidth: 0.5,
         borderTopWidth: 0.5,
         borderBottomLeftRadius: 30,
@@ -66,5 +103,5 @@ const styles = StyleSheet.create({
         fontWeight: 'semibold',
         fontSize: 25,
         textAlign: 'center'
-      },
+    },
 })
