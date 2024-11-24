@@ -1,5 +1,6 @@
 package com.example.gestiGastillos.controller;
 
+import com.example.gestiGastillos.dto.MonthDTO;
 import com.example.gestiGastillos.dto.transactions.TransactionListResponseDTO;
 import com.example.gestiGastillos.dto.transactions.expense.ExpenseResponseDTO;
 import com.example.gestiGastillos.dto.transactions.income.IncomeResponseDTO;
@@ -30,5 +31,12 @@ public class EstadisticsController {
         TransactionListResponseDTO transactionListResponseDTO = statisticsService.getEstadistics(userId);
 
         return ResponseEntity.ok(transactionListResponseDTO);
+    }
+
+    @GetMapping("/prueba/{userId2}")
+    public ResponseEntity<List<MonthDTO>> prueba(@PathVariable Long userId2){
+        List<MonthDTO> monthDTOList = statisticsService.getAllMonthsStatistics(userId2);
+
+        return ResponseEntity.ok(monthDTOList);
     }
 }
