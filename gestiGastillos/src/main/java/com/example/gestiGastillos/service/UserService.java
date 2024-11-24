@@ -5,6 +5,8 @@ import com.example.gestiGastillos.dto.user.UserResponseDTO;
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.repository.*;
+import com.example.gestiGastillos.validation.user.UserValidator;
+import jakarta.transaction.UserTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,13 @@ public class UserService {
     private final DebitCardRepository debitCardRepository;
     private final CreditCardRepository creditCardRepository;
     private final SavingRepository savingRepository;
+    private final UserValidator<UserDataDTO> userValidator;
 
     @Autowired
     public UserService(UserRepository userRepository, CardRepository cardRepository,
                        TransactionsRepository transactionsRepository, ReminderRepository reminderRepository,
                        DebitCardRepository debitCardRepository, CreditCardRepository creditCardRepository,
-                       SavingRepository savingRepository){
+                       SavingRepository savingRepository, UserValidator<UserDataDTO> userValidator){
         this.userRepository = userRepository;
         this.cardRepository = cardRepository;
         this.transactionsRepository = transactionsRepository;
@@ -30,9 +33,12 @@ public class UserService {
         this.debitCardRepository = debitCardRepository;
         this.creditCardRepository = creditCardRepository;
         this.savingRepository = savingRepository;
+        this.userValidator = userValidator;
     }
 
     public UserResponseDTO signUpRequest(UserDataDTO userDataDTO){
+        userValidator.validation(userDataDTO);
+
         User user = new User(userDataDTO.name());
         userRepository.save(user);
 

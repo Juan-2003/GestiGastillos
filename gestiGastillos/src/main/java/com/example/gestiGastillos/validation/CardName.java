@@ -18,15 +18,11 @@ public class CardName {
         boolean flag = false;
         if(dto instanceof CreditCardDataDTO || dto instanceof UpdateCreditCardDTO) {
             List<CreditCard> creditCardList = user.getCreditCards();
-            System.out.println();
-            System.out.println("Si entre al CARDNAME DE LA VERIFICACION DEL NOMBRE");
             flag=  creditCardList.stream()
                     .anyMatch(c -> c.getCard().getName().equals(newCardName));
         }
         else if(dto instanceof DebitCardDataDTO || dto instanceof UpdateDebitCardDTO) {
             List<DebitCard> debitCardList = user.getDebitCards();
-            System.out.println();
-            System.out.println("Si entre al CARDNAME DE LA VERIFICACION DEL NOMBRE");
             flag=  debitCardList.stream()
                     .anyMatch(c -> c.getCard().getName().equals(newCardName));
         }
