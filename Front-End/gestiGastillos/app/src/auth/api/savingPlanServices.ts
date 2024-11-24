@@ -13,6 +13,10 @@ export interface SavingResponseDTO {
 
 }
 
+export interface SavingGeneralStatusDTO {
+  generalStatus:string
+}
+
 export const getSavingList = async (): Promise<SavingResponseDTO[]> => {
     try {
       const response = await fetch(`http://${ip}:8080/gestiGastillos/saving/savingList`, {
@@ -70,4 +74,35 @@ export const deleteSaving = async (id: number) => {
 };
 
 
+export const getGeneralStatus = async (id: number): Promise<SavingGeneralStatusDTO> => {
+  try {
+    const response = await fetch(`http://${ip}:8080/gestiGastillos/saving/generalStatus/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
+    console.log("Response status:", response.status);
+    if (!response.ok) {
+      throw new Error(`Error al obtener el estado general. Status: ${response.status}`);
+    }
+
+    // Convertir la respuesta a JSON
+    const data: SavingGeneralStatusDTO = await response.json();
+    return data;
+
+  } catch (error: any) {
+    console.error("Error fetching general status:", error.message);
+
+    if (error.response) {
+      console.error("Response error:", error.response);
+    }
+
+    if (error instanceof Error) {
+      console.error("Error stack trace:", error.stack);
+    }
+
+    throw error;
+  }
+};

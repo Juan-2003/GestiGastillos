@@ -40,6 +40,7 @@ export default function SavingPlansForm({ navigation }: Props) {
         const amount = parseFloat(target_amount);
         try {
             const SavingPlans = {
+                user_id:5,
                 name:name,
                 target_amount:amount,
                 debit_card_id: debitCardId,

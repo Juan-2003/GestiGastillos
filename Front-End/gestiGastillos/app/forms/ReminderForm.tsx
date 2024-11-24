@@ -46,6 +46,7 @@ export default function ReminderForm({ navigation }: Props) {
 
     try {
       const reminderData = {
+        user_id:5,
         name,
         message,
         date,
