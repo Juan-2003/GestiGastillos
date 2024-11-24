@@ -4,6 +4,7 @@ export interface ExpenseItem {
   // Dto de gastos
   transaction_id: number;
   type: string;
+  title: string,
   amount: number;
   concept: string;
   category: string;
@@ -17,6 +18,7 @@ export interface IncomeItem {
   // Dto de ingresos
   transaction_id: number;
   type: string;
+  title: string,
   amount: number;
   concept: string;
   category: string;
@@ -58,6 +60,7 @@ export const handleFetchIncomeExpense = async (): Promise<MovementItem[]> => {
 export const handleSubmitIncomeExpense = async (
   navigation: any,
   type: string,
+  title: string,
   amount: number,
   concept: string,
   category: string,
@@ -70,9 +73,11 @@ export const handleSubmitIncomeExpense = async (
     React.SetStateAction<{ title: string; errorMessages: string[] } | null>
   >
 ) => {
+  
   // DTO de IncomeDataDTO
   const IncomeDataDTO = {
     type,
+    title,
     amount,
     concept,
     category,
@@ -84,6 +89,7 @@ export const handleSubmitIncomeExpense = async (
   // DTO de ExpenseDataDTO con propiedades comunes
   const ExpenseDataDTO: {
     type: string;
+    title: string;
     amount: number;
     concept: string;
     category: string;
@@ -93,12 +99,15 @@ export const handleSubmitIncomeExpense = async (
     debit_card_id?: number;
   } = {
     type,
+    title,
     amount,
     concept,
     category,
     payment_method,
     date,
   };
+
+  console.log("Tipo:", type)
 
   // Definir la URL según el tipo de tarjeta
   const url =
@@ -115,7 +124,7 @@ export const handleSubmitIncomeExpense = async (
 
   let body: any = {};
 
-  if (type === "income") {
+  if (type === "ingreso") {
     body = IncomeDataDTO;
   } else {
     body = ExpenseDataDTO;
@@ -202,6 +211,7 @@ export const handleEditIncomeExpense = async (
   navigation: any,
   item_id: number,
   type: string,
+  title: string,
   amount: number,
   concept: string,
 
@@ -220,17 +230,17 @@ export const handleEditIncomeExpense = async (
   const UpdateIncomeDTO = {
     income_id: item_id,
     type,
+    title,
     amount,
     concept,
-    date,
   };
 
   // DTO para un gasto
   const UpdateExpenseDTO = {
     expense_id: item_id,
+    title,
     amount,
     concept,
-    date,
   };
 
   // Comprobamos el tipo de tarjeta y construimos el DTO correspondiente

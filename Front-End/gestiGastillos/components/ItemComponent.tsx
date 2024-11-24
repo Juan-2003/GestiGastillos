@@ -52,7 +52,7 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
     >
       <View style={itemContainerStyle.dataContainer}>
         <View style={itemContainerStyle.textContainer}>
-          <Text style={itemContainerStyle.text}>{item.type}</Text>
+          <Text style={itemContainerStyle.text}>{item.title}</Text>
         </View>
 
         <View style={itemContainerStyle.iconsContainer}>
@@ -97,6 +97,9 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
             </Text>
             <Text style={itemContainerStyle.detailText}>
               Fecha: {item.date}
+            </Text>
+            <Text style={itemContainerStyle.detailText}>
+              Titulo: {item.title}
             </Text>
           </View>
         </View>

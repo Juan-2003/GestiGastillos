@@ -23,6 +23,7 @@ import {
 } from "../src/auth/api/cardServices";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp, useFocusEffect } from "@react-navigation/native";
+import { useMyContext } from "../contextProvider";
 type RootStackParamList = {
   Card: undefined;
   CardForm: { card: CardItem };
@@ -46,6 +47,7 @@ export default function Cardform({
     title: string;
     errorMessages: string[];
   } | null>(null);
+  const { userName, userId: user_id } = useMyContext();  // Accede al userName desde el contexto
 
   useEffect(() => {
     setError(cardError);
@@ -65,8 +67,6 @@ export default function Cardform({
   const [fechaVencimiento, setFechaVencimiento] = useState(
     card?.card.expiration_date || ""
   );
-
-  const user_id = 1;
 
   useEffect(() => {
     if (card) {

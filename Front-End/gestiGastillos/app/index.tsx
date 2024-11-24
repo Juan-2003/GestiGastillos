@@ -15,6 +15,7 @@ import IncomeExpenseForm from "./forms/IncomeExpenseForm";
 import EditSavingPlans from "./updateForms/EditSavingPlans";
 import IncomeExpenses from "./src/auth/screens/IncomeExpenses";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { MyContextProvider } from "./contextProvider";
 const Stack = createNativeStackNavigator();
 
 export type RootStackParamList = {
@@ -43,76 +44,78 @@ export default function Index() {
   }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-          gestureEnabled: true,
-          animation: "fade_from_bottom",
-        }}
-      >
-        <Stack.Screen
-          name="Welcome"
-          component={Welcome}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={DrawerNavigation}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Register"
-          component={Register}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Card"
-          component={DrawerNavigation}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Cardform"
-          component={Cardform}
-          options={{ headerShown: false }}
-        />
+    <MyContextProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerShown: false,
+            gestureEnabled: true,
+            animation: "fade_from_bottom",
+          }}
+        >
+          <Stack.Screen
+            name="Welcome"
+            component={Welcome}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={DrawerNavigation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={Register}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Card"
+            component={DrawerNavigation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Cardform"
+            component={Cardform}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="IncomeExpenseForm"
-          component={IncomeExpenseForm}
-          options={{ headerShown: false }}
-        />
+          <Stack.Screen
+            name="IncomeExpenseForm"
+            component={IncomeExpenseForm}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="Income/Expense"
-          component={DrawerNavigation}
-          options={{ headerShown: false }}
-        />
+          <Stack.Screen
+            name="Income/Expense"
+            component={DrawerNavigation}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="ReminderForm"
-          component={ReminderForm}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SavingPlansForm"
-          component={SavingPlansForm}
-          options={{ headerShown: false }}
-        />
+          <Stack.Screen
+            name="ReminderForm"
+            component={ReminderForm}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SavingPlansForm"
+            component={SavingPlansForm}
+            options={{ headerShown: false }}
+          />
 
-        <StackParam.Screen
-          name="EditReminderScreen"
-          component={EditReminderScreen}
-          options={{ headerShown: false }}
-        />
+          <StackParam.Screen
+            name="EditReminderScreen"
+            component={EditReminderScreen}
+            options={{ headerShown: false }}
+          />
 
-        <StackParam.Screen
-          name="EditSavingPlans"
-          component={EditSavingPlans}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </GestureHandlerRootView>
+          <StackParam.Screen
+            name="EditSavingPlans"
+            component={EditSavingPlans}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </GestureHandlerRootView>
+    </MyContextProvider>
   );
 }

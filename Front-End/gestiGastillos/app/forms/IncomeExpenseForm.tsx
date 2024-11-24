@@ -37,7 +37,7 @@ export default function IncomeExpenseForm({
   onItemUpdate,
 }: Props) {
   // Recibir los datos si es que obtenemos un objeto en la ruta
-  const { Movement: item, type: title } = route.params || {};
+  const { Movement: item, type: tipo } = route.params || {};
   const [error, setError] = useState<{
     title: string;
     errorMessages: string[];
@@ -48,7 +48,7 @@ export default function IncomeExpenseForm({
   }, [cardError]);
 
   // Declaracion de variables
-  const [type, setType] = useState<string | undefined>(title || "");
+  const [type, setType] = useState<string | undefined>(tipo || "");
   const [payment_method, setPaymentMethod] = useState<string | undefined>(
     item?.payment_method || ""
   );
@@ -70,20 +70,22 @@ export default function IncomeExpenseForm({
   const [date, setDate] = useState<string | undefined>(
     item?.date || new Date().toISOString().split("T")[0]
   );
+  const [title, setTitle] = useState<string | undefined>(item?.title || "");
 
+  // Agregamos los valores de las variables si entra a actualizar
   useEffect(() => {
     if (item as IncomeItem) {
       setType(item?.type);
+      setTitle(item?.title);
       setAmount(item?.amount || 0);
       setConcept(item?.concept);
       setPaymentMethod(item?.payment_method);
-      setDate(item?.date);
       setDebitId(item?.debit_card_id);
     }
     if (item as ExpenseItem) {
+      setTitle(item?.title);
       setAmount(item?.amount);
       setConcept(item?.concept);
-      setDate(item?.date);
     }
   }, [item]);
 
@@ -95,18 +97,19 @@ export default function IncomeExpenseForm({
       console.log(
         "Tipo:",
         type,
+        "Titulo:",
+        title,
         "Cantidad:",
         amount,
         "Concepto:",
-        concept,
-        "Fecha:",
-        date
+        concept
       );
 
       handleEditIncomeExpense(
         navigation,
         item.transaction_id,
         type,
+        title,
         amount,
         concept,
         date,
@@ -119,6 +122,8 @@ export default function IncomeExpenseForm({
       console.log(
         "Tipo:",
         type,
+        "Titulo:",
+        title,
         "Cantidad:",
         amount,
         "Concepto:",
@@ -138,6 +143,7 @@ export default function IncomeExpenseForm({
       handleSubmitIncomeExpense(
         navigation,
         type,
+        title,
         amount,
         concept,
         category,
@@ -156,10 +162,10 @@ export default function IncomeExpenseForm({
       <TopBarForms
         title={
           item
-            ? title === "ingreso"
+            ? tipo === "ingreso"
               ? "EDITAR INGRESO"
               : "EDITAR GASTO"
-            : title === "ingreso"
+            : tipo === "ingreso"
             ? "AGREGAR INGRESO"
             : "AGREGAR GASTO"
         }
@@ -176,11 +182,19 @@ export default function IncomeExpenseForm({
                   </Text>
                 </View>
                 <CategoryPickerComponent
-                  type={title}
+                  type={tipo}
                   setCategory={setCategory}
                 />
               </>
             )}
+            <TextClass text="Titulo" />
+            <TextInput
+              style={globalStyles.textInput}
+              value={title}
+              onChangeText={setTitle}
+              placeholder="Ingresa un pequeño titulo del movimiento"
+            />
+            console.log(title)
             <TextClass text="Concepto" />
             <TextInput
               style={globalStyles.textInput}
@@ -194,7 +208,7 @@ export default function IncomeExpenseForm({
                 setPaymentMethod={setPaymentMethod}
                 setCreditId={setCreditId}
                 setDebitId={setDebitId}
-                title={title}
+                title={tipo}
               />
             ) : (
               <>
@@ -218,9 +232,9 @@ export default function IncomeExpenseForm({
           </View>
           <View style={globalStylesMenu.containerBottom}>
             {error && (
-                <Text style={globalStyles.error}>
-                  {error.title}: {error.errorMessages.join(", ")}
-                </Text>
+              <Text style={globalStyles.error}>
+                {error.title}: {error.errorMessages.join(", ")}
+              </Text>
             )}
             <Pressable style={globalStyles.button} onPress={handleAction}>
               <Text style={globalStyles.text}>

@@ -16,6 +16,7 @@ import {
   generateHTMLReport,
 } from "../api/utils/IncomeExpensesUtils";
 import homeStyles from "@/styles/HomeStyles";
+import { useMyContext } from "@/app/contextProvider";
 
 interface Props {
   type: string;
@@ -23,7 +24,7 @@ interface Props {
 
 export default function Home({ type }: Props) {
   const [item, setItem] = useState<MovementItem[]>([]);
-  console.log(type);
+  const { userName, userId } = useMyContext();  // Accede al userName desde el contexto
 
   // Funcion para obtener los datos del backEnd
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function Home({ type }: Props) {
 
   return (
     <View style={globalStyles.container}>
-      <TopBar title="¡Hola, Usuario!" />
+      <TopBar title={`¡Hola ${userName || "Usuario"}!`} />
       <View style={globalStylesMenu.container}>
         <ScrollView style={homeStyles.scrollViewContainer}>
           <View style={homeStyles.container}>
