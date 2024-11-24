@@ -47,7 +47,7 @@ export default function Index() {
     <MyContextProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Stack.Navigator
-          initialRouteName="Home"
+          initialRouteName="Welcome"
           screenOptions={{
             headerShown: false,
             gestureEnabled: true,
