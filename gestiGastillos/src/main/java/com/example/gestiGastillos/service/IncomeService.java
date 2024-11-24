@@ -7,14 +7,12 @@ import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeDTO;
 import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeResponseDTO;
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.model.Saving;
+import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.transactions.TransactionType;
 import com.example.gestiGastillos.model.transactions.Transactions;
-import com.example.gestiGastillos.repository.CardRepository;
-import com.example.gestiGastillos.repository.DebitCardRepository;
-import com.example.gestiGastillos.repository.SavingRepository;
-import com.example.gestiGastillos.repository.TransactionsRepository;
+import com.example.gestiGastillos.repository.*;
 import com.example.gestiGastillos.util.SavingStatus;
 import com.example.gestiGastillos.util.SavingStatusEvalutator;
 import com.example.gestiGastillos.validation.Transactions.PostValidations.TransactionValidator;
@@ -30,19 +28,24 @@ public class IncomeService {
     private final CardRepository cardRepository;
     private final DebitCardRepository debitCardRepository;
     private final SavingRepository savingRepository;
+    private final UserRepository userRepository;
     private final List<TransactionValidator<Object>> incomeValidator;
 
     @Autowired
     public IncomeService(TransactionsRepository transactionsRepository, CardRepository cardRepository, DebitCardRepository debitCardRepository, List<TransactionValidator<Object>> incomeValidator,
-                         SavingRepository savingRepository){
+                         SavingRepository savingRepository, UserRepository userRepository){
         this.transactionsRepository =  transactionsRepository;
         this.cardRepository = cardRepository;
         this.incomeValidator = incomeValidator;
         this.debitCardRepository = debitCardRepository;
+        this.userRepository = userRepository;
         this.savingRepository = savingRepository;
     }
 
     public IncomeResponseDTO registerIncome(IncomeDataDTO incomeDataDTO) {
+        User user = userRepository.findById(incomeDataDTO.user_id())
+                        .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con id: " + incomeDataDTO.user_id()));
+
         incomeValidator.forEach(i -> i.validation(incomeDataDTO));
 
         Transactions transactions;
@@ -53,8 +56,8 @@ public class IncomeService {
             Double oldCurrentBalance = debitCard.getCurrentBalance();
             Double newCurrentBalance = oldCurrentBalance + incomeDataDTO.amount();
             debitCard.setCurrentBalance(newCurrentBalance);
-            System.out.println("incomedata:" + incomeDataDTO.title());
-            transactions = new Transactions(incomeDataDTO, debitCard.getCard());
+
+            transactions = new Transactions(incomeDataDTO, debitCard.getCard(), user);
 
             if(debitCard.getCard().getSaving() != null){
                 Saving saving = debitCard.getCard().getSaving();
@@ -63,11 +66,11 @@ public class IncomeService {
                 savingRepository.save(saving);
             }
         }else{
-            transactions = new Transactions(incomeDataDTO);
+
+            transactions = new Transactions(incomeDataDTO, user);
         }
 
         transactionsRepository.save(transactions);
-        System.out.println("Title:" + transactions.getTitle());
         return new IncomeResponseDTO(transactions);
     }
 

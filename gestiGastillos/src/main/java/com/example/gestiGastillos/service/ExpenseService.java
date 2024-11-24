@@ -5,16 +5,14 @@ import com.example.gestiGastillos.dto.transactions.expense.UpdateExpenseResponse
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.infra.exceptions.ExpenseAmount;
 import com.example.gestiGastillos.model.Saving;
+import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.transactions.TransactionType;
 import com.example.gestiGastillos.model.transactions.Transactions;
 import com.example.gestiGastillos.dto.transactions.expense.ExpenseDataDTO;
 import com.example.gestiGastillos.dto.transactions.expense.ExpenseResponseDTO;
-import com.example.gestiGastillos.repository.CreditCardRepository;
-import com.example.gestiGastillos.repository.DebitCardRepository;
-import com.example.gestiGastillos.repository.SavingRepository;
-import com.example.gestiGastillos.repository.TransactionsRepository;
+import com.example.gestiGastillos.repository.*;
 import com.example.gestiGastillos.util.SavingStatus;
 import com.example.gestiGastillos.util.SavingStatusEvalutator;
 import com.example.gestiGastillos.validation.Transactions.PostValidations.TransactionValidator;
@@ -30,18 +28,26 @@ public class ExpenseService {
     private final DebitCardRepository debitCardRepository;
     private final CreditCardRepository creditCardRepository;
     private final SavingRepository savingRepository;
+    private final UserRepository userRepository;
     private final List<TransactionValidator<Object>> expenseValidator;
 
     @Autowired
-    public ExpenseService(TransactionsRepository transactionsRepository, DebitCardRepository debitCardRepository, CreditCardRepository creditCardRepository, List<TransactionValidator<Object>> expenseValidator, SavingRepository savingRepository) {
+    public ExpenseService(TransactionsRepository transactionsRepository, DebitCardRepository debitCardRepository,
+                          CreditCardRepository creditCardRepository, UserRepository userRepository,
+                          List<TransactionValidator<Object>> expenseValidator, SavingRepository savingRepository) {
         this.transactionsRepository = transactionsRepository;
         this.debitCardRepository = debitCardRepository;
         this.creditCardRepository = creditCardRepository;
         this.expenseValidator = expenseValidator;
+        this.userRepository = userRepository;
         this.savingRepository = savingRepository;
     }
 
     public ExpenseResponseDTO registerExpense(ExpenseDataDTO expenseDataDTO){
+        User user = userRepository.findById(expenseDataDTO.user_id())
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con id: " + expenseDataDTO.user_id()));
+
+
         expenseValidator.forEach(i -> i.validation(expenseDataDTO));
 
         Transactions transaction;
@@ -54,7 +60,7 @@ public class ExpenseService {
             Double amount = expenseDataDTO.amount();
             creditCard.setDebt(debt + amount);
 
-            transaction = new Transactions(expenseDataDTO, creditCard.getCard());
+            transaction = new Transactions(expenseDataDTO, creditCard.getCard(), user);
         }
         else if(expenseDataDTO.debitCardId() != null){//El egreso se hizo con tarjeta de debito
             Long debitCardId = expenseDataDTO.debitCardId();
@@ -68,7 +74,7 @@ public class ExpenseService {
             Double amount = expenseDataDTO.amount();
             Double newCurrentBalance = oldCurrentBalance - amount;
             debitCard.setCurrentBalance(newCurrentBalance);
-            transaction = new Transactions(expenseDataDTO, debitCard.getCard());
+            transaction = new Transactions(expenseDataDTO, debitCard.getCard(), user);
 
             if(debitCard.getCard().getSaving() != null){
                 Saving saving = debitCard.getCard().getSaving();
@@ -78,7 +84,7 @@ public class ExpenseService {
             }
 
         }else{//El egreso se hizo con efectivo
-            transaction = new Transactions(expenseDataDTO);
+            transaction = new Transactions(expenseDataDTO, user);
         }
 
         transactionsRepository.save(transaction);

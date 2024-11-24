@@ -51,7 +51,7 @@ public class StatisticsService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("No encontrado"));
 
-        user.get
+
 
         List<MonthDTO> monthDTOList = new ArrayList<>();
         for(int i = 1; i <= Month.values().length; i++){

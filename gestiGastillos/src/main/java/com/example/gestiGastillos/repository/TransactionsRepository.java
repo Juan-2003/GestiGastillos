@@ -16,8 +16,7 @@ public interface TransactionsRepository extends JpaRepository<Transactions, Long
     @Query(value= """
         SELECT transactions.*, transactions.id AS transactions_id
         FROM Transactions
-        INNER JOIN card ON transactions.card_id = card.id
-        INNER JOIN user ON card.user_id = user.id 
+        INNER JOIN user ON transactions.user_id = user.id 
         WHERE strftime('%m', transactions.date) =:month 
         AND transactions.type = 'INCOME' 
         AND user.id = :userId
@@ -27,8 +26,7 @@ public interface TransactionsRepository extends JpaRepository<Transactions, Long
     @Query(value = """      
         SELECT transactions.*, transactions.id AS transactions_id  
         FROM Transactions
-        INNER JOIN card ON transactions.card_id = card.id
-        INNER JOIN user ON card.user_id = user.id 
+        INNER JOIN user ON transactions.user_id = user.id 
         WHERE strftime('%m', transactions.date) =:month 
         AND user.id = :userId
         AND transactions.type = 'EXPENSE'
