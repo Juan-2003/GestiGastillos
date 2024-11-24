@@ -8,6 +8,8 @@ import com.example.gestiGastillos.repository.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 @Service
@@ -20,8 +22,10 @@ public class StatisticsService {
     }
 
     public TransactionListResponseDTO getEstadistics(Long userId){
-        List<IncomeResponseDTO> incomeList = transactionsRepository.getIncomesByMonth("11", userId).stream().map(IncomeResponseDTO::new).toList();
-        List<ExpenseResponseDTO> expenseList = transactionsRepository.getExpenseByMonth("11", userId).stream().map(ExpenseResponseDTO::new).toList();
+        String month = String.valueOf(LocalDate.now().getMonthValue());
+
+        List<IncomeResponseDTO> incomeList = transactionsRepository.getIncomesByMonth(month, userId).stream().map(IncomeResponseDTO::new).toList();
+        List<ExpenseResponseDTO> expenseList = transactionsRepository.getExpenseByMonth(month, userId).stream().map(ExpenseResponseDTO::new).toList();
 
         long incomeSum = incomeList.stream()
                 .mapToLong(i -> i.amount().longValue())
