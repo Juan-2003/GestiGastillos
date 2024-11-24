@@ -7,6 +7,8 @@ interface MyContextType {
   setUserId: (id: number | null) => void;
   userName: string | null;
   setUserName: (name: string | null) => void;
+  isRegistered: boolean;
+  setIsRegistered: (status: boolean) => void;  // Nuevo estado para manejo de registro
 }
 
 interface MyContextProviderProps {
@@ -16,9 +18,10 @@ interface MyContextProviderProps {
 const MyContext = createContext<MyContextType | undefined>(undefined);
 
 const MyContextProvider = ({ children }: MyContextProviderProps) => {
-  // Estado local para manejar userId y userName
+  // Estado local para manejar userId, userName y isRegistred
   const [userId, setUserId] = useState<number | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);  // Nuevo estado
 
   // Cargar datos desde AsyncStorage cuando la app inicia
   useEffect(() => {
@@ -26,10 +29,15 @@ const MyContextProvider = ({ children }: MyContextProviderProps) => {
       try {
         const storedUserId = await AsyncStorage.getItem("userId");
         const storedUserName = await AsyncStorage.getItem("userName");
+        const storedIsRegistered = await AsyncStorage.getItem("isRegistered");
 
         if (storedUserId && storedUserName) {
           setUserId(Number(storedUserId)); // Asegurarse de que es un número
           setUserName(storedUserName);
+        }
+
+        if (storedIsRegistered === "true") {
+          setIsRegistered(true);
         }
       } catch (error) {
         console.error("Error loading user data from AsyncStorage", error);
@@ -46,6 +54,7 @@ const MyContextProvider = ({ children }: MyContextProviderProps) => {
         try {
           await AsyncStorage.setItem("userId", userId.toString());
           await AsyncStorage.setItem("userName", userName);
+          await AsyncStorage.setItem("isRegistered", isRegistered.toString());
         } catch (error) {
           console.error("Error saving user data to AsyncStorage", error);
         }
@@ -56,7 +65,7 @@ const MyContextProvider = ({ children }: MyContextProviderProps) => {
   }, [userId, userName]);
 
   return (
-    <MyContext.Provider value={{ userId, setUserId, userName, setUserName }}>
+    <MyContext.Provider value={{ userId, setUserId, userName, setUserName, isRegistered, setIsRegistered }}>
       {children}
     </MyContext.Provider>
   );

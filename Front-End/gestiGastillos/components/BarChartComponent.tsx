@@ -4,6 +4,8 @@ import { BarChart } from "react-native-gifted-charts";
 import BarChartTitle from "./BarChartTitle";
 
 export default function BarChartComponent() {
+
+  
   
   const data = [
     {

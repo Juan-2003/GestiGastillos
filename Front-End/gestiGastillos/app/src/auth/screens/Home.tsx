@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Image, Text, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  Button,
+} from "react-native";
 import globalStyles from "@/styles/GlobalStyles";
 import TopBar from "@/components/topBar";
 import globalStylesMenu from "@/styles/GlobalStylesMenu";
@@ -17,6 +25,8 @@ import {
 } from "../api/utils/IncomeExpensesUtils";
 import homeStyles from "@/styles/HomeStyles";
 import { useMyContext } from "@/app/contextProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface Props {
   type: string;
@@ -24,26 +34,7 @@ interface Props {
 
 export default function Home({ type }: Props) {
   const [item, setItem] = useState<MovementItem[]>([]);
-  const { userName, userId } = useMyContext();  // Accede al userName desde el contexto
-
-  // Funcion para obtener los datos del backEnd
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await handleFetchIncomeExpense();
-      console.log(data);
-      const combinedItems: MovementItem[] = [
-        ...(data.incomes?.map((item: any) => ({ ...item, type: "ingreso" })) ||
-          []),
-        ...(data.expenses?.map((item: any) => ({ ...item, type: "egreso" })) ||
-          []),
-      ];
-      console.log("Items combinados:", combinedItems);
-
-      setItem(combinedItems);
-      console.log("Items filtrados:", combinedItems);
-    };
-    fetchData();
-  }, [type]);
+  const { userName, userId } = useMyContext(); // Accede al userName desde el contexto
 
   const createPDF = async () => {
     const htmlContent = generateHTMLReport(item, calculateTotals);
@@ -57,6 +48,16 @@ export default function Home({ type }: Props) {
     // Compartir el PDF
     await shareAsync(file.uri);
     console.log("PDF generado con éxito");
+  };
+
+  const clearAsyncStorage = async () => {
+    try {
+      await AsyncStorage.clear();
+      Alert.alert("Éxito", "Caché limpiado con éxito.");
+    } catch (error) {
+      console.error("Error al limpiar AsyncStorage:", error);
+      Alert.alert("Error", "Hubo un problema al limpiar el caché.");
+    }
   };
 
   return (
@@ -74,7 +75,7 @@ export default function Home({ type }: Props) {
 
             <BarChartComponent />
 
-            <TransactionComponent />
+            <TransactionComponent type={"egreso"}/>
 
             <TouchableOpacity
               style={homeStyles.buttonContainer}
@@ -82,6 +83,10 @@ export default function Home({ type }: Props) {
             >
               <Text style={homeStyles.text}>Generar reporte</Text>
             </TouchableOpacity>
+
+            <View style={{ marginTop: 10 }}>
+              <Button title="Limpiar Caché" onPress={clearAsyncStorage} />
+            </View>
           </View>
         </ScrollView>
       </View>

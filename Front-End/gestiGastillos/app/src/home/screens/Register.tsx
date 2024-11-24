@@ -16,8 +16,7 @@ interface Props {
 export default function Register({ navigation }: Props) {
   const [error, setError] = useState(" ");
   const [name, setName] = useState("");
-  const { setUserId, setUserName } = useMyContext();  // Accede al contexto
-  
+  const { setUserId, setUserName, setIsRegistered } = useMyContext();  // Accede al contexto
 
   const handleRegisterUser = async () => {
     try {
@@ -39,11 +38,16 @@ export default function Register({ navigation }: Props) {
         const data = await response.json();
         console.log(data);
         
+        // Guarda los datos en AsyncStorage
         await AsyncStorage.setItem("user_id", data.user_id.toString());
         await AsyncStorage.setItem("user_name", data.name);
+        await AsyncStorage.setItem("isRegistered", "true");  // Marcar el registro como completado
         
+        // Actualiza el contexto
         setUserId(data.user_id);
         setUserName(data.name);
+        setIsRegistered(true);  // Actualizar el estado en el contexto
+        
         navigation.navigate("Home");
       } else {
         const errorText = await response.text();
