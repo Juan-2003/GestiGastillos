@@ -2,6 +2,7 @@ package com.example.gestiGastillos.model;
 
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
+import com.example.gestiGastillos.model.transactions.Transactions;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +36,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Saving> savings;
 
+    @OneToMany(mappedBy = "user")
+    private List<Transactions> transactions;
 
     public User(String name){
 

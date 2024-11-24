@@ -26,16 +26,16 @@ public class EstadisticsController {
         this.statisticsService = statisticsService;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/month/{userId}")
     public ResponseEntity<TransactionListResponseDTO> getEstadistics(@PathVariable Long userId ){
         TransactionListResponseDTO transactionListResponseDTO = statisticsService.getEstadistics(userId);
 
         return ResponseEntity.ok(transactionListResponseDTO);
     }
 
-    @GetMapping("/prueba/{userId2}")
-    public ResponseEntity<List<MonthDTO>> prueba(@PathVariable Long userId2){
-        List<MonthDTO> monthDTOList = statisticsService.getAllMonthsStatistics(userId2);
+    @GetMapping("/all-months/{userId}")
+    public ResponseEntity<List<MonthDTO>> prueba(@PathVariable Long userId){
+        List<MonthDTO> monthDTOList = statisticsService.getAllMonthsStatistics(userId);
 
         return ResponseEntity.ok(monthDTOList);
     }
