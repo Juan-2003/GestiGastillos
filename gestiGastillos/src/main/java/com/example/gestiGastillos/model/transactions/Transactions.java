@@ -23,6 +23,7 @@ public class Transactions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
     private Double amount;
     private String concept;
 
@@ -46,6 +47,7 @@ public class Transactions {
 
     //Ingreso con tarjeta de debito
     public Transactions(IncomeDataDTO incomeDataDTO, Card card){
+        this.title = incomeDataDTO.title();
         this.type = TransactionType.fromSpanish(incomeDataDTO.type());
         this.amount = incomeDataDTO.amount();
         this.concept = incomeDataDTO.concept();
@@ -68,6 +70,7 @@ public class Transactions {
 
     //Egreso con cualquier tarjeta
     public Transactions(ExpenseDataDTO expenseDataDTO, Card card){
+        this.title = expenseDataDTO.title();
         this.type = TransactionType.fromSpanish(expenseDataDTO.type());
         this.amount = expenseDataDTO.amount();
         this.concept = expenseDataDTO.concept();
@@ -79,6 +82,7 @@ public class Transactions {
 
     //Egreso con efectivo
     public Transactions(ExpenseDataDTO expenseDataDTO){
+        this.title = expenseDataDTO.title();
         this.type = TransactionType.fromSpanish(expenseDataDTO.type());
         this.amount = expenseDataDTO.amount();
         this.concept = expenseDataDTO.concept();
@@ -89,7 +93,9 @@ public class Transactions {
 
     //Actualizar ingreso
     public void updateIncome(UpdateIncomeDTO updateIncomeDTO){
-
+        if(updateIncomeDTO.title() != this.title){
+            this.title = updateIncomeDTO.title();
+        }
         if(updateIncomeDTO.amount() != this.amount){
             this.amount = updateIncomeDTO.amount();
         }
@@ -100,6 +106,9 @@ public class Transactions {
 
     //Actualizar egreso
     public void updateExpense(UpdateExpenseDTO updateExpenseDTO){
+        if(updateExpenseDTO.title() != this.title){
+            this.title = updateExpenseDTO.title();
+        }
         if(updateExpenseDTO.amount() != this.amount){
             this.amount = updateExpenseDTO.amount();
         }

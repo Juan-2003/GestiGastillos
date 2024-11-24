@@ -1,10 +1,8 @@
 package com.example.gestiGastillos.controller;
 
-import com.example.gestiGastillos.dto.saving.SavingDataDTO;
-import com.example.gestiGastillos.dto.saving.SavingResponseDTO;
-import com.example.gestiGastillos.dto.saving.UpdateSavingDTO;
-import com.example.gestiGastillos.dto.saving.UpdateSavingResponseDTO;
+import com.example.gestiGastillos.dto.saving.*;
 import com.example.gestiGastillos.service.SavingService;
+import com.example.gestiGastillos.util.SavingStatus;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +39,12 @@ public class SavingController {
     public ResponseEntity<SavingResponseDTO> getSaving(@PathVariable Long id){
         SavingResponseDTO savingResponseDTO = savingService.getSaving(id);
         return ResponseEntity.ok(savingResponseDTO);
+    }
+
+    @GetMapping("/generalStatus/{id}")
+    public ResponseEntity<SavingGeneralStatusDTO> getGeneralStatus(@PathVariable Long id){
+        SavingGeneralStatusDTO savingGeneralStatusDTO = savingService.getGeneralStatus(id);
+        return ResponseEntity.ok(savingGeneralStatusDTO);
     }
 
     @GetMapping("/savingList")

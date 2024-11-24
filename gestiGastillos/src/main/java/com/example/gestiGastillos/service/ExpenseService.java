@@ -43,8 +43,6 @@ public class ExpenseService {
 
     public ExpenseResponseDTO registerExpense(ExpenseDataDTO expenseDataDTO){
         expenseValidator.forEach(i -> i.validation(expenseDataDTO));
-        System.out.println(expenseDataDTO.creditCardId());
-        System.out.println(expenseDataDTO.debitCardId());
 
         Transactions transaction;
         if(expenseDataDTO.creditCardId() != null){//El egreso se hizo con trarjeta de credito
@@ -107,6 +105,7 @@ public class ExpenseService {
     }
 
     public UpdateExpenseResponseDTO updateExpense(UpdateExpenseDTO updateExpenseDTO) {
+        expenseValidator.forEach(i -> i.validation(updateExpenseDTO));
         Transactions expenseTransaction = transactionsRepository.findById(updateExpenseDTO.expenseId())
                 .orElseThrow(() -> new EntityNotFoundException("La transaccion de egreso no ha sido encontrado con el id: " + updateExpenseDTO.expenseId() ));
 

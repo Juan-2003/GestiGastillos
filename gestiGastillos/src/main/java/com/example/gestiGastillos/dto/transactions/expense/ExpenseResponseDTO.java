@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public record ExpenseResponseDTO(
         @JsonProperty("transaction_id")
         Long transactionId,
+
+        String title,
         String type,
         Double amount,
         String concept,
@@ -27,6 +29,7 @@ public record ExpenseResponseDTO(
     public ExpenseResponseDTO(Transactions transaction){
         this(
                 transaction.getId(),
+                transaction.getTitle(),
                 transaction.getType().name(),
                 transaction.getAmount(),
                 transaction.getConcept(),

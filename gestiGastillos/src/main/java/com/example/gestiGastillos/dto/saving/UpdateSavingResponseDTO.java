@@ -12,20 +12,22 @@ public record UpdateSavingResponseDTO(
         Long savingId,
         String name,
 
-        @NotNull
         @JsonProperty("target_amount")
         Double targetAmount,
 
+        String status,
 
-        @NotNull
         @JsonProperty("debit_card_id")
         Long debitCardId
+
+
 ) {
     public UpdateSavingResponseDTO(Saving saving){
         this(
                 saving.getId(),
                 saving.getName(),
                 saving.getTargetAmount(),
+                saving.getStatus().toString(),
                 saving.getCard().getDebitCard().getId()
         );
     }

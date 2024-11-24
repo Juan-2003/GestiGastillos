@@ -2,6 +2,7 @@ package com.example.gestiGastillos.validation.Transactions.PostValidations;
 
 import com.example.gestiGastillos.dto.transactions.expense.ExpenseDataDTO;
 import com.example.gestiGastillos.dto.transactions.income.IncomeDataDTO;
+import com.example.gestiGastillos.dto.transactions.income.UpdateIncomeDTO;
 import com.example.gestiGastillos.infra.exceptions.InvalidCategoryException;
 import com.example.gestiGastillos.model.transactions.TransactionCategory;
 import org.springframework.stereotype.Component;
@@ -14,13 +15,16 @@ public class TransactionCategoryValidator implements TransactionValidator<Object
         if(dto instanceof ExpenseDataDTO){
             ExpenseDataDTO expenseDataDTO = (ExpenseDataDTO) dto;
             userCategory = expenseDataDTO.category();
+            if (TransactionCategory.fromSpanish(userCategory)==null){
+                throw new InvalidCategoryException("Categoria no aceptada");
+            }
         }
         else if(dto instanceof IncomeDataDTO){
             IncomeDataDTO incomeDataDTO = (IncomeDataDTO) dto;
             userCategory = incomeDataDTO.category();
-        }
-        if (TransactionCategory.fromSpanish(userCategory)==null){
-            throw new InvalidCategoryException("Categoria no aceptada");
+            if (TransactionCategory.fromSpanish(userCategory)==null){
+                throw new InvalidCategoryException("Categoria no aceptada");
+            }
         }
     }
 }

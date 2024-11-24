@@ -5,9 +5,11 @@ import com.example.gestiGastillos.dto.transactions.expense.ExpenseResponseDTO;
 import com.example.gestiGastillos.dto.transactions.income.IncomeResponseDTO;
 import com.example.gestiGastillos.model.transactions.Transactions;
 import com.example.gestiGastillos.repository.TransactionsRepository;
+import com.example.gestiGastillos.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,19 +19,16 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/gesti-gastillos/estaditics")
 public class EstadisticsController {
-    private final TransactionsRepository transactionsRepository;
-
+    private final StatisticsService statisticsService;
     @Autowired
-    public EstadisticsController(TransactionsRepository transactionsRepository){
-        this.transactionsRepository = transactionsRepository;
+    public EstadisticsController(StatisticsService statisticsService){
+        this.statisticsService = statisticsService;
     }
 
-    @GetMapping
-    public ResponseEntity<TransactionListResponseDTO> getEstadistics(){
-        List<IncomeResponseDTO> incomeList = transactionsRepository.getIncomesByMonth("02").stream().map(IncomeResponseDTO::new).toList();
-        List<ExpenseResponseDTO> expenseList = transactionsRepository.getExpenseByMonth("02").stream().map(ExpenseResponseDTO::new).toList();
+    @GetMapping("/{userId}")
+    public ResponseEntity<TransactionListResponseDTO> getEstadistics(@PathVariable Long userId ){
+        TransactionListResponseDTO transactionListResponseDTO = statisticsService.getEstadistics(userId);
 
-        TransactionListResponseDTO transactionListResponseDTO = new TransactionListResponseDTO(incomeList, expenseList);
         return ResponseEntity.ok(transactionListResponseDTO);
     }
 }

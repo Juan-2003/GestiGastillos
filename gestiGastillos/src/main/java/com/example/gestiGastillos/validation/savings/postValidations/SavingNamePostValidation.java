@@ -28,19 +28,24 @@ public class SavingNamePostValidation<Object> {
     public void validation(Object dto) {
         String name = "";
         List<Saving> savingList;
+        Long savingId = null;
+        Long userId = null;
 
         if(dto instanceof SavingDataDTO){
             SavingDataDTO savingDataDTO = (SavingDataDTO) dto;
             name = savingDataDTO.name();
+            userId = savingDataDTO.userId();
         }
         else if(dto instanceof UpdateSavingDTO){
             UpdateSavingDTO updateSavingDTO = (UpdateSavingDTO) dto;
             name = updateSavingDTO.name();
+            savingId = updateSavingDTO.savingId();
         }
 
         if(!name.isBlank()){
-            savingList = savingRepository.findAll();
-            SavingNameValidator.savingNameValidation(name, savingList);
+            //savingList = savingRepository.findAll();
+            savingList = savingRepository.getSavingsByUser(userId);
+            SavingNameValidator.savingNameValidation(savingId, name, savingList);
         }
     }
 }

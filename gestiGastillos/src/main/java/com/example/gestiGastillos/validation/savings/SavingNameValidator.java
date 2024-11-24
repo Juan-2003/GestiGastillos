@@ -8,9 +8,9 @@ import com.example.gestiGastillos.model.Saving;
 import java.util.List;
 
 public class SavingNameValidator {
-    public static void savingNameValidation(String savingName, List<Saving> savingList) {
+    public static void savingNameValidation(Long savingId, String savingName, List<Saving> savingList) {
         boolean flag = savingList.stream()
-                .anyMatch(r -> r.getName().equals(savingName));
+                .anyMatch(s -> s.getName().equals(savingName)  && (savingId == null || !s.getId().equals(savingId)));
 
         if (flag) {
             throw new SavingNameException("Ya existe un saving con el nombre: " + savingName);

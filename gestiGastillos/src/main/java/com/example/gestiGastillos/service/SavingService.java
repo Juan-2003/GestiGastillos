@@ -1,19 +1,14 @@
 package com.example.gestiGastillos.service;
 
 import com.example.gestiGastillos.dto.creditCard.CreditCardResponseDTO;
-import com.example.gestiGastillos.dto.saving.SavingDataDTO;
-import com.example.gestiGastillos.dto.saving.SavingResponseDTO;
-import com.example.gestiGastillos.dto.saving.UpdateSavingDTO;
-import com.example.gestiGastillos.dto.saving.UpdateSavingResponseDTO;
+import com.example.gestiGastillos.dto.saving.*;
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.model.Saving;
+import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
-import com.example.gestiGastillos.repository.CardRepository;
-import com.example.gestiGastillos.repository.CreditCardRepository;
-import com.example.gestiGastillos.repository.DebitCardRepository;
-import com.example.gestiGastillos.repository.SavingRepository;
+import com.example.gestiGastillos.repository.*;
 import com.example.gestiGastillos.util.SavingStatus;
 import com.example.gestiGastillos.util.SavingStatusEvalutator;
 import com.example.gestiGastillos.validation.savings.postValidations.SavingNamePostValidation;
@@ -30,13 +25,17 @@ public class SavingService {
     private final SavingRepository savingRepository;
     private final DebitCardRepository debitCardRepository;
     private final CardRepository cardRepository;
+    private final UserRepository userRepository;
     private final SavingNamePostValidation<Object> savingNamePostValidation;
 
     @Autowired
-    public SavingService(SavingRepository savingRepository, DebitCardRepository debitCardRepository, CardRepository cardRepository, SavingNamePostValidation<Object> savingNamePostValidation) {
+    public SavingService(SavingRepository savingRepository, DebitCardRepository debitCardRepository,
+                         CardRepository cardRepository, UserRepository userRepository,
+                         SavingNamePostValidation<Object> savingNamePostValidation) {
         this.savingRepository = savingRepository;
         this.debitCardRepository = debitCardRepository;
         this.cardRepository = cardRepository;
+        this.userRepository = userRepository;
         this.savingNamePostValidation = savingNamePostValidation;
     }
 
@@ -44,13 +43,16 @@ public class SavingService {
 
         savingNamePostValidation.validation(savingDataDTO);
 
+        User user = userRepository.findById(savingDataDTO.userId())
+                .orElseThrow(() -> new EntityNotFoundException("User no encontrado con id" + savingDataDTO.userId()));
+
         DebitCard debitCard =  debitCardRepository.findById(savingDataDTO.debitCardId())
                 .orElseThrow(() -> new EntityNotFoundException("Tarjeta de debito no encontrada con id: " + savingDataDTO.debitCardId()));
 
         Card card = debitCard.getCard();
 
         SavingStatus savingStatus = SavingStatusEvalutator.savingStatusEvaluator(debitCard.getCurrentBalance(), savingDataDTO.targetAmount());
-        Saving saving = new Saving(savingDataDTO, card, savingStatus);
+        Saving saving = new Saving(savingDataDTO, card, savingStatus, user);
 
         savingRepository.save(saving);
         card.setSaving(saving);
@@ -66,16 +68,23 @@ public class SavingService {
         return new SavingResponseDTO(saving);
     }
 
+    public SavingGeneralStatusDTO getGeneralStatus(Long id){
+        List<Saving> savingList = savingRepository.getSavingsByUser(id);
+        for(Saving saving : savingList){
+            System.out.println(saving.getName());
+        }
+        SavingStatus savingStatus = SavingStatusEvalutator.generalSavingStatus(savingList);
+        return new SavingGeneralStatusDTO(savingStatus);
+    }
+
     public List<SavingResponseDTO> getSavingList(Pageable pageable){
         return savingRepository.findAll(pageable).map(SavingResponseDTO::new).getContent();
     }
 
     public UpdateSavingResponseDTO updateSaving(UpdateSavingDTO updateSavingDTO){
-
-        savingNamePostValidation.validation(updateSavingDTO);
-
         Saving saving = savingRepository.findById(updateSavingDTO.savingId())
                 .orElseThrow(() -> new EntityNotFoundException("Ahorro no econtrado con id: " + updateSavingDTO.savingId()));
+        savingNamePostValidation.validation(updateSavingDTO);
 
         saving.update(updateSavingDTO);
         savingRepository.save(saving);

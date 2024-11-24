@@ -29,6 +29,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<DebitCard> debitCards;
 
+    @OneToMany(mappedBy = "user")
+    private List<Reminder> reminders;
+
+    @OneToMany(mappedBy = "user")
+    private List<Saving> savings;
+
 
     public User(String name){
 

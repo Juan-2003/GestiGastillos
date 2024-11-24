@@ -1,3 +1,4 @@
+import React from "react";
 import globalStyles from "@/styles/GlobalStyles";
 import { useState } from "react";
 import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";

@@ -46,13 +46,14 @@ public class IncomeService {
         incomeValidator.forEach(i -> i.validation(incomeDataDTO));
 
         Transactions transactions;
-        if(incomeDataDTO.debitCardId() != null){//La transaccion se hizo con tarjeta
+        if(incomeDataDTO.debitCardId() != null){//La transaccion se hizo con tarjeta de debuito
             DebitCard debitCard = debitCardRepository.findById(incomeDataDTO.debitCardId())
-                    .orElseThrow(() -> new EntityNotFoundException("La tarjeta credito con el id: " + incomeDataDTO.debitCardId()));
+                    .orElseThrow(() -> new EntityNotFoundException("La tarjeta de debito con el id: " + incomeDataDTO.debitCardId()));
 
             Double oldCurrentBalance = debitCard.getCurrentBalance();
             Double newCurrentBalance = oldCurrentBalance + incomeDataDTO.amount();
             debitCard.setCurrentBalance(newCurrentBalance);
+            System.out.println("incomedata:" + incomeDataDTO.title());
             transactions = new Transactions(incomeDataDTO, debitCard.getCard());
 
             if(debitCard.getCard().getSaving() != null){
@@ -66,7 +67,7 @@ public class IncomeService {
         }
 
         transactionsRepository.save(transactions);
-
+        System.out.println("Title:" + transactions.getTitle());
         return new IncomeResponseDTO(transactions);
     }
 
@@ -93,6 +94,7 @@ public class IncomeService {
     }
 
     public UpdateIncomeResponseDTO updateIncome(UpdateIncomeDTO updateIncomeDTO){
+        incomeValidator.forEach(i -> i.validation(updateIncomeDTO));
         Transactions transaction = transactionsRepository.findById(updateIncomeDTO.incomeId())
                 .orElseThrow(() -> new EntityNotFoundException("Transaccion no encontrada con id: " + updateIncomeDTO.incomeId()));
 

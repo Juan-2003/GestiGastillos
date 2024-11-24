@@ -29,7 +29,8 @@ public class CustomExceptionsHandler {
                     ExpenseAmount.class,
                     InvalidPaymentMethodException.class,
                     InvalidCategoryException.class,
-                    TypeInvalidException.class
+                    TypeInvalidException.class,
+                    SavingNameException.class
             )
     );
 
@@ -68,6 +69,7 @@ public class CustomExceptionsHandler {
             ExpenseAmount.class,
             InvalidPaymentMethodException.class,
             InvalidCategoryException.class,
+            SavingNameException.class
     })
 
     public ResponseEntity<DataErrorValidation> handleBadRequestCustomExceptions(RuntimeException e){

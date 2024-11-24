@@ -11,6 +11,12 @@ public record SavingResponseDTO(
         Long savingId,
         String name,
 
+        @JsonProperty("debit_card_name")
+        String debitCardName,
+
+        @JsonProperty("last_digits")
+        String lastDigits,
+
         @JsonProperty("target_amount")
         Double targetAmount,
 
@@ -25,6 +31,8 @@ public record SavingResponseDTO(
         this(
                 saving.getId(),
                 saving.getName(),
+                saving.getCard().getName(),
+                saving.getCard().getLastDigits(),
                 saving.getTargetAmount(),
                 saving.getStatus().toString(),
                 String.valueOf(saving.getCard().getDebitCard().getCurrentBalance()),
