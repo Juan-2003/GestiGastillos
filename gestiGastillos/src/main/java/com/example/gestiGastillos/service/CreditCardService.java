@@ -43,21 +43,23 @@ public class CreditCardService {
 
     public CreditCardResponseDTO registerCreditCard(CreditCardDataDTO creditCardDataDTO){
         Long user_id = creditCardDataDTO.user_id();
-        String creditCardName = creditCardDataDTO.cardDataDTO().name();
-        String lastDigits = creditCardDataDTO.cardDataDTO().lastDigits();
-        String expirationDate = creditCardDataDTO.cardDataDTO().expirationDate();
-        String creditLimit = creditCardDataDTO.creditLimit();
-        Double debt = creditCardDataDTO.debt();
 
         User user = userRepository.findById(user_id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con id: " + user_id));
 
+        String creditCardName = creditCardDataDTO.cardDataDTO().name();
+        String lastDigits = creditCardDataDTO.cardDataDTO().lastDigits();
+        String expirationDate = creditCardDataDTO.cardDataDTO().expirationDate();
+
         creditCardPostValidator.forEach(c -> c.validation(creditCardDataDTO));
 
-        Card card = new Card(creditCardName, lastDigits, expirationDate);
+        Card card = new Card(creditCardName, lastDigits, expirationDate, user);
         cardRepository.save(card);
 
+        String creditLimit = creditCardDataDTO.creditLimit();
+        Double debt = creditCardDataDTO.debt();
         CreditCard creditCard = new CreditCard(card, user, creditLimit, debt);
+
         creditCardRepository.save(creditCard);
         card.setCreditCard(creditCard);
 

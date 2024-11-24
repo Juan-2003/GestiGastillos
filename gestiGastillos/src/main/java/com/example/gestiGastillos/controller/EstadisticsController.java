@@ -9,6 +9,7 @@ import com.example.gestiGastillos.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,9 +25,9 @@ public class EstadisticsController {
         this.statisticsService = statisticsService;
     }
 
-    @GetMapping
-    public ResponseEntity<TransactionListResponseDTO> getEstadistics(){
-        TransactionListResponseDTO transactionListResponseDTO = statisticsService.getEstadistics();
+    @GetMapping("/{userId}")
+    public ResponseEntity<TransactionListResponseDTO> getEstadistics(@PathVariable Long userId ){
+        TransactionListResponseDTO transactionListResponseDTO = statisticsService.getEstadistics(userId);
 
         return ResponseEntity.ok(transactionListResponseDTO);
     }

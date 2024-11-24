@@ -1,5 +1,6 @@
 package com.example.gestiGastillos.model.card;
 
+import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
 import com.example.gestiGastillos.model.Reminder;
 import com.example.gestiGastillos.model.Saving;
@@ -49,10 +50,15 @@ public class Card {
     @OneToMany(mappedBy = "card")
     private List<Transactions> transactions;
 
-    public Card(String name, String lastDigits, String expirationDate){
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Card(String name, String lastDigits, String expirationDate, User user){
         this.name = name;
         this.lastDigits = lastDigits;
         this.expirationDate = expirationDate;
+        this.user = user;
     }
 
     public  void updateCard(String name){

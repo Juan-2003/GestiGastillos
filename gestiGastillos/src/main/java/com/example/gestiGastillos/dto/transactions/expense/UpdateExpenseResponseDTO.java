@@ -2,11 +2,13 @@ package com.example.gestiGastillos.dto.transactions.expense;
 
 import com.example.gestiGastillos.model.transactions.Transactions;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+@JsonPropertyOrder({"expense_id", "title", "type", "amount", "concept", "category", "date", "payment_method"})
 public record UpdateExpenseResponseDTO(
         @JsonProperty("expense_id")
         Long expenseId,

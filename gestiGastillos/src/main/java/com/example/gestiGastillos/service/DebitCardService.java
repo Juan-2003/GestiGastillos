@@ -51,11 +51,11 @@ public class DebitCardService {
         Double currentBalance = debitCardDataDTO.currentBalance();
 
         User user = userRepository.findById(user_id)
-                .orElseThrow(() ->new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() ->new EntityNotFoundException("Usuario no encontrado con id: " + user_id));
 
         debitCardPostValidator.forEach(c -> c.validation(debitCardDataDTO));
 
-        Card card = new Card(debitCardName, lastDigits, expirationDate);
+        Card card = new Card(debitCardName, lastDigits, expirationDate, user);
         cardRepository.save(card);
 
         DebitCard debitCard = new DebitCard(currentBalance,card,user);
@@ -81,7 +81,7 @@ public class DebitCardService {
     public UpdateDebitCardResponseDTO updateDebitCard(UpdateDebitCardDTO updateDebitCardDTO){
 
         DebitCard debitCard = debitCardRepository.findById(updateDebitCardDTO.debitCardId())
-                .orElseThrow(() ->new RuntimeException("Tarjeta no encontrada con el id: " + updateDebitCardDTO.debitCardId()));
+                .orElseThrow(() ->new EntityNotFoundException("Tarjeta no encontrada con el id: " + updateDebitCardDTO.debitCardId()));
 
         debitCardPutValidator.forEach(c -> c.validation(updateDebitCardDTO));
 

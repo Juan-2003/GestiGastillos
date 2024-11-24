@@ -6,13 +6,11 @@ import com.example.gestiGastillos.dto.reminder.UpdateReminderDTO;
 import com.example.gestiGastillos.dto.reminder.UpdateReminderResponseDTO;
 import com.example.gestiGastillos.infra.exceptions.EntityNotFoundException;
 import com.example.gestiGastillos.model.Reminder;
+import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.model.card.Card;
 import com.example.gestiGastillos.model.creditCard.CreditCard;
 import com.example.gestiGastillos.model.debitCard.DebitCard;
-import com.example.gestiGastillos.repository.CardRepository;
-import com.example.gestiGastillos.repository.CreditCardRepository;
-import com.example.gestiGastillos.repository.DebitCardRepository;
-import com.example.gestiGastillos.repository.ReminderRepository;
+import com.example.gestiGastillos.repository.*;
 import com.example.gestiGastillos.validation.reminder.ReminderValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,17 +24,20 @@ public class ReminderService {
     private final CardRepository cardRepository;
     private final CreditCardRepository creditCardRepository;
     private final DebitCardRepository debitCardRepository;
+    private final UserRepository userRepository;
     private final List<ReminderValidator<Object>> reminderPostValidator;
     private final List<ReminderValidator<Object>> reminderPutValidator;
 
     @Autowired
     public ReminderService(ReminderRepository reminderRepository,
                            CardRepository cardRepository, CreditCardRepository creditCardRepository,  DebitCardRepository debitCardRepository,
+                           UserRepository userRepository,
                            List<ReminderValidator<Object>> reminderValidator, List<ReminderValidator<Object>> reminderPutValidator){
         this.reminderRepository = reminderRepository;
         this.cardRepository = cardRepository;
         this.creditCardRepository = creditCardRepository;
         this.debitCardRepository = debitCardRepository;
+        this.userRepository = userRepository;
         this.reminderPostValidator = reminderValidator;
         this.reminderPutValidator = reminderPutValidator;
     }
@@ -46,12 +47,15 @@ public class ReminderService {
         Card card;
         reminderPostValidator.forEach(r -> r.validation(reminderDataDTO));
 
+        User user = userRepository.findById(reminderDataDTO.userId())
+                .orElseThrow(() -> new EntityNotFoundException("'User' no encontrado con id: " + reminderDataDTO.userId()));
+
         if(reminderDataDTO.creditCardId() != null){
             CreditCard creditCard = creditCardRepository.findById(reminderDataDTO.creditCardId())
                     .orElseThrow(() -> new EntityNotFoundException("Tarjeta de credito no encontrada con id: " + reminderDataDTO.creditCardId()));
 
             card = creditCard.getCard();
-            reminder = new Reminder(reminderDataDTO, card);
+            reminder = new Reminder(reminderDataDTO, card, user);
 
             card.setReminder(reminder);
             cardRepository.save(card);
@@ -63,12 +67,12 @@ public class ReminderService {
 
             card = debitCard.getCard();
 
-            reminder = new Reminder(reminderDataDTO, card);
+            reminder = new Reminder(reminderDataDTO, card, user);
             card.setReminder(reminder);
             cardRepository.save(card);
             debitCardRepository.save(debitCard);
         }else{
-            reminder = new Reminder(reminderDataDTO);
+            reminder = new Reminder(reminderDataDTO, user);
         }
         reminderRepository.save(reminder);
 

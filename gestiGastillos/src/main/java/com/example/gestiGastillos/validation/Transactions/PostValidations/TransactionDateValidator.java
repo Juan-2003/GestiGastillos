@@ -10,7 +10,8 @@ import org.hibernate.annotations.Comment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TransactionDateValidator implements TransactionValidator<Object>{
+public class TransactionDateValidator{
+    /*
     @Override
     public void validation(Object dto) {
         String date = "";
@@ -35,4 +36,5 @@ public class TransactionDateValidator implements TransactionValidator<Object>{
             PaymentDay.paymentDay(date);
         }
     }
+    */
 }

@@ -19,9 +19,9 @@ public class StatisticsService {
         this.transactionsRepository = transactionsRepository;
     }
 
-    public TransactionListResponseDTO getEstadistics(){
-        List<IncomeResponseDTO> incomeList = transactionsRepository.getIncomesByMonth("11").stream().map(IncomeResponseDTO::new).toList();
-        List<ExpenseResponseDTO> expenseList = transactionsRepository.getExpenseByMonth("11").stream().map(ExpenseResponseDTO::new).toList();
+    public TransactionListResponseDTO getEstadistics(Long userId){
+        List<IncomeResponseDTO> incomeList = transactionsRepository.getIncomesByMonth("11", userId).stream().map(IncomeResponseDTO::new).toList();
+        List<ExpenseResponseDTO> expenseList = transactionsRepository.getExpenseByMonth("11", userId).stream().map(ExpenseResponseDTO::new).toList();
 
         long incomeSum = incomeList.stream()
                 .mapToLong(i -> i.amount().longValue())
@@ -30,7 +30,7 @@ public class StatisticsService {
                 .mapToLong(e -> e.amount().longValue())
                 .sum();
 
-        long totalSum = incomeSum + expenseSum;
+        long totalSum = incomeSum - expenseSum;
 
         return new TransactionListResponseDTO(incomeSum, expenseSum, totalSum, incomeList, expenseList);
     }

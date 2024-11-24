@@ -28,19 +28,25 @@ public class Reminder {
     @JoinColumn(name = "card_id")
     private Card card;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     //Crear recordatorio sin una tarjeta relacionada
-    public Reminder(ReminderDataDTO reminderDataDTO){
+    public Reminder(ReminderDataDTO reminderDataDTO, User user){
         this.name = reminderDataDTO.name();
         this.message = reminderDataDTO.message();
         this.date = reminderDataDTO.date();
+        this.user = user;
     }
 
     //Crear recordatorio con una tarjeta relacionada
-    public Reminder(ReminderDataDTO reminderDataDTO, Card card){
+    public Reminder(ReminderDataDTO reminderDataDTO, Card card, User user){
         this.name = reminderDataDTO.name();
         this.message = reminderDataDTO.message();
         this.date = reminderDataDTO.date();
         this.card = card;
+        this.user = user;
     }
 
     public void update(UpdateReminderDTO updateReminderDTO){

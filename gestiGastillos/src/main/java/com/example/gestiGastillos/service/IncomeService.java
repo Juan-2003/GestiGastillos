@@ -53,6 +53,7 @@ public class IncomeService {
             Double oldCurrentBalance = debitCard.getCurrentBalance();
             Double newCurrentBalance = oldCurrentBalance + incomeDataDTO.amount();
             debitCard.setCurrentBalance(newCurrentBalance);
+            System.out.println("incomedata:" + incomeDataDTO.title());
             transactions = new Transactions(incomeDataDTO, debitCard.getCard());
 
             if(debitCard.getCard().getSaving() != null){
@@ -66,7 +67,7 @@ public class IncomeService {
         }
 
         transactionsRepository.save(transactions);
-
+        System.out.println("Title:" + transactions.getTitle());
         return new IncomeResponseDTO(transactions);
     }
 

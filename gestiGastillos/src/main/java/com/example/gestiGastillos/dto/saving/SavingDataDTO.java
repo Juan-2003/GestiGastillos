@@ -7,6 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record SavingDataDTO(
+        @JsonProperty("user_id")
+        @NotNull(message = "'user_id' no puede ser nulo")
+        Long userId,
+
         @NotBlank(message = "'nombre' no puede estar vacio")
         String name,
 

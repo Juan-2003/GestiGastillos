@@ -28,15 +28,20 @@ public class Saving {
     @Enumerated(EnumType.STRING)
     private SavingStatus status;
 
-   @OneToOne
+    @OneToOne
     @JoinColumn(name = "card_id")
     private Card card;
 
-   public Saving(SavingDataDTO savingDataDTO, Card card, SavingStatus savingStatus){
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+   public Saving(SavingDataDTO savingDataDTO, Card card, SavingStatus savingStatus, User user){
        this.name = savingDataDTO.name();
        this.targetAmount = savingDataDTO.targetAmount();
        this.status = savingStatus;
        this.card = card;
+       this.user = user;
    }
 
    public void update(UpdateSavingDTO updateSavingDTO){

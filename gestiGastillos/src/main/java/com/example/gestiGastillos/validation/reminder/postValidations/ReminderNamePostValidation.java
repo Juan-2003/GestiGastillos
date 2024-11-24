@@ -25,19 +25,23 @@ public class ReminderNamePostValidation implements ReminderValidator<Object> {
         String name = "";
         List<Reminder> reminderList;
         Long reminderId = null;
+        Long userId = null;
 
         if(dto instanceof ReminderDataDTO){
             ReminderDataDTO reminderDataDTO = (ReminderDataDTO) dto;
             name = reminderDataDTO.name();
+            userId = reminderDataDTO.userId();
         }
         else if(dto instanceof UpdateReminderDTO){
             UpdateReminderDTO updateReminderDTO = (UpdateReminderDTO) dto;
             name = updateReminderDTO.name();
             reminderId = updateReminderDTO.id();
+
         }
 
         if(!name.isBlank()){
-            reminderList = reminderRepository.findAll();
+            //reminderList = reminderRepository.findAll();
+            reminderList = reminderRepository.getReminderByUser(userId);
             ReminderName.reminderNameValidation(reminderId, name, reminderList);
         }
     }
