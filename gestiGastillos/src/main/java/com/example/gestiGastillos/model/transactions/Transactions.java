@@ -60,6 +60,7 @@ public class Transactions {
 
     //Ingreso con efectivo
     public Transactions(IncomeDataDTO incomeDataDTO){
+        this.title = incomeDataDTO.title();
         this.type = TransactionType.fromSpanish(incomeDataDTO.type());
         this.amount = incomeDataDTO.amount();
         this.concept = incomeDataDTO.concept();
