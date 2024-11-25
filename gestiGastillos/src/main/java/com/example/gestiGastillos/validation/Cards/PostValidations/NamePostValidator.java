@@ -30,6 +30,7 @@ public class NamePostValidator implements CardValidator<Object> {
     public void validation(Object dto) {
         User user = null;
         String newCardName = "";
+        Long cardId = null;
         if(dto instanceof CreditCardDataDTO){
             CreditCardDataDTO creditCardDataDTO = (CreditCardDataDTO) dto;
             user = userRepository.getReferenceById(creditCardDataDTO.user_id());
@@ -39,11 +40,13 @@ public class NamePostValidator implements CardValidator<Object> {
             UpdateCreditCardDTO updateCreditCardDTO = (UpdateCreditCardDTO) dto;
             user = userRepository.getReferenceById(updateCreditCardDTO.userId());
             newCardName = updateCreditCardDTO.updateCardDTO().name();
+            cardId = updateCreditCardDTO.creditCardId();
         }
         else if(dto instanceof UpdateDebitCardDTO){
             UpdateDebitCardDTO updatedebitCardDTO = (UpdateDebitCardDTO) dto;
             user = userRepository.getReferenceById(updatedebitCardDTO.userId());
             newCardName = updatedebitCardDTO.updateCardDTO().name();
+            cardId = updatedebitCardDTO.debitCardId();
         }
         else if(dto instanceof DebitCardDataDTO){
             DebitCardDataDTO debitCardDataDTO = (DebitCardDataDTO) dto;
@@ -52,7 +55,7 @@ public class NamePostValidator implements CardValidator<Object> {
         }
 
         if(user != null){
-            CardName.cardNameValidation(newCardName, user, dto);
+            CardName.cardNameValidation(newCardName, user, dto, cardId);
         }
     }
 }

@@ -69,7 +69,7 @@ public class DebitCardService {
 
     public DebitCardResponseDTO getDebitCard(Long id){
         DebitCard debitCard = debitCardRepository.findById(id)
-                .orElseThrow(() ->new RuntimeException("Tarjeta de debito no encontrada"));
+                .orElseThrow(() ->new EntityNotFoundException("Tarjeta de debito no encontrada"));
 
         return new DebitCardResponseDTO(debitCard);
     }

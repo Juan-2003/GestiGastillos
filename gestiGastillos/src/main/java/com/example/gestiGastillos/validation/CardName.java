@@ -13,18 +13,20 @@ import java.util.List;
 
 public class CardName {
 
-    public static void cardNameValidation(String newCardName, User user, Object dto) {
-
+    public static void cardNameValidation(String newCardName, User user, Object dto, Long cardId) {
         boolean flag = false;
+
         if(dto instanceof CreditCardDataDTO || dto instanceof UpdateCreditCardDTO) {
             List<CreditCard> creditCardList = user.getCreditCards();
             flag=  creditCardList.stream()
-                    .anyMatch(c -> c.getCard().getName().equals(newCardName));
+                    .anyMatch(c -> c.getCard().getName().equals(newCardName) && (cardId == null)|| !c.getId().equals(cardId));
         }
         else if(dto instanceof DebitCardDataDTO || dto instanceof UpdateDebitCardDTO) {
             List<DebitCard> debitCardList = user.getDebitCards();
+
             flag=  debitCardList.stream()
-                    .anyMatch(c -> c.getCard().getName().equals(newCardName));
+                    .anyMatch(c -> c.getCard().getName().equals(newCardName) && (cardId == null)|| !c.getId().equals(cardId));
+            System.out.println("flag: " + flag);
         }
         if(flag){
             throw new InvalidCardNameException("Ya existe una tarjeta de credito con el nombre: " + newCardName);
