@@ -1,12 +1,18 @@
 import { MovementItem } from "../IncomeExpensesServices";
 
-// Funcion para calcular los balances
-export const calculateTotals = (items: MovementItem[]) => {
-  const incomes = items.filter((item) => item.type === "ingreso");
-  const expenses = items.filter((item) => item.type === "egreso");
+// Función para calcular los balances
+export const calculateTotals = (items: {
+  incomes: MovementItem[];
+  expenses: MovementItem[];
+}) => {
+  const incomes = items.incomes;
+  const expenses = items.expenses;
 
   const totalIncomes = incomes.reduce((acc, income) => acc + income.amount, 0);
-  const totalExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
+  const totalExpenses = expenses.reduce(
+    (acc, expense) => acc + expense.amount,
+    0
+  );
   const balance = totalIncomes - totalExpenses;
 
   const highestIncome = incomes.reduce(
@@ -19,44 +25,65 @@ export const calculateTotals = (items: MovementItem[]) => {
     { amount: 0, concept: "" }
   );
 
-  return { totalIncomes, totalExpenses, balance, highestIncome, highestExpense };
+  return {
+    totalIncomes,
+    totalExpenses,
+    balance,
+    highestIncome,
+    highestExpense,
+  };
 };
 
-// Funcion para generar el PDF
-export const generateHTMLReport = (items: MovementItem[], calculateTotals: Function) => {
-  const incomes = items.filter((item) => item.type === "ingreso");
-  const expenses = items.filter((item) => item.type === "egreso");
-
-  const { totalIncomes, totalExpenses, balance, highestIncome, highestExpense } = calculateTotals(items);
+// Función para generar el PDF
+export const generateHTMLReport = (
+  items: { incomes: MovementItem[]; expenses: MovementItem[] },
+  calculateTotals: Function
+) => {
+  const {
+    totalIncomes,
+    totalExpenses,
+    balance,
+    highestIncome,
+    highestExpense,
+  } = calculateTotals(items);
 
   const modifyConcept = (concept: string) => {
     if (concept === "EDUCATION") {
       return concept.replace("EDUCATION", "Educacion");
     } else if (concept === "ENTRETAIMENT") {
       return concept.replace("ENTRETAIMENT", "Entretenimiento");
+    } else if (concept === "PAYDATE") {
+      return concept.replace("PAYDATE", "Pago");
+    } else if (concept === "EDUCATION") {
+      return concept.replace("EDUCATION", "educacion");
     }
+
     return concept;
   };
 
-  const incomeRows = incomes.map(
-    (income) => `
+  const incomeRows = items.incomes
+    .map(
+      (income) => `
     <tr>
       <td>${income.date}</td>
       <td>${income.amount}</td>
       <td>${income.concept}</td>
       <td>${modifyConcept(income.category)}</td>
     </tr>`
-  ).join("");
+    )
+    .join("");
 
-  const expenseRows = expenses.map(
-    (expense) => `
+  const expenseRows = items.expenses
+    .map(
+      (expense) => `
     <tr>
       <td>${expense.date}</td>
       <td>${expense.amount}</td>
       <td>${expense.concept}</td>
       <td>${modifyConcept(expense.category)}</td>
     </tr>`
-  ).join("");
+    )
+    .join("");
 
   return `
     <html>
