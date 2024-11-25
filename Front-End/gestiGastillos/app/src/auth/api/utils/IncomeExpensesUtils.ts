@@ -1,9 +1,9 @@
 import { MovementItem } from "../IncomeExpensesServices";
 
-// Funcion para calcular los balances
-export const calculateTotals = (items: MovementItem[]) => {
-  const incomes = items.filter((item) => item.type === "ingreso");
-  const expenses = items.filter((item) => item.type === "egreso");
+// Función para calcular los balances
+export const calculateTotals = (items: {incomes: MovementItem[], expenses: MovementItem[]}) => {
+  const incomes = items.incomes;
+  const expenses = items.expenses;
 
   const totalIncomes = incomes.reduce((acc, income) => acc + income.amount, 0);
   const totalExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
@@ -22,11 +22,8 @@ export const calculateTotals = (items: MovementItem[]) => {
   return { totalIncomes, totalExpenses, balance, highestIncome, highestExpense };
 };
 
-// Funcion para generar el PDF
-export const generateHTMLReport = (items: MovementItem[], calculateTotals: Function) => {
-  const incomes = items.filter((item) => item.type === "ingreso");
-  const expenses = items.filter((item) => item.type === "egreso");
-
+// Función para generar el PDF
+export const generateHTMLReport = (items: {incomes: MovementItem[], expenses: MovementItem[]}, calculateTotals: Function) => {
   const { totalIncomes, totalExpenses, balance, highestIncome, highestExpense } = calculateTotals(items);
 
   const modifyConcept = (concept: string) => {
@@ -35,10 +32,11 @@ export const generateHTMLReport = (items: MovementItem[], calculateTotals: Funct
     } else if (concept === "ENTRETAIMENT") {
       return concept.replace("ENTRETAIMENT", "Entretenimiento");
     }
+
     return concept;
   };
 
-  const incomeRows = incomes.map(
+  const incomeRows = items.incomes.map(
     (income) => `
     <tr>
       <td>${income.date}</td>
@@ -48,7 +46,7 @@ export const generateHTMLReport = (items: MovementItem[], calculateTotals: Funct
     </tr>`
   ).join("");
 
-  const expenseRows = expenses.map(
+  const expenseRows = items.expenses.map(
     (expense) => `
     <tr>
       <td>${expense.date}</td>

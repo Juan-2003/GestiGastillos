@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -36,10 +36,24 @@ interface Props {
 export default function Home({ type }: Props) {
   const [item, setItem] = useState<MovementItem[]>([]);
   const { userName, userId } = useMyContext(); // Accede al userName desde el contexto
-
+  const [loading, setLoading] = useState(true);
+  
+  const loadIncomeExpenses = async () => {
+    try {
+      setLoading(true);
+      const data = await handleFetchIncomeExpense();
+      console.log("Data from API:", data); // Verifica lo que se recibe
+      setItem(data);
+    } catch (error) {
+      console.error("Error al cargar los planes de ahorro:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const createPDF = async () => {
+    console.log("hola: ",item);
     const htmlContent = generateHTMLReport(item, calculateTotals);
-
+    
     // Generar el archivo PDF
     const file = await printToFileAsync({
       html: htmlContent,
@@ -50,6 +64,11 @@ export default function Home({ type }: Props) {
     await shareAsync(file.uri);
     console.log("PDF generado con éxito");
   };
+  useFocusEffect(
+    useCallback(() => {
+      loadIncomeExpenses();
+    }, [])
+  );
 
   const clearAsyncStorage = async () => {
     try {

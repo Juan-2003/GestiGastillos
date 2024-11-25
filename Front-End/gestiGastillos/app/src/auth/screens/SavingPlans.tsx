@@ -70,6 +70,22 @@ export default function SavingPlans({ navigation }: Props) {
     }
   }, [generalStatus]); // Actualiza `status` solo cuando cambie `generalStatus`
 
+  const fetchGeneralStatus = async () => {
+    try {
+      const status = await getGeneralStatus(id);
+      setGeneralStatus(status);
+      console.log("el estatus es:", status);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchGeneralStatus();
+    }, [])
+  );
+
   const renderItem = ({ item }: { item: any }) => {
     return (
       <View style={styles.saving}>
