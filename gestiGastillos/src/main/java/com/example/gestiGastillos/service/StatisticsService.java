@@ -1,6 +1,7 @@
 package com.example.gestiGastillos.service;
 
 import com.example.gestiGastillos.dto.MonthDTO;
+import com.example.gestiGastillos.dto.TransactionsAnualDTO;
 import com.example.gestiGastillos.dto.transactions.TransactionListResponseDTO;
 import com.example.gestiGastillos.dto.transactions.expense.ExpenseResponseDTO;
 import com.example.gestiGastillos.dto.transactions.income.IncomeResponseDTO;
@@ -9,6 +10,8 @@ import com.example.gestiGastillos.model.User;
 import com.example.gestiGastillos.model.transactions.Transactions;
 import com.example.gestiGastillos.repository.TransactionsRepository;
 import com.example.gestiGastillos.repository.UserRepository;
+import com.example.gestiGastillos.util.SavingStatus;
+import com.example.gestiGastillos.util.SavingStatusEvalutator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +50,7 @@ public class StatisticsService {
         return new TransactionListResponseDTO(incomeSum, expenseSum, totalSum, incomeList, expenseList);
     }
 
-    public List<MonthDTO> getAllMonthsStatistics(Long userId){
+    public TransactionsAnualDTO getAllMonthsStatistics(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("No encontrado"));
 
@@ -55,6 +58,7 @@ public class StatisticsService {
 
         List<MonthDTO> monthDTOList = new ArrayList<>();
         for(int i = 1; i <= Month.values().length; i++){
+
             String monthNumber = String.valueOf(i);
             Month month = Month.of(i);
 
@@ -74,6 +78,7 @@ public class StatisticsService {
             MonthDTO monthDTO = new MonthDTO(month.name(), new TransactionListResponseDTO(incomeSum, expenseSum, totalSum, incomeList, expenseList));
             monthDTOList.add(monthDTO);
         }
-        return monthDTOList;
+        String status = SavingStatusEvalutator.generalStatus(monthDTOList).name();
+        return new TransactionsAnualDTO(status, monthDTOList);
     }
 }
