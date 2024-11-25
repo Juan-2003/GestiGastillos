@@ -31,6 +31,10 @@ export const generateHTMLReport = (items: {incomes: MovementItem[], expenses: Mo
       return concept.replace("EDUCATION", "Educacion");
     } else if (concept === "ENTRETAIMENT") {
       return concept.replace("ENTRETAIMENT", "Entretenimiento");
+    }else if (concept === "PAYDATE") {
+      return concept.replace("PAYDATE", "Pago");
+    }else if (concept === "EDUCATION") {
+      return concept.replace("EDUCATION", "educacion");
     }
 
     return concept;
