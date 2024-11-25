@@ -55,7 +55,7 @@ public class SavingStatusEvalutator {
             expenseSum += monthDTO.transactionListResponseDTO().expenseSum();
             totalSum += monthDTO.transactionListResponseDTO().totalSum();
         }
-        if(totalSum <= -10000){
+        if(totalSum >= -10000){
             return SavingStatus.VERY_POOR;
         }
         else if(totalSum < 0 && totalSum > -10000){
