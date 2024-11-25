@@ -17,6 +17,7 @@ import { RouteProp } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import CategoryPickerComponent from "@/components/CategoryPickerComponent";
 import { cardError } from "../src/auth/api/cardServices";
+import { useMyContext } from "../contextProvider";
 
 type RootStackParamList = {
   IncomeExpenses: undefined;
@@ -46,6 +47,8 @@ export default function IncomeExpenseForm({
   useEffect(() => {
     setError(cardError);
   }, [cardError]);
+
+  const { userId: user_id } = useMyContext();  // Accede al userName desde el contexto
 
   // Declaracion de variables
   const [type, setType] = useState<string | undefined>(tipo || "");
@@ -122,6 +125,8 @@ export default function IncomeExpenseForm({
       console.log(
         "Tipo:",
         type,
+        "ID:",
+        user_id,
         "Titulo:",
         title,
         "Cantidad:",
@@ -142,6 +147,7 @@ export default function IncomeExpenseForm({
 
       handleSubmitIncomeExpense(
         navigation,
+        user_id,
         type,
         title,
         amount,

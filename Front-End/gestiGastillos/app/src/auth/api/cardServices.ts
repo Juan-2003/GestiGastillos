@@ -1,3 +1,4 @@
+import { useMyContext } from "@/app/contextProvider";
 import { ip } from "../IP/Ip";
 interface error{
     error:any
@@ -199,7 +200,7 @@ export const handleEdit = async (
   onSuccess?: () => void,
   setError?: React.Dispatch<React.SetStateAction<{ title: string; errorMessages: string[] } | null>>
 ) => {
-  const user_id = 1; // Si este valor es dinámico, deberías obtenerlo de alguna parte
+  const user_id = 10;
 
   // DTO para card
   const updateCardDTO = {

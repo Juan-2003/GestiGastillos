@@ -27,6 +27,7 @@ import homeStyles from "@/styles/HomeStyles";
 import { useMyContext } from "@/app/contextProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import MainEmojiComponent from "@/components/MainEmojiComponent";
 
 interface Props {
   type: string;
@@ -66,12 +67,8 @@ export default function Home({ type }: Props) {
       <View style={globalStylesMenu.container}>
         <ScrollView style={homeStyles.scrollViewContainer}>
           <View style={homeStyles.container}>
-            <View style={homeStyles.imageContainer}>
-              <Image
-                source={require("@/assets/images/smilingIcon.png")}
-                style={homeStyles.image}
-              />
-            </View>
+
+            <MainEmojiComponent />
 
             <BarChartComponent />
 

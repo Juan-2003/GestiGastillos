@@ -1,7 +1,9 @@
+import { useMyContext } from "@/app/contextProvider";
 import { ip } from "../IP/Ip";
 
 export interface ExpenseItem {
   // Dto de gastos
+  user_id: number;
   transaction_id: number;
   type: string;
   title: string,
@@ -16,6 +18,7 @@ export interface ExpenseItem {
 
 export interface IncomeItem {
   // Dto de ingresos
+  user_id: number;
   transaction_id: number;
   type: string;
   title: string,
@@ -59,6 +62,7 @@ export const handleFetchIncomeExpense = async (): Promise<MovementItem[]> => {
 
 export const handleSubmitIncomeExpense = async (
   navigation: any,
+  user_id: number,
   type: string,
   title: string,
   amount: number,
@@ -73,9 +77,12 @@ export const handleSubmitIncomeExpense = async (
     React.SetStateAction<{ title: string; errorMessages: string[] } | null>
   >
 ) => {
-  
+
+  console.log("ID: ",user_id)
+
   // DTO de IncomeDataDTO
   const IncomeDataDTO = {
+    user_id,
     type,
     title,
     amount,
@@ -88,6 +95,7 @@ export const handleSubmitIncomeExpense = async (
 
   // DTO de ExpenseDataDTO con propiedades comunes
   const ExpenseDataDTO: {
+    user_id: number;
     type: string;
     title: string;
     amount: number;
@@ -98,6 +106,7 @@ export const handleSubmitIncomeExpense = async (
     credit_card_id?: number;
     debit_card_id?: number;
   } = {
+    user_id,
     type,
     title,
     amount,
