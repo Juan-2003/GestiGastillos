@@ -96,7 +96,7 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>10.10.0</version>
 				<configuration>
-					<url>jdbc:sqlite:C:/Users/PC/Desktop/App/GestiGastillos/gestiGastillos/gestiGastillos.db</url>
+					<url>jdbc:sqlite:C:/Users/Toton/Desktop/gestiGastillos.db</url>
 					<user></user>
 					<password></password>
 				</configuration>
