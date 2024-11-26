@@ -7,14 +7,14 @@ import { View, Image } from "react-native";
 import { barDataItem } from "react-native-gifted-charts";
 
 export default function MainEmojiComponent() {
-  const [statusImage, setStatusImage] = useState<string>(""); // Estado para manejar la imagen
+  const [statusImage, setStatusImage] = useState<string>("neutral"); // Estado para manejar la imagen
   const { userId: user_id } = useMyContext();
 
   // Mapear las imágenes con claves
   const imageMap: { [key: string]: any } = {
-    positive: require("@/assets/images/EXCELENTSAVING.png"),  // Imagen cuando el balance es positivo
-    negative: require("@/assets/images/POORSAVING.png"),     // Imagen cuando el balance es negativo
-    neutral: require("@/assets/images/GOODSAVING.png"),   // Imagen cuando el balance es cero
+    positive: require("@/assets/images/EXCELENTSAVING.png"), // Imagen cuando el balance es positivo
+    negative: require("@/assets/images/POORSAVING.png"), // Imagen cuando el balance es negativo
+    neutral: require("@/assets/images/GOODSAVING.png"), // Imagen cuando el balance es cero
   };
 
   // Función para obtener los datos del backend
@@ -29,7 +29,7 @@ export default function MainEmojiComponent() {
           const currentMonthName = new Date()
             .toLocaleString("default", { month: "long" })
             .toUpperCase(); // Obtiene el mes actual
-            console.log(currentMonthName);
+          console.log(currentMonthName);
 
           const currentMonthData = data.find(
             (monthData: any) => monthData.month === currentMonthName
@@ -40,11 +40,11 @@ export default function MainEmojiComponent() {
 
             // Lógica para decidir qué imagen mostrar
             if (total_sum > 0) {
-              setStatusImage('positive'); // Imagen positiva: más ingresos que gastos
+              setStatusImage("positive"); // Imagen positiva: más ingresos que gastos
             } else if (total_sum < 0) {
-              setStatusImage('negative'); // Imagen negativa: más gastos que ingresos
+              setStatusImage("negative"); // Imagen negativa: más gastos que ingresos
             } else {
-              setStatusImage('neutral'); // Imagen neutral: ingresos igual a gastos
+              setStatusImage("neutral"); // Imagen neutral: ingresos igual a gastos
             }
           }
         } catch (error) {

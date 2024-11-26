@@ -9,7 +9,7 @@ import globalStyles from "@/styles/GlobalStyles";
 
 type EditSavingPlanScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'EditSavingPlans' 
+  "EditSavingPlans"
 >;
 
 interface saving {
@@ -22,7 +22,6 @@ interface saving {
   debit_card_name: string;
   last_digits: string;
   onDelete: (id: number) => void;
-
 }
 
 export default function SavingPlansItem({
@@ -40,11 +39,16 @@ export default function SavingPlansItem({
   const [showDetails, setShowDetails] = useState(false); // Estado para mostrar u ocultar detalles
 
   const handleEdit = () => {
-    navigation.navigate("EditSavingPlans", { saving_id, name, target_amount, status, debit_card_id });
+    navigation.navigate("EditSavingPlans", {
+      saving_id,
+      name,
+      target_amount,
+      status,
+      debit_card_id,
+    });
   };
 
   const handleDelete = async () => {
-    
     const isDeleted = await deleteSaving(saving_id); // Llama al servicio para eliminar
     if (isDeleted) {
       onDelete(saving_id); // Actualiza la lista en el componente padre si se eliminó correctamente
@@ -56,31 +60,40 @@ export default function SavingPlansItem({
     imageUrl = require("@/assets/images/VERY_POOR.png");
   } else if (status === "EXCELENT") {
     imageUrl = require("@/assets/images/excelent.png");
-  }else if (status === "GOOD") {
+  } else if (status === "GOOD") {
     imageUrl = require("@/assets/images/GOOD.png");
-  }
-  else if (status === "POOR") {
+  } else if (status === "POOR") {
     imageUrl = require("@/assets/images/POOR.png");
+  } else if (status === "AVERAGE") {
+    imageUrl = require("@/assets/images/AVERAGE.png");
   }
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => setShowDetails(!showDetails)}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => setShowDetails(!showDetails)}
+    >
       <View style={styles.SavingPlanContainer}>
         <View style={styles.leftContainer}>
           <Text style={styles.digits}>{name}</Text>
           <View style={styles.containerBottomText}>
             <Text style={styles.bottomText}>guardado: {current_balance}</Text>
-
           </View>
         </View>
         <View style={styles.RightContainer}>
           <View style={styles.ItemContainer}>
             <Image source={imageUrl} style={styles.image} />
             <TouchableOpacity onPress={handleEdit}>
-              <Image source={require("@/assets/images/editIcon.png")} style={styles.image} />
+              <Image
+                source={require("@/assets/images/editIcon.png")}
+                style={styles.image}
+              />
             </TouchableOpacity>
             <TouchableOpacity onPress={handleDelete}>
-              <Image source={require("@/assets/images/deleteIcon.png")} style={styles.image} />
+              <Image
+                source={require("@/assets/images/deleteIcon.png")}
+                style={styles.image}
+              />
             </TouchableOpacity>
           </View>
           <View style={styles.containerBottomText}>
@@ -90,11 +103,12 @@ export default function SavingPlansItem({
       </View>
       {showDetails && (
         <>
-        <View style={styles.showBotton}>
+          <View style={styles.showBotton}>
             <Text style={styles.bottomText}>Tarjeta: {debit_card_name}</Text>
-            <Text style={styles.bottomText}>Nombre de tarjeta: {last_digits}</Text>
-        </View>
-
+            <Text style={styles.bottomText}>
+              Nombre de tarjeta: {last_digits}
+            </Text>
+          </View>
         </>
       )}
     </TouchableOpacity>
@@ -105,15 +119,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-
   },
   SavingPlanContainer: {
-    flex:1,
+    flex: 1,
     width: "85%",
     height: "100%",
-    padding:20,
+    padding: 20,
     marginTop: 40,
-    borderRadius:10,
+    borderRadius: 10,
     backgroundColor: "#27C1F9",
     flexDirection: "row",
     elevation: 5,
@@ -125,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     //backgroundColor:"red",
-    paddingVertical:10,
+    paddingVertical: 10,
   },
   RightContainer: {
     flex: 2,
@@ -141,7 +154,7 @@ const styles = StyleSheet.create({
   image: {
     height: 35,
     width: 35,
-    resizeMode: 'contain',
+    resizeMode: "contain",
     paddingHorizontal: 25,
   },
   digits: {
@@ -151,24 +164,24 @@ const styles = StyleSheet.create({
   },
   containerBottomText: {
     flex: 0.4,
-    alignItems:"center",
-    width:"100%"
+    alignItems: "center",
+    width: "100%",
   },
   bottomText: {
     fontSize: 15,
     color: "#FFFFFF",
   },
-  showBotton:{
+  showBotton: {
     width: "80%",
     height: "30%",
-    marginTop:10,
-    justifyContent:"center",
-    paddingHorizontal:20,
+    marginTop: 10,
+    justifyContent: "center",
+    paddingHorizontal: 20,
     backgroundColor: "#27C1F9",
-    borderRadius:10,
-    marginBottom:30,
+    borderRadius: 10,
+    marginBottom: 30,
     elevation: 5,
     borderWidth: 1,
-    borderColor: "#1E91BB"
-  }
+    borderColor: "#1E91BB",
+  },
 });
